@@ -163,7 +163,7 @@ export async function getUserById(id?: number) {
       id,
       first_name,
       last_name,
-      username
+      email
     FROM
       users
     WHERE
