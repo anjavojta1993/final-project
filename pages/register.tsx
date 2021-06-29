@@ -173,7 +173,7 @@ export default function Register(props: Props) {
 
               // Navigate to the user's page when
               // they have been successfully created
-              router.push(`/profiles/success`);
+              router.push(`/profiles/${createdUser.id}`);
             }}
           >
             <div css={logoContainer}>
