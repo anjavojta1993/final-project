@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }) {
 
       // Set the username state variable which we can use
       // in other components via passing props
-      setEmail(json.user?.username);
+      setEmail(json.user?.email);
     }, []);
 
   // Retrieve username information ONCE the first time
