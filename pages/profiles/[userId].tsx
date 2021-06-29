@@ -59,21 +59,23 @@ export default function SingleUserProfile(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  // TODO: Verify the user's token (from the cookie) and
-  // retrieve the user that matches the token
-
-  // TODO: Test if the token user's email matches the email in the URL
-
-  // API design here is not so great, maybe don't copy
-  const response = await fetch(
-    `${process.env.API_BASE_URL}/users-by-email/${context.query.email}`,
+  const { getUserById, getValidSessionByToken } = await import(
+    '../../util/database'
   );
-  const { user } = await response.json();
-  console.log('API decoded JSON from response', user);
 
-  return {
-    props: {
-      user: user,
-    },
-  };
+  const session = await getValidSessionByToken(
+    context.req.cookies.sessionToken,
+  );
+
+  if (!session || session.userId !== Number(context.query.userId)) {
+    return {
+      props: {
+        user: null,
+        errors: [{ message: 'Access denied' }],
+      },
+    };
+  }
+
+  const user = await getUserById(Number(context.query.userId));
+  return { props: { user: user } };
 }
