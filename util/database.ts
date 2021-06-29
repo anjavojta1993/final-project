@@ -143,21 +143,24 @@ export async function getUsers() {
   return users.map((user) => camelcaseKeys(user));
 }
 
-// export async function getUserById(id?: number) {
-//   // Return undefined if userId is not parseable
-//   // to an integer
-//   if (!id) return undefined;
+export async function getUserById(id?: number) {
+  // Return undefined if userId is not parseable
+  // to an integer
+  if (!id) return undefined;
 
-//   const users = await sql<[User]>`
-//     SELECT
-//       *
-//     FROM
-//       users
-//     WHERE
-//       id = ${id}
-//   `;
-//   return users.map((user) => camelcaseKeys(user))[0];
-// }
+  const users = await sql<[User]>`
+    SELECT
+      id,
+      first_name,
+      last_name,
+      username
+    FROM
+      users
+    WHERE
+      id = ${id}
+  `;
+  return users.map((user) => camelcaseKeys(user))[0];
+}
 
 // export async function getUserByIdWithCourses(userId?: number) {
 //   // Return undefined if userId is not parseable
