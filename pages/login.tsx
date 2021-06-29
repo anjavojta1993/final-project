@@ -224,7 +224,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
     return {
       redirect: {
-        destination: `/profiles/success`,
+        destination: `/profiles/${session.userId}`,
         permanent: false,
       },
     };
