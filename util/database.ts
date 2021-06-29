@@ -143,6 +143,16 @@ export async function getUsers() {
   return users.map((user) => camelcaseKeys(user));
 }
 
+export async function getUserByValidSessionToken(token: string) {
+  if (!token) return undefined;
+
+  const session = await getValidSessionByToken(token);
+
+  if (!session) return undefined;
+
+  return await getUserById(session.userId);
+}
+
 export async function getUserById(id?: number) {
   // Return undefined if userId is not parseable
   // to an integer
