@@ -79,6 +79,46 @@ export async function getUserWithPasswordHashByEmail(email?: string) {
   return users.map((user) => camelcaseKeys(user))[0];
 }
 
+export async function deleteUserById(id?: number) {
+  if (!id) return undefined;
+
+  const users = await sql`
+    DELETE FROM
+      users
+    WHERE
+      id = ${id}
+    RETURNING
+      id,
+      first_name,
+      last_name,
+      email
+  `;
+  return users.map((user) => camelcaseKeys(user))[0];
+}
+
+export async function updateUserById(
+  userId: number | undefined,
+  firstName: string,
+  lastName: string,
+) {
+  if (!userId) return undefined;
+
+  const users = await sql<[User]>`
+    UPDATE
+      users
+    SET
+      first_name = ${firstName},
+      last_name = ${lastName}
+    WHERE
+      id = ${userId}
+    RETURNING
+      id,
+      first_name,
+      last_name,
+      email
+  `;
+  return users.map((user) => camelcaseKeys(user))[0];
+}
 export async function insertSession(token: string, userId: number) {
   const sessions = await sql<Session[]>`
     INSERT INTO sessions
