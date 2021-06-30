@@ -15,7 +15,6 @@ export default function Layout(props: Props) {
   return (
     <>
       <Header email={props.email} />
-      {/* <Header email={props.email} /> */}
       <div css={containerStyles}>{props.children}</div>
       {/* <Footer /> */}
     </>
