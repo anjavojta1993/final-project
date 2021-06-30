@@ -1,5 +1,4 @@
 import argon2 from 'argon2';
-import cookie from 'cookie';
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createSerializedSessionTokenCookie } from '../../util/cookies';
@@ -23,10 +22,11 @@ export default async function Login(
 ) {
   if (req.method === 'POST') {
     // Destructure relevant information from the request body
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    // Get the user from the database with the username
-    const userWithPasswordHash = await getUserWithPasswordHashByEmail(username);
+    // Get the user from the database with the email
+
+    const userWithPasswordHash = await getUserWithPasswordHashByEmail(email);
 
     // If a matching user does not exist in the database, return a
     // 401 Unauthorized status code and an error
