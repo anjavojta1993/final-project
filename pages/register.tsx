@@ -142,7 +142,6 @@ export default function Register(props: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isTherapist, setIsTherapist] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
   return (
@@ -247,31 +246,22 @@ export default function Register(props: Props) {
             <div css={checkboxesContainer}>
               {' '}
               <div>
-                <input
-                  type="checkbox"
-                  // State #2: Synchronize the value to the HTML
-                  checked={isTherapist}
-                  onChange={(event) => {
-                    // State #3: Update the value
-                    setIsTherapist(event.currentTarget.checked);
-                  }}
-                />
-                <label htmlFor="therapist">I am a therapist</label>
+                <label>
+                  Please choose:
+                  <select
+                    id="role"
+                    value={isTherapist}
+                    onChange={(event) => {
+                      setIsTherapist(event.currentTarget.value);
+                    }}
+                  >
+                    <option value="true">I am looking for a therapist</option>
+                    <option value="false">I am a therapist</option>
+                  </select>
+                </label>
               </div>
-              <div>
-                <input
-                  type="checkbox"
-                  // State #2: Synchronize the value to the HTML
-                  checked={isClient}
-                  onChange={(event) => {
-                    // State #3: Update the value
-                    setIsClient(event.currentTarget.checked);
-                  }}
-                />
-                <label htmlFor="client">I am looking for a therapist</label>
-              </div>
+              <button css={coloredButtonStyles}>Sign up</button>
             </div>
-            <button css={coloredButtonStyles}>Sign up</button>
           </form>
         </div>
       </div>

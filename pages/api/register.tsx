@@ -55,6 +55,8 @@ export default async function Register(
     const passwordHash = await argon2.hash(password);
 
     const user = await insertUser(firstName, lastName, email, passwordHash);
+    // istherapist => TRUE OR FALSE
+    // pass everything i need here
 
     // Clean up expired sessions
     await deleteExpiredSessions();

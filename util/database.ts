@@ -40,6 +40,7 @@ function connectOneTimeToDatabase() {
 const sql = connectOneTimeToDatabase();
 
 // insertUser function
+// query nr 1
 
 export async function insertUser(
   firstName: string,
@@ -59,6 +60,8 @@ export async function insertUser(
       email
   `;
   console.log(users);
+  // if therapist is true or false do second insert into therapist
+  // ID IS already here, just work with the id
   return users.map((user) => camelcaseKeys(user))[0];
 }
 
