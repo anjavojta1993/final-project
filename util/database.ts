@@ -211,3 +211,14 @@ export async function getUserById(id?: number) {
   `;
   return users.map((user) => camelcaseKeys(user))[0];
 }
+
+export async function insertFiveMinuteSessionWithoutUserId(token: string) {
+  const sessions = await sql<Session[]>`
+    INSERT INTO sessions
+      (token, expiry)
+    VALUES
+      (${token}, NOW() + INTERVAL '5 minutes')
+    RETURNING *
+  `;
+  return sessions.map((session) => camelcaseKeys(session))[0];
+}

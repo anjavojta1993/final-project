@@ -1,17 +1,18 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Layout from '../components/Layout';
 import { normalText } from '../styles/sharedStyles';
+import { generateCsrfSecretByToken } from '../util/auth';
 import { getValidSessionByToken } from '../util/database';
 
 type Props = {
   refreshEmail: () => void;
   email: string;
+  csrfToken: string;
 };
 
 const pageContainer = css`
@@ -164,6 +165,7 @@ export default function Register(props: Props) {
                   lastName: lastName,
                   email: email,
                   password: password,
+                  csrfToken: props.csrfToken,
                 }),
               });
               const { user: createdUser } = await response.json();
@@ -278,6 +280,34 @@ export default function Register(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // Redirect from HTTP to HTTPS on Heroku
+  if (
+    context.req.headers.host &&
+    context.req.headers['x-forwarded-proto'] &&
+    context.req.headers['x-forwarded-proto'] !== 'https'
+  ) {
+    return {
+      redirect: {
+        destination: `https://${context.req.headers.host}/register`,
+        permanent: true,
+      },
+    };
+  }
+
+  // eslint-disable-next-line unicorn/prefer-node-protocol
+  const crypto = await import('crypto');
+  const { createSerializedRegisterSessionTokenCookie } = await import(
+    '../util/cookies'
+  );
+  const { insertFiveMinuteSessionWithoutUserId, deleteExpiredSessions } =
+    await import('../util/database');
+
+  // Import and initialize the `csrf` library
+  const Tokens = await (await import('csrf')).default;
+  const tokens = new Tokens();
+
+  // Get session information if user is already logged in
+
   const sessionToken = context.req.cookies.sessionToken;
 
   const session = await getValidSessionByToken(sessionToken);
@@ -294,7 +324,30 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   //   };
   // }
 
+  await deleteExpiredSessions();
+
+  // Generate 5-minute short-lived session, only for the registration
+  const shortLivedSession = await insertFiveMinuteSessionWithoutUserId(
+    crypto.randomBytes(64).toString('base64'),
+  );
+
+  // Set new cookie for the short-lived session
+  const cookie = createSerializedRegisterSessionTokenCookie(
+    shortLivedSession.token,
+  );
+  context.res.setHeader('Set-Cookie', cookie);
+
+  // Use token from short-lived session to generate
+  // secret for the CSRF token
+  const csrfSecret = generateCsrfSecretByToken(shortLivedSession.token);
+
+  // Create CSRF token
+  const csrfToken = tokens.create(csrfSecret);
+
   return {
-    props: {},
+    props: {
+      // Pass CSRF Token via props
+      csrfToken,
+    },
   };
 }
