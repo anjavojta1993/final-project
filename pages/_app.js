@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
     useCallback(async () => {
       // Call the API to retrieve the user information
       // by automatically passing along the sessionToken cookie
-      const response = await fetch('/api/');
+      const response = await fetch('/api/profile');
       const json = await response.json();
 
       // If there are errors, return early
