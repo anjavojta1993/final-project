@@ -8,7 +8,8 @@ CREATE TABLE users (
      	first_name varchar(100) NOT NULL,
 			last_name varchar(100) NOT NULL,
 			email varchar(300) NOT NULL,
-			password_hash varchar(100) NOT NULL
+			password_hash varchar(100) NOT NULL,
+      role varchar(15) NOT NULL
     )
   `;
 };
