@@ -47,17 +47,44 @@ export async function insertUser(
   lastName: string,
   email: string,
   passwordHash: string,
+  role: string,
 ) {
-  const users = await sql`
+  const users = await sql<[User]>`
     INSERT INTO users
-      (first_name, last_name, email, password_hash)
+      (first_name, last_name, email, password_hash, role)
     VALUES
-      (${firstName}, ${lastName}, ${email}, ${passwordHash})
+      (${firstName}, ${lastName}, ${email}, ${passwordHash}, ${role})
     RETURNING
       id,
       first_name,
       last_name,
-      email
+      email,
+      role
+  `;
+  console.log(users);
+  // if therapist is true or false do second insert into therapist
+  // ID IS already here, just work with the id
+  return users.map((user) => camelcaseKeys(user))[0];
+}
+
+export async function insertTherapist(
+  firstName: string,
+  lastName: string,
+  email: string,
+  passwordHash: string,
+  role: string,
+) {
+  const users = await sql<[User]>`
+    INSERT INTO therapists
+      (first_name, last_name, email, password_hash, role)
+    VALUES
+      (${firstName}, ${lastName}, ${email}, ${passwordHash}, ${role})
+    RETURNING
+      id,
+      first_name,
+      last_name,
+      email,
+      role
   `;
   console.log(users);
   // if therapist is true or false do second insert into therapist
