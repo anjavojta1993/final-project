@@ -9,7 +9,7 @@ type Props = {
   errors?: ApplicationError[];
 };
 
-export default function SingleUserProfile(props: Props) {
+export default function SingleClientProfile(props: Props) {
   // Show message if user not allowed
   const errors = props.errors;
   if (errors) {
