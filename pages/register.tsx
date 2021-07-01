@@ -8,6 +8,7 @@ import Layout from '../components/Layout';
 import { normalText } from '../styles/sharedStyles';
 import { generateCsrfSecretByToken } from '../util/auth';
 import { getValidSessionByToken } from '../util/database';
+import { RegisterResponse } from './api/register';
 
 type Props = {
   refreshEmail: () => void;
@@ -136,13 +137,80 @@ const coloredButtonStyles = css`
   }
 `;
 
+const therapist = 'therapist';
+const client = 'client';
+
 export default function Register(props: Props) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isTherapist, setIsTherapist] = useState(false);
+  const [role, setRole] = useState(client);
+  const [error, setError] = useState('');
   const router = useRouter();
+
+  const formSubmit = async (event: any) => {
+    event.preventDefault();
+    if (role === 'client') {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          csrfToken: props.csrfToken,
+          role: client,
+        }),
+      });
+      const json = (await response.json()) as RegisterResponse;
+
+      if ('errors' in json) {
+        setError(json.errors[0].message);
+        return;
+      }
+
+      // update Login/Logout button in header
+      props.refreshEmail();
+
+      // Navigate to the user's page when
+      // they have been successfully created
+      router.push(`/profiles/${json.user.id}`);
+    } else {
+      event.preventDefault();
+
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          csrfToken: props.csrfToken,
+          role: therapist,
+        }),
+      });
+      const json = (await response.json()) as RegisterResponse;
+
+      if ('errors' in json) {
+        setError(json.errors[0].message);
+        return;
+      }
+
+      // update Login/Logout button in header
+      props.refreshEmail();
+
+      // Navigate to the user's page when
+      // they have been successfully created
+      router.push(`/profiles/${json.user.id}`);
+    }
+  };
 
   return (
     <Layout email={props.email}>
@@ -151,32 +219,7 @@ export default function Register(props: Props) {
       </Head>
       <div css={pageContainer}>
         <div css={formContainer}>
-          <form
-            onSubmit={async (event) => {
-              event.preventDefault();
-              const response = await fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  firstName: firstName,
-                  lastName: lastName,
-                  email: email,
-                  password: password,
-                  csrfToken: props.csrfToken,
-                }),
-              });
-              const { user: createdUser } = await response.json();
-
-              // update Login/Logout button in header
-              props.refreshEmail();
-
-              // Navigate to the user's page when
-              // they have been successfully created
-              router.push(`/profiles/${createdUser.id}`);
-            }}
-          >
+          <form onSubmit={formSubmit}>
             <div css={logoContainer}>
               <img
                 src="/images/logo.png"
@@ -250,13 +293,13 @@ export default function Register(props: Props) {
                   Please choose:
                   <select
                     id="role"
-                    value={isTherapist}
+                    value={role}
                     onChange={(event) => {
-                      setIsTherapist(event.currentTarget.value);
+                      setRole(event.currentTarget.value);
                     }}
                   >
-                    <option value="true">I am looking for a therapist</option>
-                    <option value="false">I am a therapist</option>
+                    <option value={client}>I am looking for a therapist</option>
+                    <option value={therapist}>I am a therapist</option>
                   </select>
                 </label>
               </div>
