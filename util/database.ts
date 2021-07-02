@@ -1,7 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
-import { Session, User, UserWithPasswordHash } from './types';
+import { Session, Therapist, User, UserWithPasswordHash } from './types';
 
 // import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 
@@ -51,46 +51,40 @@ export async function insertUser(
 ) {
   const users = await sql<[User]>`
     INSERT INTO users
-      (first_name, last_name, email, password_hash, role)
+      (first_name, last_name, email, password_hash)
     VALUES
-      (${firstName}, ${lastName}, ${email}, ${passwordHash}, ${role})
+      (${firstName}, ${lastName}, ${email}, ${passwordHash})
     RETURNING
       id,
       first_name,
       last_name,
-      email,
-      role
+      email
   `;
+
   console.log(users);
+  console.log(users[0]);
+  console.log(users[0].id);
+
   // if therapist is true or false do second insert into therapist
   // ID IS already here, just work with the id
 
-  //   const therapistId = await sql<[User]>`
-  //   INSERT INTO therapists
-  //     (user_id)
-  //   VALUES
-  //     (${userId}, ${therapist})
+  if (role === 'therapist') {
+    // keep everything between backticks clean bcs its sql, do it before or after then you can use JS
+    const therapist = await sql<[User]>`
+    INSERT INTO therapists
+    -- this is the name of the column
+      (user_id)
+    VALUES
+      (${users[0].id})
+      RETURNING
+      id
+  `;
 
-  // `;
+    console.log(therapist);
+  }
 
   return users.map((user) => camelcaseKeys(user))[0];
 }
-// if therapist is true or false do second insert into therapist
-// ID IS already here, just work with the id
-
-//   if (role === 'therapist') {
-//     await sql<[User]>`
-// SELECT user_id,
-//   FROM users
-//   WHERE
-//       user_id = ${userId}
-// INSERT into therapists
-// (user_id)
-// VALUES
-// (${userId})
-//   `;
-// }
-// }
 
 // function to get user by email
 
@@ -233,14 +227,31 @@ export async function getUserById(id?: number) {
       id,
       first_name,
       last_name,
-      email,
-      role
+      email
+
     FROM
       users
     WHERE
       id = ${id}
   `;
   return users.map((user) => camelcaseKeys(user))[0];
+}
+
+export async function getTherapistByUserId(id?: number) {
+  // Return undefined if userId is not parseable
+  // to an integer
+  if (!id) return undefined;
+
+  const therapists = await sql<[Therapist]>`
+    SELECT
+ *
+    FROM
+      therapists
+    WHERE
+      user_id = ${id}
+  `;
+  console.log(therapists);
+  return therapists.map((therapist) => camelcaseKeys(therapist))[0];
 }
 
 export async function insertFiveMinuteSessionWithoutUserId(token: string) {
