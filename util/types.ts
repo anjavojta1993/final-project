@@ -6,6 +6,20 @@ export type User = {
   role: string;
 };
 
+export type Therapist = {
+  id: number;
+  companyName: string;
+  costPerHour: string;
+  websiteUrl: string;
+  videoUrl: string;
+  region: string;
+  zipCode: string;
+  user_id: number;
+  streetAddress: string;
+  streetNumber: string;
+  specializations: string;
+};
+
 export type UserWithPasswordHash = User & {
   passwordHash: string;
 };
