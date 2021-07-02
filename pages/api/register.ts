@@ -57,7 +57,7 @@ export default async function Register(
     // Create a hash of the password to save in the database
     const passwordHash = await argon2.hash(password);
 
-    // save the information to the database
+    // calling the function that inserts the info in the database and I pass the parameters that I need inside this function, but that doesnt mean I am inserting all of these parameters into the database table
     const user: User = await insertUser(
       firstName,
       lastName,
