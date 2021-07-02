@@ -64,38 +64,38 @@ export async function insertUser(
   console.log(users);
   // if therapist is true or false do second insert into therapist
   // ID IS already here, just work with the id
-  return users.map((user) => camelcaseKeys(user))[0];
-}
 
-export async function insertTherapist(
-  firstName: string,
-  lastName: string,
-  email: string,
-  passwordHash: string,
-  role: string,
-) {
-  const users = await sql<[User]>`
-    INSERT INTO therapists
-      (first_name, last_name, email, password_hash, role)
-    VALUES
-      (${firstName}, ${lastName}, ${email}, ${passwordHash}, ${role})
-    RETURNING
-      id,
-      first_name,
-      last_name,
-      email,
-      role
-  `;
-  console.log(users);
-  // if therapist is true or false do second insert into therapist
-  // ID IS already here, just work with the id
+  //   const therapistId = await sql<[User]>`
+  //   INSERT INTO therapists
+  //     (user_id)
+  //   VALUES
+  //     (${userId}, ${therapist})
+
+  // `;
+
   return users.map((user) => camelcaseKeys(user))[0];
 }
+// if therapist is true or false do second insert into therapist
+// ID IS already here, just work with the id
+
+//   if (role === 'therapist') {
+//     await sql<[User]>`
+// SELECT user_id,
+//   FROM users
+//   WHERE
+//       user_id = ${userId}
+// INSERT into therapists
+// (user_id)
+// VALUES
+// (${userId})
+//   `;
+// }
+// }
 
 // function to get user by email
 
 export async function getUserWithPasswordHashByEmail(email?: string) {
-  // Return undefined if username is falsy
+  // Return undefined if email is falsy
   if (!email) return undefined;
 
   const users = await sql<[UserWithPasswordHash]>`
@@ -233,7 +233,8 @@ export async function getUserById(id?: number) {
       id,
       first_name,
       last_name,
-      email
+      email,
+      role
     FROM
       users
     WHERE
