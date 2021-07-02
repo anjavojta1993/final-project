@@ -35,27 +35,53 @@ export default function SingleClientProfile(props: Props) {
     );
   }
 
-  return (
-    <Layout email={props.email}>
-      <Head>
-        <title>
-          Profile page for {props.user.firstName} {props.user.lastName}
-        </title>
-      </Head>
+  if (props.user.role === 'client') {
+    console.log('role of client', props.user);
+    return (
+      <Layout email={props.email}>
+        <Head>
+          <title>
+            Client Profile page for {props.user.firstName} {props.user.lastName}
+          </title>
+        </Head>
 
-      <h1 data-cy="profile-page-h1">Profile Page</h1>
+        <h1 data-cy="profile-page-h1">Client Profile Page</h1>
 
-      <div>
-        id: <span data-cy="profile-page-id">{props.user.id}</span>
-      </div>
+        <div>
+          id: <span data-cy="profile-page-id">{props.user.id}</span>
+        </div>
 
-      <div>
-        email: <span data-cy="profile-page-id">{props.user.email}</span>
-      </div>
-      <div>first_name: {props.user.firstName}</div>
-      <div>last_name: {props.user.lastName}</div>
-    </Layout>
-  );
+        <div>
+          email: <span data-cy="profile-page-id">{props.user.email}</span>
+        </div>
+        <div>first_name: {props.user.firstName}</div>
+        <div>last_name: {props.user.lastName}</div>
+      </Layout>
+    );
+  } else if (props.user.role === 'therapist') {
+    return (
+      <Layout email={props.email}>
+        <Head>
+          <title>
+            Therapist Profile page for {props.user.firstName}{' '}
+            {props.user.lastName}
+          </title>
+        </Head>
+
+        <h1 data-cy="profile-page-h1">Therapist Profile Page</h1>
+
+        <div>
+          id: <span data-cy="profile-page-id">{props.user.id}</span>
+        </div>
+
+        <div>
+          email: <span data-cy="profile-page-id">{props.user.email}</span>
+        </div>
+        <div>first_name: {props.user.firstName}</div>
+        <div>last_name: {props.user.lastName}</div>
+      </Layout>
+    );
+  }
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
