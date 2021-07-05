@@ -20,6 +20,11 @@ export type Therapist = {
   specializations: string;
 };
 
+export type Specialization = {
+  id: number;
+  specializationName: string;
+};
+
 export type UserWithPasswordHash = User & {
   passwordHash: string;
 };
