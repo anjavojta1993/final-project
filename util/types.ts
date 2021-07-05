@@ -7,14 +7,14 @@ export type User = {
 };
 
 export type Therapist = {
-  id: number;
+  id?: number;
   companyName: string;
   costPerHour: string;
   websiteUrl: string;
   videoUrl: string;
   region: string;
   zipCode: string;
-  user_id: number;
+  user_id?: number;
   streetAddress: string;
   streetNumber: string;
   specializations: string;
