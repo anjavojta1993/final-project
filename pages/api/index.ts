@@ -19,6 +19,7 @@ export default async function usersHandler(
       req.body.lastName,
       req.body.email,
       req.body.passwordHash,
+      req.body.role,
     );
     return res.status(200).json({ user: user });
   }

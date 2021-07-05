@@ -3,13 +3,20 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import Layout from '../../components/Layout';
-import { ApplicationError, Therapist, User } from '../../util/types';
+import Specializations from '../../components/Specializations';
+import {
+  ApplicationError,
+  Specialization,
+  Therapist,
+  User,
+} from '../../util/types';
 
 type Props = {
   user?: User;
   therapist?: Therapist;
   email: string;
   errors?: ApplicationError[];
+  specialization: Specialization;
 };
 
 const pageContainer = css`
@@ -66,7 +73,6 @@ export default function SingleClientProfile(props: Props) {
   const [streetNumber, setStreetNumber] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [region, setRegion] = useState('');
-  const [specializations, setSpecializations] = useState('');
 
   // Show message if user not allowed
   const errors = props.errors;
@@ -145,7 +151,7 @@ export default function SingleClientProfile(props: Props) {
 
                 <div>
                   <label htmlFor="cost-per-hour">
-                    Please enter your average cost/hour for a session?
+                    Please enter your average cost/hour for a session:
                   </label>
                   <input
                     placeholder="e.g. 100"
@@ -246,6 +252,12 @@ export default function SingleClientProfile(props: Props) {
                     }}
                   />
                 </div>
+
+                <div>
+                  <Specializations
+                    specializationOptions={props.specialization}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -256,8 +268,12 @@ export default function SingleClientProfile(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { getUserById, getValidSessionByToken, getTherapistByUserId } =
-    await import('../../util/database');
+  const {
+    getAllSpecializations,
+    getUserById,
+    getValidSessionByToken,
+    getTherapistByUserId,
+  } = await import('../../util/database');
 
   const session = await getValidSessionByToken(
     context.req.cookies.sessionToken,
@@ -277,10 +293,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const user = await getUserById(Number(context.query.userId));
 
+  const specialization = await getAllSpecializations();
+  console.log('sepcializations list', specialization);
+
   return {
     props: {
       user: user,
       therapist: therapist || null,
+      specialization: specialization.map((spec) => {
+        return {
+          value: spec.specializationName,
+          label: spec.specializationName,
+        };
+      }),
     },
   };
 }

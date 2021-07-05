@@ -1,7 +1,13 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
-import { Session, Therapist, User, UserWithPasswordHash } from './types';
+import {
+  Session,
+  Specialization,
+  Therapist,
+  User,
+  UserWithPasswordHash,
+} from './types';
 
 // import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 
@@ -262,4 +268,17 @@ export async function insertFiveMinuteSessionWithoutUserId(token: string) {
     RETURNING *
   `;
   return sessions.map((session) => camelcaseKeys(session))[0];
+}
+
+export async function getAllSpecializations() {
+  const specializations = await sql<[Specialization]>`
+    SELECT
+    id,
+ specialization_name
+
+    FROM
+      specializations
+  `;
+  console.log('give me the specializations', specializations);
+  return specializations.map((specialization) => camelcaseKeys(specialization));
 }
