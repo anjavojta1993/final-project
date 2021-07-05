@@ -273,12 +273,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const therapist = await getTherapistByUserId(Number(context.query.userId));
+  console.log('therapist awaiting', therapist);
 
   const user = await getUserById(Number(context.query.userId));
+
   return {
     props: {
       user: user,
-      therapist: therapist,
+      therapist: therapist || null,
     },
   };
 }
