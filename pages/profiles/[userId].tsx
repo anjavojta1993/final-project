@@ -1,15 +1,18 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import router from 'next/router';
 import { useState } from 'react';
 import Layout from '../../components/Layout';
 import Specializations from '../../components/Specializations';
+import { normalText } from '../../styles/sharedStyles';
 import {
   ApplicationError,
   Specialization,
   Therapist,
   User,
 } from '../../util/types';
+import { TherapistProfileResponse } from '../api/therapistprofile';
 
 type Props = {
   user?: User;
@@ -52,6 +55,28 @@ const inputsContainer = css`
   margin-bottom: 10px;
 `;
 
+const coloredButtonStyles = css`
+  background: linear-gradient(to left, #faffd1, #a1ffce);
+  font-size: ${normalText};
+  justify-content: center;
+  font-weight: 800;
+  border: none;
+  width: 250px;
+  padding: 20px 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+
+  :hover {
+    transform: scale(1.1, 1.1);
+    -webkit-transform: scale(1.1, 1.1);
+    -moz-transform: scale(1.1, 1.1);
+    cursor: pointer;
+  }
+`;
+
 // define const for regions
 
 const vienna = 'Vienna';
@@ -72,7 +97,41 @@ export default function SingleClientProfile(props: Props) {
   const [streetAddress, setStreetAddress] = useState('');
   const [streetNumber, setStreetNumber] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState('Vienna');
+  const [error, setError] = useState('');
+
+  const formSubmitTherapist = async (event: any) => {
+    event.preventDefault();
+    {
+      const response = await fetch('/api/therapistprofile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: props.user.id,
+          companyName: companyName,
+          costPerHour: costPerHour,
+          websiteUrl: websiteUrl,
+          videoUrl: videoUrl,
+          region: region,
+          zipCode: zipCode,
+          streetAddress: streetAddress,
+          streetNumber: streetNumber,
+        }),
+      });
+      const json = (await response.json()) as TherapistProfileResponse;
+
+      if ('errors' in json) {
+        setError(json.errors[0].message);
+        return;
+      }
+
+      // Navigate to the successfull creation page when
+      // therapist profile has been successfully created
+      router.push(`/profiles/creation-successful`);
+    }
+  };
 
   // Show message if user not allowed
   const errors = props.errors;
@@ -130,117 +189,95 @@ export default function SingleClientProfile(props: Props) {
         </Head>
         <div css={pageContainer}>
           <div css={formContainer}>
-            <h1 data-cy="profile-page-h1">Therapist Profile Page</h1>
-
-            <div>
-              <div css={inputsContainer}>
-                <div>
-                  <label htmlFor="company-name">
-                    What is your company name?{' '}
-                  </label>
-                  <input
-                    placeholder="e.g. Mindful zone, Dr. Antje Enzi"
-                    aria-label="company-name"
-                    data-cy="company-name"
-                    value={companyName}
-                    onChange={(event) => {
-                      setCompanyName(event.currentTarget.value);
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="cost-per-hour">
-                    Please enter your average cost/hour for a session:
-                  </label>
-                  <input
-                    placeholder="e.g. 100"
-                    aria-label="cost-per-hour"
-                    data-cy="cost-per-hour"
-                    value={costPerHour}
-                    onChange={(event) => {
-                      setCostPerHour(event.currentTarget.value);
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="street-name">
-                    Please enter your address:
-                  </label>
-                  <input
-                    placeholder="Street name e.g. Gartenweg"
-                    aria-label="street-name"
-                    data-cy="street-name"
-                    value={streetAddress}
-                    onChange={(event) => {
-                      setStreetAddress(event.currentTarget.value);
-                    }}
-                  />
-                  <input
-                    placeholder="Street number e.g. 4"
-                    aria-label="street-number"
-                    data-cy="street-number"
-                    value={streetNumber}
-                    onChange={(event) => {
-                      setStreetNumber(event.currentTarget.value);
-                    }}
-                  />
-                </div>
-                <input
-                  placeholder="ZIP Code e.g 1010"
-                  aria-label="zip-code"
-                  data-cy="zip-code"
-                  value={zipCode}
-                  onChange={(event) => {
-                    setZipCode(event.currentTarget.value);
-                  }}
-                />
-              </div>
-              <select
-                id="region"
-                value={region}
-                onChange={(event) => {
-                  setRegion(event.currentTarget.value);
-                }}
-              >
-                <option value={vienna}>Vienna</option>
-                <option value={burgenland}>Burgenland</option>
-                <option value={loweraustria}>Lower Austria</option>
-                <option value={upperaustria}>Upper Austria</option>
-                <option value={styria}>Styria</option>
-                <option value={salzburg}>Salzburg</option>
-                <option value={vorarlberg}>Vorarlberg</option>
-                <option value={tyrol}>Tyrol</option>
-                <option value={carinthia}>Carinthia</option>
-              </select>
+            <form onSubmit={formSubmitTherapist}>
+              <h1 data-cy="profile-page-h1">Therapist Profile Page</h1>
 
               <div>
-                <label htmlFor="website-url">
-                  Please enter your website url:
-                </label>
-                <input
-                  placeholder="e.g. https://www.mindfultherapy.com"
-                  aria-label="website-url"
-                  data-cy="website-url"
-                  value={websiteUrl}
+                <div css={inputsContainer}>
+                  <div>
+                    <label htmlFor="company-name">
+                      What is your company name?{' '}
+                    </label>
+                    <input
+                      placeholder="e.g. Mindful zone, Dr. Antje Enzi"
+                      aria-label="company-name"
+                      data-cy="company-name"
+                      value={companyName}
+                      onChange={(event) => {
+                        setCompanyName(event.currentTarget.value);
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="cost-per-hour">
+                      Please enter your average cost/hour for a session:
+                    </label>
+                    <input
+                      placeholder="e.g. 100"
+                      aria-label="cost-per-hour"
+                      data-cy="cost-per-hour"
+                      value={costPerHour}
+                      onChange={(event) => {
+                        setCostPerHour(event.currentTarget.value);
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="street-name">
+                      Please enter your address:
+                    </label>
+                    <input
+                      placeholder="Street name e.g. Gartenweg"
+                      aria-label="street-name"
+                      data-cy="street-name"
+                      value={streetAddress}
+                      onChange={(event) => {
+                        setStreetAddress(event.currentTarget.value);
+                      }}
+                    />
+                    <input
+                      placeholder="Street number e.g. 4"
+                      aria-label="street-number"
+                      data-cy="street-number"
+                      value={streetNumber}
+                      onChange={(event) => {
+                        setStreetNumber(event.currentTarget.value);
+                      }}
+                    />
+                  </div>
+                  <input
+                    placeholder="ZIP Code e.g 1010"
+                    aria-label="zip-code"
+                    data-cy="zip-code"
+                    value={zipCode}
+                    onChange={(event) => {
+                      setZipCode(event.currentTarget.value);
+                    }}
+                  />
+                </div>
+                <select
+                  id="region"
+                  value={region}
                   onChange={(event) => {
-                    setWebsiteUrl(event.currentTarget.value);
+                    setRegion(event.currentTarget.value);
                   }}
-                />
+                >
+                  <option value={vienna}>Vienna</option>
+                  <option value={burgenland}>Burgenland</option>
+                  <option value={loweraustria}>Lower Austria</option>
+                  <option value={upperaustria}>Upper Austria</option>
+                  <option value={styria}>Styria</option>
+                  <option value={salzburg}>Salzburg</option>
+                  <option value={vorarlberg}>Vorarlberg</option>
+                  <option value={tyrol}>Tyrol</option>
+                  <option value={carinthia}>Carinthia</option>
+                </select>
 
                 <div>
-                  <label htmlFor="video-url">
-                    Please upload a video in vertical view (max. 60 seconds)
-                    where you answer the following 3 questions:
-                    <ol>
-                      <li>Who are you and what are you specialized on?</li>
-                      <li>
-                        Describe a typical situation a client would come to you
-                        with.
-                      </li>
-                      <li>Why do you love what you do?</li>
-                    </ol>
+                  <label htmlFor="website-url">
+                    Please enter your website url:
                   </label>
                   <input
                     placeholder="e.g. https://www.mindfultherapy.com"
@@ -251,15 +288,44 @@ export default function SingleClientProfile(props: Props) {
                       setWebsiteUrl(event.currentTarget.value);
                     }}
                   />
-                </div>
 
-                <div>
-                  <Specializations
-                    specializationOptions={props.specialization}
-                  />
+                  <div>
+                    <label htmlFor="video-url">
+                      Please upload a video in vertical view (max. 60 seconds)
+                      where you answer the following 3 questions:
+                      <ol>
+                        <li>Who are you and what are you specialized on?</li>
+                        <li>
+                          Describe a typical situation a client would come to
+                          you with.
+                        </li>
+                        <li>Why do you love what you do?</li>
+                      </ol>
+                    </label>
+                    <input
+                      placeholder="e.g. https://www.mindfultherapy.com"
+                      aria-label="website-url"
+                      data-cy="website-url"
+                      value={videoUrl}
+                      onChange={(event) => {
+                        setVideoUrl(event.currentTarget.value);
+                      }}
+                    />
+                    <button>Upload button</button>
+                  </div>
+
+                  <div>
+                    <label htmlFor="specializations">
+                      Please choose up to 5 specializations:
+                    </label>
+                    <Specializations
+                      specializationOptions={props.specialization}
+                    />
+                  </div>
+                  <button css={coloredButtonStyles}>Submit</button>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </Layout>
@@ -298,7 +364,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   return {
     props: {
-      user: user,
+      user: user || null,
       therapist: therapist || null,
       specialization: specialization.map((spec) => {
         return {
