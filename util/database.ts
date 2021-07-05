@@ -92,6 +92,50 @@ export async function insertUser(
   return users.map((user) => camelcaseKeys(user))[0];
 }
 
+// function to insert therapist
+
+export async function updateTherapistById(
+  userId: number,
+  companyName: string,
+  costPerHour: string,
+  websiteUrl: string,
+  videoUrl: string,
+  region: string,
+  zipCode: string,
+  streetAddress: string,
+  streetNumber: string,
+) {
+  const therapists = await sql<[Therapist]>`
+   UPDATE therapists
+
+      SET
+      display_name = ${companyName},
+      cost_per_hour = ${costPerHour},
+      website_url = ${websiteUrl},
+      video_url = ${videoUrl},
+      address_street = ${streetAddress},
+      address_number = ${streetNumber},
+      region = ${region},
+      zip_code = ${zipCode}
+
+      WHERE
+      id = ${userId}
+
+    RETURNING
+    id,
+     display_name,
+      cost_per_hour,
+      website_url,
+      video_url,
+      address_street,
+      address_number,
+      region,
+      zip_code
+  `;
+  console.log('therapist api response', therapists);
+  return therapists.map((therapist) => camelcaseKeys(therapist))[0];
+}
+
 // function to get user by email
 
 export async function getUserWithPasswordHashByEmail(email?: string) {
