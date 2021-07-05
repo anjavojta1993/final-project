@@ -237,10 +237,9 @@ export async function getUserById(id?: number) {
   return users.map((user) => camelcaseKeys(user))[0];
 }
 
-export async function getTherapistByUserId(id?: number) {
-  // Return undefined if userId is not parseable
-  // to an integer
-  if (!id) return undefined;
+export async function getTherapistByUserId(userId?: number) {
+  // Return undefined if userId does not exist
+  if (!userId) return undefined;
 
   const therapists = await sql<[Therapist]>`
     SELECT
@@ -248,9 +247,9 @@ export async function getTherapistByUserId(id?: number) {
     FROM
       therapists
     WHERE
-      user_id = ${id}
+      user_id = ${userId}
   `;
-  console.log(therapists);
+  console.log('give me the therapists', therapists);
   return therapists.map((therapist) => camelcaseKeys(therapist))[0];
 }
 
