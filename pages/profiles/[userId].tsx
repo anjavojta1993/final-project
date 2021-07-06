@@ -20,6 +20,7 @@ type Props = {
   email: string;
   errors?: ApplicationError[];
   specialization: Specialization;
+  userId: Number;
 };
 
 const pageContainer = css`
@@ -109,7 +110,7 @@ export default function SingleClientProfile(props: Props) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: props.user.id,
+          userId: props.userId,
           companyName: companyName,
           costPerHour: costPerHour,
           websiteUrl: websiteUrl,
@@ -318,9 +319,9 @@ export default function SingleClientProfile(props: Props) {
                     <label htmlFor="specializations">
                       Please choose up to 5 specializations:
                     </label>
-                    <Specializations
+                    {/* <Specializations
                       specializationOptions={props.specialization}
-                    />
+                    /> */}
                   </div>
                   <button css={coloredButtonStyles}>Submit</button>
                 </div>
@@ -359,12 +360,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const user = await getUserById(Number(context.query.userId));
 
+  const userId = context.query.userId;
+
   const specialization = await getAllSpecializations();
-  console.log('sepcializations list', specialization);
+  console.log('specializations list', specialization);
 
   return {
     props: {
       user: user || null,
+      userId: userId,
       therapist: therapist || null,
       specialization: specialization.map((spec) => {
         return {

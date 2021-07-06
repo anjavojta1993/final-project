@@ -20,7 +20,7 @@ export default async function UpdateTherapist(
     // Destructure relevant information from the request body
     const {
       // find a way to get this id
-      id,
+      userId,
       companyName,
       costPerHour,
       websiteUrl,
@@ -40,7 +40,7 @@ export default async function UpdateTherapist(
 
     // calling the function that inserts the info in the database and I pass the parameters that I need inside this function, but that doesnt mean I am inserting all of these parameters into the database table
     const therapist = await updateTherapistById(
-      id,
+      userId,
       companyName,
       costPerHour,
       websiteUrl,

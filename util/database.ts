@@ -109,7 +109,7 @@ export async function updateTherapistById(
    UPDATE therapists
 
       SET
-      display_name = ${companyName},
+      company_name = ${companyName},
       cost_per_hour = ${costPerHour},
       website_url = ${websiteUrl},
       video_url = ${videoUrl},
@@ -119,11 +119,11 @@ export async function updateTherapistById(
       zip_code = ${zipCode}
 
       WHERE
-      id = ${userId}
+      user_id = ${userId}
 
     RETURNING
     id,
-     display_name,
+     company_name,
       cost_per_hour,
       website_url,
       video_url,
