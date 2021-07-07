@@ -5,6 +5,7 @@ import router from 'next/router';
 import { useState } from 'react';
 import Layout from '../../components/Layout';
 import Specializations from '../../components/Specializations';
+import VideoUploader from '../../components/VideoUploader';
 import { normalText } from '../../styles/sharedStyles';
 import {
   ApplicationError,
@@ -292,7 +293,7 @@ export default function SingleClientProfile(props: Props) {
 
                   <div>
                     <label htmlFor="video-url">
-                      Please upload a video in vertical view (max. 60 seconds)
+                      Please upload a video in horizontal view (max. 60 seconds)
                       where you answer the following 3 questions:
                       <ol>
                         <li>Who are you and what are you specialized on?</li>
@@ -303,16 +304,10 @@ export default function SingleClientProfile(props: Props) {
                         <li>Why do you love what you do?</li>
                       </ol>
                     </label>
-                    <input
-                      placeholder="e.g. https://www.mindfultherapy.com"
-                      aria-label="website-url"
-                      data-cy="website-url"
-                      value={videoUrl}
-                      onChange={(event) => {
-                        setVideoUrl(event.currentTarget.value);
-                      }}
+                    <VideoUploader
+                      videoUrl={videoUrl}
+                      setVideoUrl={setVideoUrl}
                     />
-                    <button>Upload button</button>
                   </div>
 
                   <div>
