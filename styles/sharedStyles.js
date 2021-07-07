@@ -5,6 +5,8 @@ export const normalText = '16px';
 export const smallText = '0.75rem';
 export const largeText = '1.5rem';
 
+export const h1 = '3rem';
+export const h2 = '2rem';
 
 // color palette
 // text sizes

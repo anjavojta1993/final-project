@@ -81,7 +81,7 @@ export default function Header(props) {
         <a css={navBar}>Home</a>
       </Link>
       <Link href="/products">
-        <a css={navBar}>How it works</a>
+        <a css={navBar}>Search</a>
       </Link>
       <Link href="/contact">
         <a css={navBar}>Contact</a>
