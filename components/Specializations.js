@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 
-// import { Specialization } from '../util/types';
-
 export default function Specializations(props) {
   const maxOptions = 5;
   const [selectedSpecializations, setSelectedSpecializations] = useState('');
@@ -11,8 +9,8 @@ export default function Specializations(props) {
     console.log(event);
   };
 
-  console.log(props.specializationOptions);
-
+  console.log('props spec options', props.specializationOptions);
+  console.log('therapist choice of specializations', selectedSpecializations);
   return (
     <Select
       onChange={handleTypeSelect}

@@ -4,9 +4,10 @@
 exports.up = async function up(sql) {
   await sql`
 CREATE TABLE therapists_specializations(
-      user_id integer REFERENCES users (id),
-			therapist_id integer REFERENCES therapists (id),
-			PRIMARY KEY (user_id, therapist_id)
+  PRIMARY KEY (specialization_id, therapist_id),
+      specialization_id integer REFERENCES specializations (id),
+			therapist_id integer REFERENCES therapists (id)
+
     )
   `;
 };

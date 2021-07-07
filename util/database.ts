@@ -132,9 +132,36 @@ export async function updateTherapistById(
       region,
       zip_code
   `;
+
   console.log('therapist api response', therapists);
+  console.log('therapist id', therapists[0].id);
+
+  // if (!therapists[0].id) return undefined;
+
+  // const therapistId = await sql<[Therapist]>`
+  // INSERT INTO therapists_specializations
+  // -- this is the name of the column
+  //   (therapist_id)
+  // VALUES
+  //   (${therapists[0].id})
+  // `;
+
+  // console.log(therapistId);
+
   return therapists.map((therapist) => camelcaseKeys(therapist))[0];
 }
+
+// function to insertSpecializations
+
+// const specializationId = await sql<[Specialization]>`
+//   INSERT INTO therapists_specializations
+//   -- this is the name of the column
+//     (specialization_id)
+//   VALUES
+//     (${therapists[0].id})
+//     RETURNING
+//     id
+//   `;
 
 // function to get user by email
 

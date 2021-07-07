@@ -52,6 +52,11 @@ export default async function UpdateTherapist(
     );
 
     console.log('therapist api response', updateTherapistById);
+
+    if (!therapist) {
+      return undefined;
+    }
+
     return res.status(200).json({ therapist: therapist });
   }
 }

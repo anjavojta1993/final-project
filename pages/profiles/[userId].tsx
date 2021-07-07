@@ -319,11 +319,11 @@ export default function SingleClientProfile(props: Props) {
                     <label htmlFor="specializations">
                       Please choose up to 5 specializations:
                     </label>
-                    {/* <Specializations
+                    <Specializations
                       specializationOptions={props.specialization}
-                    /> */}
+                    />
                   </div>
-                  <button css={coloredButtonStyles}>Submit</button>
+                  <button css={coloredButtonStyles}>Save</button>
                 </div>
               </div>
             </form>
@@ -341,6 +341,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     getValidSessionByToken,
     getTherapistByUserId,
   } = await import('../../util/database');
+
+  console.log('list of all specializations', getAllSpecializations);
 
   const session = await getValidSessionByToken(
     context.req.cookies.sessionToken,
@@ -372,7 +374,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       therapist: therapist || null,
       specialization: specialization.map((spec) => {
         return {
-          value: spec.specializationName,
+          value: spec.id,
           label: spec.specializationName,
         };
       }),

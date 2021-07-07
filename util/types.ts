@@ -17,7 +17,6 @@ export type Therapist = {
   user_id?: number;
   streetAddress: string;
   streetNumber: string;
-  specializations: string;
 };
 
 export type Specialization = {

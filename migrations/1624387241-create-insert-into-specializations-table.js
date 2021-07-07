@@ -22,7 +22,7 @@ const specializations = [
   { specialization_name: 'Gambling' },
   { specialization_name: 'HIV/AIDS' },
   { specialization_name: 'Hypnotherapy' },
-  { specialization_name: 'Imoulse Control Disorders' },
+  { specialization_name: 'Impulse Control Disorders' },
   { specialization_name: 'Infertility/Adoption' },
   { specialization_name: 'Infidelity' },
   { specialization_name: 'LGBTQ+ Issues' },
