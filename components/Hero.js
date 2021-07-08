@@ -116,7 +116,7 @@ export default function Hero() {
           </h2>
         </div>
         <div css={heroButtonsContainer}>
-          <Link href="/register/">
+          <Link href="/search/">
             <a css={buttonStylesLight}>Search therapist</a>
           </Link>
           <Link href="/register/">

@@ -136,22 +136,55 @@ export async function updateTherapistById(
   console.log('therapist api response', therapists);
   console.log('therapist id', therapists[0].id);
 
-  // if (!therapists[0].id) return undefined;
+  if (!therapists[0].id) return undefined;
 
-  // const therapistId = await sql<[Therapist]>`
-  // INSERT INTO therapists_specializations
-  // -- this is the name of the column
-  //   (therapist_id)
-  // VALUES
-  //   (${therapists[0].id})
-  // `;
+  const therapistId = await sql<[Therapist]>`
+  INSERT INTO therapists_specializations
+  -- this is the name of the column
+    (therapist_id)
+  VALUES
+    (${therapists[0].id})
+  `;
 
-  // console.log(therapistId);
+  console.log(therapistId);
 
   return therapists.map((therapist) => camelcaseKeys(therapist))[0];
 }
 
 // function to insertSpecializations
+
+export async function insertTherapistSpecializations(
+  specializationName: string,
+  id: string,
+) {
+  const specializationById = await sql<Specialization[]>`
+
+SELECT
+specialization_id
+FROM
+ specializations
+ WHERE
+ specialization_name= ${specializationName}
+ `;
+
+const specializationId = await sql<Specialization[]>`
+INSERT INTO therapists_specializations
+(specialization_id)
+VALUES
+(${id})
+
+  `;
+  return specializationId.map((spec) => camelcaseKeys(spec))[0];
+}
+
+// const specializationId = await sql<[Specialization]>`
+//     SELECT
+//       *
+//     FROM
+//       users
+//     WHERE
+//       specialization_name= ${selectedSpecializations}
+//   `;
 
 // const specializationId = await sql<[Specialization]>`
 //   INSERT INTO therapists_specializations
@@ -353,3 +386,19 @@ export async function getAllSpecializations() {
   console.log('give me the specializations', specializations);
   return specializations.map((specialization) => camelcaseKeys(specialization));
 }
+
+// export async function getSpecializationById() {
+//   // Return undefined if userId does not exist
+//   if (!specializationId) return undefined;
+
+//   const therapists = await sql<[Therapist]>`
+//      SELECT
+//   *
+//      FROM
+//        therapists
+//      WHERE
+//        user_id = ${userId}
+//    `;
+//   console.log('give me the therapists', therapists);
+//   return therapists.map((therapist) => camelcaseKeys(therapist))[0];
+// }

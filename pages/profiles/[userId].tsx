@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import router from 'next/router';
 import { useState } from 'react';
+import Select from 'react-select';
 import Layout from '../../components/Layout';
 import Specializations from '../../components/Specializations';
 import VideoUploader from '../../components/VideoUploader';
@@ -21,6 +22,7 @@ type Props = {
   email: string;
   errors?: ApplicationError[];
   specialization: Specialization;
+  specializationName: string;
   userId: Number;
 };
 
@@ -92,6 +94,9 @@ const carinthia = 'Carinthia';
 const styria = 'Styria';
 
 export default function SingleClientProfile(props: Props) {
+  console.log('alle props', props);
+  const maxOptions = 5;
+  const [selectedSpecializations, setSelectedSpecializations] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [costPerHour, setCostPerHour] = useState('');
   const [websiteUrl, setWebsiteUrl] = useState('');
@@ -101,6 +106,10 @@ export default function SingleClientProfile(props: Props) {
   const [zipCode, setZipCode] = useState('');
   const [region, setRegion] = useState('Vienna');
   const [error, setError] = useState('');
+
+  const handleTypeSelect = (event: any) => {
+    setSelectedSpecializations(event);
+  };
 
   const formSubmitTherapist = async (event: any) => {
     event.preventDefault();
@@ -120,6 +129,7 @@ export default function SingleClientProfile(props: Props) {
           zipCode: zipCode,
           streetAddress: streetAddress,
           streetNumber: streetNumber,
+          specializations: selectedSpecializations,
         }),
       });
       const json = (await response.json()) as TherapistProfileResponse;
@@ -314,9 +324,24 @@ export default function SingleClientProfile(props: Props) {
                     <label htmlFor="specializations">
                       Please choose up to 5 specializations:
                     </label>
-                    <Specializations
-                      specializationOptions={props.specialization}
+                    <Select
+                      onChange={handleTypeSelect}
+                      isMulti
+                      options={
+                        selectedSpecializations.length === maxOptions
+                          ? []
+                          : props.specializationName
+                      }
+                      noOptionsMessage={() => {
+                        return selectedSpecializations.length === maxOptions
+                          ? 'You cannot choose more than 5 specializations'
+                          : 'No options available';
+                      }}
+                      value={selectedSpecializations}
                     />
+                    {/* <Specializations
+                      specializationOptions={props.specialization}
+                    /> */}
                   </div>
                   <button css={coloredButtonStyles}>Save</button>
                 </div>
