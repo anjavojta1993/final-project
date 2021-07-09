@@ -157,6 +157,8 @@ export async function insertTherapistSpecializations(
   specializationName: string,
   id: string,
 ) {
+  if (!id) return undefined;
+
   const specializationById = await sql<Specialization[]>`
 
 SELECT
@@ -167,7 +169,7 @@ FROM
  specialization_name= ${specializationName}
  `;
 
-const specializationId = await sql<Specialization[]>`
+  const specializationId = await sql<Specialization[]>`
 INSERT INTO therapists_specializations
 (specialization_id)
 VALUES
