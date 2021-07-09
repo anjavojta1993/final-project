@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import {
   getValidSessionByToken,
-  insertTherapistSpecializations,
   updateTherapistById,
 } from '../../util/database';
 import { ApplicationError, Specialization, Therapist } from '../../util/types';
@@ -30,6 +29,7 @@ export default async function UpdateTherapist(
       zipCode,
       streetAddress,
       streetNumber,
+      specializationIds,
     } = req.body;
 
     // check if userId, etc. is not undefined
@@ -50,6 +50,7 @@ export default async function UpdateTherapist(
       zipCode,
       streetAddress,
       streetNumber,
+      specializationIds,
     );
 
     console.log('therapist api response', updateTherapistById);
@@ -62,39 +63,39 @@ export default async function UpdateTherapist(
   }
 }
 
-export async function InsertSpecializations(
-  req: NextApiRequest,
-  res: NextApiResponse<TherapistProfileResponse>,
-) {
-  if (req.method === 'POST') {
-    const validSession = await getValidSessionByToken(req.cookies.sessionToken);
-    // Destructure relevant information from the request body
-    const { specializationName, id } = req.body;
+// export async function InsertSpecializations(
+//   req: NextApiRequest,
+//   res: NextApiResponse<TherapistProfileResponse>,
+// ) {
+//   if (req.method === 'POST') {
+//     const validSession = await getValidSessionByToken(req.cookies.sessionToken);
+//     Destructure relevant information from the request body
+//     const { specializationName, id } = req.body;
 
-    // check if userId, etc. is not undefined
-    if (!validSession) {
-      return res
-        .status(403)
-        .json({ errors: [{ message: 'No valid session.' }] });
-    }
+//     check if userId, etc. is not undefined
+//     if (!validSession) {
+//       return res
+//         .status(403)
+//         .json({ errors: [{ message: 'No valid session.' }] });
+//     }
 
-    // calling the function that inserts the info in the database and I pass the parameters that I need inside this function, but that doesnt mean I am inserting all of these parameters into the database table
-    const therapistSpecialization = await insertTherapistSpecializations(
-      specializationName,
-      id,
-    );
+//     calling the function that inserts the info in the database and I pass the parameters that I need inside this function, but that doesnt mean I am inserting all of these parameters into the database table
+//     const therapistSpecialization = await insertTherapistSpecializations(
+//       specializationName,
+//       id,
+//     );
 
-    console.log(
-      'therapist specialization api response',
-      insertTherapistSpecializations,
-    );
+//     console.log(
+//       'therapist specialization api response',
+//       insertTherapistSpecializations,
+//     );
 
-    if (!therapistSpecialization) {
-      return undefined;
-    }
+//     if (!therapistSpecialization) {
+//       return undefined;
+//     }
 
-    return res
-      .status(200)
-      .json({ therapistSpecialization: therapistSpecialization });
-  }
-}
+//     return res
+//       .status(200)
+//       .json({ therapistSpecialization: therapistSpecialization });
+//   }
+// }

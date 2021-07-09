@@ -4,6 +4,7 @@ import postgres from 'postgres';
 import {
   Session,
   Specialization,
+  SpecializationType,
   Therapist,
   User,
   UserWithPasswordHash,
@@ -104,6 +105,7 @@ export async function updateTherapistById(
   zipCode: string,
   streetAddress: string,
   streetNumber: string,
+  specializationIds: number,
 ) {
   const therapists = await sql<[Therapist]>`
    UPDATE therapists
@@ -138,15 +140,26 @@ export async function updateTherapistById(
 
   if (!therapists[0].id) return undefined;
 
-  const therapistId = await sql<[Therapist]>`
+  const therapistId = await sql`
   INSERT INTO therapists_specializations
   -- this is the name of the column
-    (therapist_id)
+    (therapist_id, specialization_id)
   VALUES
-    (${therapists[0].id})
+    (${therapists[0].id}),
+     (${specializationIds})
   `;
 
   console.log(therapistId);
+
+  // const specializationId = await sql<[SpecializationType]>`
+  // INSERT INTO therapists_specializations
+  // -- this is the name of the column
+  //   (specialization_id)
+  // VALUES
+  //   (${specializationIds})
+  // `;
+
+  // console.log(specializationId);
 
   return therapists.map((therapist) => camelcaseKeys(therapist))[0];
 }

@@ -3,7 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import router from 'next/router';
 import { useState } from 'react';
-import Select, { ActionMeta } from 'react-select';
+import Select from 'react-select';
 import { ValueType } from 'react-select/lib/types';
 import Layout from '../../components/Layout';
 import Specializations from '../../components/Specializations';
@@ -12,6 +12,7 @@ import { normalText } from '../../styles/sharedStyles';
 import {
   ApplicationError,
   Specialization,
+  SpecializationType,
   Therapist,
   User,
 } from '../../util/types';
@@ -23,13 +24,8 @@ type Props = {
   email: string;
   errors?: ApplicationError[];
   specializationName: string;
-  specialization: OptionType[];
+  specialization: SpecializationType[];
   userId: Number;
-};
-
-type OptionType = {
-  value: number;
-  label: string;
 };
 
 const pageContainer = css`
@@ -104,7 +100,7 @@ export default function SingleClientProfile(props: Props) {
 
   const maxOptions = 5;
   const [selectedSpecializations, setSelectedSpecializations] =
-    useState<object[]>();
+    useState<SpecializationType[]>();
   const [companyName, setCompanyName] = useState('');
   const [costPerHour, setCostPerHour] = useState('');
   const [websiteUrl, setWebsiteUrl] = useState('');
@@ -117,7 +113,7 @@ export default function SingleClientProfile(props: Props) {
 
   console.log('therapist choice of specializations', selectedSpecializations);
 
-  const handleTypeSelect = (selectedOption: OptionType[]) => {
+  const handleTypeSelect = (selectedOption: SpecializationType[]) => {
     setSelectedSpecializations(selectedOption);
     console.log('selected option', selectedOption);
   };
@@ -140,7 +136,7 @@ export default function SingleClientProfile(props: Props) {
           zipCode: zipCode,
           streetAddress: streetAddress,
           streetNumber: streetNumber,
-          specializations: selectedSpecializations?.map((spec) => spec.value),
+          specializationIds: selectedSpecializations?.map((spec) => spec.value),
         }),
       });
       const json = (await response.json()) as TherapistProfileResponse;
@@ -325,10 +321,10 @@ export default function SingleClientProfile(props: Props) {
                         <li>Why do you love what you do?</li>
                       </ol>
                     </label>
-                    <VideoUploader
+                    {/* <VideoUploader
                       videoUrl={videoUrl}
                       setVideoUrl={setVideoUrl}
-                    />
+                    /> */}
                   </div>
 
                   <div>
@@ -336,8 +332,10 @@ export default function SingleClientProfile(props: Props) {
                       Please choose up to 5 specializations:
                     </label>
                     <Select
-                      onChange={(selectedOption: ValueType<OptionType>) =>
-                        handleTypeSelect(selectedOption as OptionType[])
+                      onChange={(
+                        selectedOption: ValueType<SpecializationType>,
+                      ) =>
+                        handleTypeSelect(selectedOption as SpecializationType[])
                       }
                       isMulti
                       options={

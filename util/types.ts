@@ -35,4 +35,9 @@ export type Session = {
   userId: number;
 };
 
+export type SpecializationType = {
+  value: number;
+  label: string;
+};
+
 export type ApplicationError = { message: string };
