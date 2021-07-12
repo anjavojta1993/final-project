@@ -119,6 +119,10 @@ export default function SingleClientProfile(props: Props) {
   };
 
   const formSubmitTherapist = async (event: any) => {
+    const specializationIds = selectedSpecializations?.map(
+      (spec) => spec.value,
+    );
+    console.log('show me if its right', specializationIds);
     event.preventDefault();
     {
       const response = await fetch('/api/therapistprofile', {
@@ -139,6 +143,7 @@ export default function SingleClientProfile(props: Props) {
           specializationIds: selectedSpecializations?.map((spec) => spec.value),
         }),
       });
+
       const json = (await response.json()) as TherapistProfileResponse;
 
       if ('errors' in json) {

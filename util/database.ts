@@ -68,7 +68,7 @@ export async function insertUser(
       email
   `;
 
-  console.log(users);
+  console.log('give me the users', users);
   console.log(users[0]);
   console.log(users[0].id);
 
@@ -105,7 +105,7 @@ export async function updateTherapistById(
   zipCode: string,
   streetAddress: string,
   streetNumber: string,
-  specializationIds: number,
+  specializationIds: number[],
 ) {
   const therapists = await sql<[Therapist]>`
    UPDATE therapists
@@ -140,26 +140,58 @@ export async function updateTherapistById(
 
   if (!therapists[0].id) return undefined;
 
-  const therapistId = await sql`
+  if (specializationIds.length === 1) {
+    const therapistId = await sql`
   INSERT INTO therapists_specializations
   -- this is the name of the column
     (therapist_id, specialization_id)
   VALUES
-    (${therapists[0].id}),
-     (${specializationIds})
+    (${therapists[0].id}, ${specializationIds[0]})
   `;
-
-  console.log(therapistId);
-
-  // const specializationId = await sql<[SpecializationType]>`
-  // INSERT INTO therapists_specializations
-  // -- this is the name of the column
-  //   (specialization_id)
-  // VALUES
-  //   (${specializationIds})
-  // `;
-
-  // console.log(specializationId);
+  } else if (specializationIds.length === 2) {
+    const therapistId = await sql`
+    INSERT INTO therapists_specializations
+  -- this is the name of the column
+    (therapist_id, specialization_id)
+  VALUES
+    (${therapists[0].id}, ${specializationIds[0]}),
+    (${therapists[0].id}, ${specializationIds[1]})
+  `;
+  } else if (specializationIds.length === 3) {
+    const therapistId = await sql`
+    INSERT INTO therapists_specializations
+  -- this is the name of the column
+    (therapist_id, specialization_id)
+  VALUES
+    (${therapists[0].id}, ${specializationIds[0]}),
+    (${therapists[0].id}, ${specializationIds[1]}),
+    (${therapists[0].id}, ${specializationIds[2]})
+  `;
+  } else if (specializationIds.length === 4) {
+    const therapistId = await sql`
+    INSERT INTO therapists_specializations
+  -- this is the name of the column
+    (therapist_id, specialization_id)
+  VALUES
+    (${therapists[0].id}, ${specializationIds[0]}),
+    (${therapists[0].id}, ${specializationIds[1]}),
+    (${therapists[0].id}, ${specializationIds[2]}),
+    (${therapists[0].id}, ${specializationIds[3]})
+  `;
+  } else if (specializationIds.length === 5) {
+    const therapistId = await sql`
+  INSERT INTO therapists_specializations
+-- this is the name of the column
+  (therapist_id, specialization_id)
+VALUES
+  (${therapists[0].id}, ${specializationIds[0]}),
+  (${therapists[0].id}, ${specializationIds[1]}),
+  (${therapists[0].id}, ${specializationIds[2]}),
+  (${therapists[0].id}, ${specializationIds[3]}),
+  (${therapists[0].id}, ${specializationIds[4]})
+`;
+    console.log(therapistId);
+  }
 
   return therapists.map((therapist) => camelcaseKeys(therapist))[0];
 }
@@ -276,6 +308,8 @@ export async function insertSession(token: string, userId: number) {
       (${token}, ${userId})
     RETURNING *
   `;
+
+  console.log('sessions give me', sessions);
   return sessions.map((session) => camelcaseKeys(session))[0];
 }
 
