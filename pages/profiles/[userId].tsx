@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Select from 'react-select';
 import { ValueType } from 'react-select/lib/types';
 import Layout from '../../components/Layout';
-import Specializations from '../../components/Specializations';
+import UserMenu from '../../components/UserMenu';
 import VideoUploader from '../../components/VideoUploader';
 import { normalText } from '../../styles/sharedStyles';
 import {
@@ -85,15 +85,17 @@ const coloredButtonStyles = css`
 
 // define const for regions
 
-const vienna = 'Vienna';
-const burgenland = 'Burgenland';
-const upperaustria = 'Upper Austria';
-const loweraustria = 'Lower Austria';
-const salzburg = 'Salzburg';
-const tyrol = 'Tyrol';
-const vorarlberg = 'Vorarlberg';
-const carinthia = 'Carinthia';
-const styria = 'Styria';
+const regionOptions = [
+  { value: 'vienna', label: 'Vienna' },
+  { value: 'burgenland', label: 'Burgenland' },
+  { value: 'upperaustria', label: 'Upper Austria' },
+  { value: 'loweraustria', label: 'Lower Austria' },
+  { value: 'salzburg', label: 'Salzburg' },
+  { value: 'tyrol', label: 'Tyrol' },
+  { value: 'vorarlberg', label: 'Vorarlberg' },
+  { value: 'carinthia', label: 'Carinthia' },
+  { value: 'styria', label: 'Styria' },
+];
 
 export default function SingleClientProfile(props: Props) {
   console.log('alle props', props);
@@ -186,6 +188,7 @@ export default function SingleClientProfile(props: Props) {
     console.log('role of client', props.user);
     return (
       <Layout email={props.email}>
+        <UserMenu />
         <Head>
           <title>
             Client Profile page for {props.user.firstName} {props.user.lastName}
@@ -208,6 +211,7 @@ export default function SingleClientProfile(props: Props) {
   } else {
     return (
       <Layout email={props.email}>
+        <UserMenu />
         <Head>
           <title>Therapist Profile page</title>
         </Head>
@@ -281,24 +285,13 @@ export default function SingleClientProfile(props: Props) {
                     }}
                   />
                 </div>
-                <select
-                  id="region"
+                <Select
+                  options={regionOptions}
                   value={region}
                   onChange={(event) => {
-                    setRegion(event.currentTarget.value);
+                    setRegion(event);
                   }}
-                >
-                  <option value={vienna}>Vienna</option>
-                  <option value={burgenland}>Burgenland</option>
-                  <option value={loweraustria}>Lower Austria</option>
-                  <option value={upperaustria}>Upper Austria</option>
-                  <option value={styria}>Styria</option>
-                  <option value={salzburg}>Salzburg</option>
-                  <option value={vorarlberg}>Vorarlberg</option>
-                  <option value={tyrol}>Tyrol</option>
-                  <option value={carinthia}>Carinthia</option>
-                </select>
-
+                />
                 <div>
                   <label htmlFor="website-url">
                     Please enter your website url:
@@ -326,10 +319,10 @@ export default function SingleClientProfile(props: Props) {
                         <li>Why do you love what you do?</li>
                       </ol>
                     </label>
-                    {/* <VideoUploader
+                    <VideoUploader
                       videoUrl={videoUrl}
                       setVideoUrl={setVideoUrl}
-                    /> */}
+                    />
                   </div>
 
                   <div>
