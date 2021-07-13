@@ -11,6 +11,7 @@ import VideoUploader from '../../components/VideoUploader';
 import { normalText } from '../../styles/sharedStyles';
 import {
   ApplicationError,
+  RegionType,
   Specialization,
   SpecializationType,
   Therapist,
@@ -110,10 +111,12 @@ export default function SingleClientProfile(props: Props) {
   const [streetAddress, setStreetAddress] = useState('');
   const [streetNumber, setStreetNumber] = useState('');
   const [zipCode, setZipCode] = useState('');
-  const [region, setRegion] = useState('Vienna');
+  const [region, setRegion] = useState<RegionType>();
   const [error, setError] = useState('');
 
   console.log('therapist choice of specializations', selectedSpecializations);
+
+  console.log('chosen region', region);
 
   const handleTypeSelect = (selectedOption: SpecializationType[]) => {
     setSelectedSpecializations(selectedOption);
@@ -138,7 +141,7 @@ export default function SingleClientProfile(props: Props) {
           costPerHour: costPerHour,
           websiteUrl: websiteUrl,
           videoUrl: videoUrl,
-          region: region,
+          region: region?.value,
           zipCode: zipCode,
           streetAddress: streetAddress,
           streetNumber: streetNumber,
@@ -319,10 +322,10 @@ export default function SingleClientProfile(props: Props) {
                         <li>Why do you love what you do?</li>
                       </ol>
                     </label>
-                    <VideoUploader
+                    {/* <VideoUploader
                       videoUrl={videoUrl}
                       setVideoUrl={setVideoUrl}
-                    />
+                    /> */}
                   </div>
 
                   <div>
