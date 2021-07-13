@@ -11,17 +11,17 @@ const pageContainer = css`
 `;
 
 const heroImageContainer = css`
+  position: absolute;
+  right: 0;
   display: flex;
   justify-content: flex-end;
   width: 30vw;
   height: 80vh;
-  margin-left: 70%;
-  background-color: orange;
+  //background-color: orange;
+  bottom: 0;
 
   > img {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    align-content: right;
   }
 `;
 
