@@ -238,7 +238,15 @@ export default function SearchTherapist(props: Props) {
           </div>
           <div css={singleItemContainer}>
             <div css={itemHeading}>Region:</div>
-            <div></div>
+            <div>
+              <Select
+                options={regionOptions}
+                value={region}
+                onChange={(event) => {
+                  setRegion(event);
+                }}
+              />
+            </div>
           </div>
           <div css={singleItemContainer}>
             <div css={itemHeading}>ZIP Code:</div>
