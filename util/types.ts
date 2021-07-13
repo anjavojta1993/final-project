@@ -12,7 +12,7 @@ export type Therapist = {
   costPerHour: string;
   websiteUrl: string;
   videoUrl: string;
-  region: string;
+  region: object;
   zipCode: string;
   user_id?: number;
   streetAddress: string;
@@ -36,6 +36,11 @@ export type Session = {
 };
 
 export type SpecializationType = {
+  value: number;
+  label: string;
+};
+
+export type RegionType = {
   value: number;
   label: string;
 };
