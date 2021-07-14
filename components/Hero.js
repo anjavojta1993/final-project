@@ -27,7 +27,7 @@ const heroImageContainer = css`
 
 const heroHeadingContainer = css`
   position: absolute;
-  bottom: 20%;
+  bottom: 25%;
   left: 10%;
   width: 800px;
   height: 350px;
@@ -41,13 +41,13 @@ const heroHeadingContainer = css`
     line-height: 1.5em;
     letter-spacing: 1px;
     margin-bottom: 20px;
-    font-weight: 200;
+    font-weight: 300;
   }
 `;
 
 const heroButtonsContainer = css`
   position: absolute;
-  bottom: 10%;
+  bottom: 12%;
   left: 10%;
   width: 800px;
   height: auto;
@@ -112,7 +112,8 @@ export default function Hero() {
           <h1>Struggling to find a good psychotherapist?</h1>
           <h2>
             Find experts for your concern. Get <br /> an impression with 60
-            second videos. No unnecessary text.
+            second videos.
+            <br /> No unnecessary text.
           </h2>
         </div>
         <div css={heroButtonsContainer}>
