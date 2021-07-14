@@ -35,16 +35,19 @@ const pageContainer = css`
 const imageContainer = css`
   position: absolute;
   //background-color: blue;
-  top: 25%;
-  right: 0px;
+  top: 30%;
+  align-items: center;
   text-align: right;
   bottom: 0px;
+  right: 0;
+  width: 1000px;
+  /* left: 50%;
+  transform: translateX(-50%); */
 
   > img {
     width: 70%;
     height: auto;
     //background-color: orange;
-    align-content: right;
   }
 `;
 
