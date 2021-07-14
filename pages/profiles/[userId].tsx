@@ -322,10 +322,10 @@ export default function SingleClientProfile(props: Props) {
                         <li>Why do you love what you do?</li>
                       </ol>
                     </label>
-                    {/* <VideoUploader
+                    <VideoUploader
                       videoUrl={videoUrl}
                       setVideoUrl={setVideoUrl}
-                    /> */}
+                    />
                   </div>
 
                   <div>
