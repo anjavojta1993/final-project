@@ -87,11 +87,18 @@ const checkboxesContainer = css`
   margin-bottom: 20px;
 
   label {
-    padding-left: 10px;
     font-size: ${normalText};
     width: 250px;
     line-height: 1.5;
   }
+`;
+
+const optionStyles = css`
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  margin-bottom: 20px;
+  margin-top: 10px;
 `;
 
 const buttonStyles = css`
@@ -292,6 +299,7 @@ export default function Register(props: Props) {
                 <label>
                   Please choose:
                   <select
+                    css={optionStyles}
                     id="role"
                     value={role}
                     onChange={(event) => {
