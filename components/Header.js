@@ -35,7 +35,7 @@ const logoContainer = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 250px;
+  width: 300px;
 
   > img {
     margin-left: 10%;
