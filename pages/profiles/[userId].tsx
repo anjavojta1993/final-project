@@ -45,7 +45,7 @@ const formContainer = css`
   align-items: center;
   margin-top: 10px;
   width: 60vw;
-  //background-color: orange;
+  background-color: orange;
   border-radius: 8px;
   border: 1px solid black;
   padding: 5px;
@@ -53,19 +53,46 @@ const formContainer = css`
 `;
 
 const inputsContainer = css`
-  justify-content: center;
-  align-items: center;
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 800px;
   margin-right: 5px;
   margin-bottom: 10px;
+  background-color: green;
+
+  label {
+    font-size: ${normalText};
+    margin: 10px;
+    display: block;
+    background-color: purple;
+    text-align: left;
+  }
+
+  input {
+    margin: 10px;
+    font-size: ${normalText};
+    padding: 5px;
+    display: block;
+    text-align: left;
+    border-radius: 5px;
+    width: 300px;
+  }
 `;
+
+// const customStyles = {
+//   option: (provided) => ({
+//     ...provided,
+//     padding: 5,
+//     width: 300,
+//   }),
+//   return { ...provided };
+
+// };
 
 const coloredButtonStyles = css`
   background: linear-gradient(to left, #faffd1, #a1ffce);
   font-size: ${normalText};
-  justify-content: center;
+  text-align: center;
   font-weight: 800;
   border: none;
   width: 250px;
@@ -74,6 +101,7 @@ const coloredButtonStyles = css`
   text-transform: uppercase;
   margin-right: 5px;
   margin-bottom: 10px;
+  margin-top: 20px;
   border-radius: 8px;
 
   :hover {
@@ -287,72 +315,77 @@ export default function SingleClientProfile(props: Props) {
                       setZipCode(event.currentTarget.value);
                     }}
                   />
-                </div>
-                <Select
-                  options={regionOptions}
-                  value={region}
-                  onChange={(event) => {
-                    setRegion(event);
-                  }}
-                />
-                <div>
-                  <label htmlFor="website-url">
-                    Please enter your website url:
-                  </label>
-                  <input
-                    placeholder="e.g. https://www.mindfultherapy.com"
-                    aria-label="website-url"
-                    data-cy="website-url"
-                    value={websiteUrl}
+
+                  <Select
+                    styles={customStyles}
+                    options={regionOptions}
+                    value={region}
                     onChange={(event) => {
-                      setWebsiteUrl(event.currentTarget.value);
+                      setRegion(event);
                     }}
                   />
-
                   <div>
-                    <label htmlFor="video-url">
-                      Please upload a video in horizontal view (max. 60 seconds)
-                      where you answer the following 3 questions:
-                      <ol>
-                        <li>Who are you and what are you specialized on?</li>
-                        <li>
-                          Describe a typical situation a client would come to
-                          you with.
-                        </li>
-                        <li>Why do you love what you do?</li>
-                      </ol>
+                    <label htmlFor="website-url">
+                      Please enter your website url:
                     </label>
-                    <VideoUploader
-                      videoUrl={videoUrl}
-                      setVideoUrl={setVideoUrl}
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="specializations">
-                      Please choose up to 5 specializations:
-                    </label>
-                    <Select
-                      onChange={(
-                        selectedOption: ValueType<SpecializationType>,
-                      ) =>
-                        handleTypeSelect(selectedOption as SpecializationType[])
-                      }
-                      isMulti
-                      options={
-                        selectedSpecializations?.length === maxOptions
-                          ? []
-                          : props.specialization
-                      }
-                      noOptionsMessage={() => {
-                        return selectedSpecializations?.length === maxOptions
-                          ? 'You cannot choose more than 5 specializations'
-                          : 'No options available';
+                    <input
+                      placeholder="e.g. https://www.mindfultherapy.com"
+                      aria-label="website-url"
+                      data-cy="website-url"
+                      value={websiteUrl}
+                      onChange={(event) => {
+                        setWebsiteUrl(event.currentTarget.value);
                       }}
-                      value={selectedSpecializations}
                     />
+
+                    <div>
+                      <label htmlFor="video-url">
+                        Please upload a video in horizontal view (max. 60
+                        seconds) where you answer the following 3 questions:
+                        <ol>
+                          <li>Who are you and what are you specialized on?</li>
+                          <li>
+                            Describe a typical situation a client would come to
+                            you with.
+                          </li>
+                          <li>Why do you love what you do?</li>
+                        </ol>
+                      </label>
+                      <VideoUploader
+                        videoUrl={videoUrl}
+                        setVideoUrl={setVideoUrl}
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="specializations">
+                        Please choose up to 5 specializations:
+                      </label>
+                      <Select
+                        styles={customStyles}
+                        onChange={(
+                          selectedOption: ValueType<SpecializationType>,
+                        ) =>
+                          handleTypeSelect(
+                            selectedOption as SpecializationType[],
+                          )
+                        }
+                        isMulti
+                        options={
+                          selectedSpecializations?.length === maxOptions
+                            ? []
+                            : props.specialization
+                        }
+                        noOptionsMessage={() => {
+                          return selectedSpecializations?.length === maxOptions
+                            ? 'You cannot choose more than 5 specializations'
+                            : 'No options available';
+                        }}
+                        value={selectedSpecializations}
+                      />
+                    </div>
+                    <button css={coloredButtonStyles}>Save</button>
                   </div>
-                  <button css={coloredButtonStyles}>Save</button>
                 </div>
               </div>
             </form>
