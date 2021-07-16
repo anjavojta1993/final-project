@@ -6,7 +6,6 @@ export default function Specializations(props) {
   const [selectedSpecializations, setSelectedSpecializations] = useState('');
   const handleTypeSelect = (event) => {
     setSelectedSpecializations(event);
-    console.log(event);
   };
 
   console.log('props spec options', props.specializationOptions);
