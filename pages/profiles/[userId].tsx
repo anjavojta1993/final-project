@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { ValueType } from 'react-select/lib/types';
 import Layout from '../../components/Layout';
 import UserMenu from '../../components/UserMenu';
-import VideoUploader from '../../components/VideoUploader';
+import VideoUploader2 from '../../components/VideoUploader2';
 import { normalText } from '../../styles/sharedStyles';
 import {
   ApplicationError,
@@ -33,6 +33,7 @@ const pageContainer = css`
   display: flex;
   width: 100%;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   margin-top: 40px;
 `;
@@ -44,7 +45,7 @@ const formContainer = css`
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
-  width: 60vw;
+  width: 50vw;
   background-color: orange;
   border-radius: 8px;
   border: 1px solid black;
@@ -55,7 +56,7 @@ const formContainer = css`
 const inputsContainer = css`
   display: flex;
   flex-direction: column;
-  width: 800px;
+  width: 600px;
   margin-right: 5px;
   margin-bottom: 10px;
   background-color: green;
@@ -76,6 +77,10 @@ const inputsContainer = css`
     text-align: left;
     border-radius: 5px;
     width: 300px;
+  }
+
+  h1 {
+    padding: 10px;
   }
 `;
 
@@ -157,6 +162,7 @@ export default function SingleClientProfile(props: Props) {
     );
     console.log('show me if its right', specializationIds);
     event.preventDefault();
+
     {
       const response = await fetch('/api/therapistprofile', {
         method: 'POST',
@@ -219,7 +225,11 @@ export default function SingleClientProfile(props: Props) {
     console.log('role of client', props.user);
     return (
       <Layout email={props.email}>
-        <UserMenu />
+        <UserMenu
+          firstName={props.user.firstName}
+          lastName={props.user.lastName}
+          userId={props.userId}
+        />
         <Head>
           <title>
             Client Profile page for {props.user.firstName} {props.user.lastName}
@@ -242,17 +252,40 @@ export default function SingleClientProfile(props: Props) {
   } else {
     return (
       <Layout email={props.email}>
-        <UserMenu />
+        <UserMenu
+          firstName={props.user.firstName}
+          lastName={props.user.lastName}
+          userId={props.user.id}
+        />
         <Head>
           <title>Therapist Profile page</title>
         </Head>
         <div css={pageContainer}>
           <div css={formContainer}>
-            <form onSubmit={formSubmitTherapist}>
-              <h1 data-cy="profile-page-h1">Therapist Profile Page</h1>
-
+            <div css={inputsContainer}>
+              <div>
+                <h1 data-cy="profile-page-h1">Your video</h1>
+                <label htmlFor="video-url">
+                  Please upload a video in horizontal view (max. 60 seconds)
+                  where you answer the following 3 questions:
+                  <ol>
+                    <li>Who are you and what are you specialized on?</li>
+                    <li>
+                      Describe a typical situation a client would come to you
+                      with.
+                    </li>
+                    <li>Why do you love what you do?</li>
+                  </ol>
+                </label>
+              </div>
+              <VideoUploader2 videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
+            </div>
+          </div>
+          <div css={formContainer}>
+            <form onSubmit={formSubmitTherapist} id="form1">
               <div>
                 <div css={inputsContainer}>
+                  <h1 data-cy="profile-page-h1">Your information</h1>
                   <div>
                     <label htmlFor="company-name">
                       What is your company name?{' '}
@@ -317,7 +350,6 @@ export default function SingleClientProfile(props: Props) {
                   />
 
                   <Select
-                    styles={customStyles}
                     options={regionOptions}
                     value={region}
                     onChange={(event) => {
@@ -339,30 +371,11 @@ export default function SingleClientProfile(props: Props) {
                     />
 
                     <div>
-                      <label htmlFor="video-url">
-                        Please upload a video in horizontal view (max. 60
-                        seconds) where you answer the following 3 questions:
-                        <ol>
-                          <li>Who are you and what are you specialized on?</li>
-                          <li>
-                            Describe a typical situation a client would come to
-                            you with.
-                          </li>
-                          <li>Why do you love what you do?</li>
-                        </ol>
-                      </label>
-                      <VideoUploader
-                        videoUrl={videoUrl}
-                        setVideoUrl={setVideoUrl}
-                      />
-                    </div>
-
-                    <div>
                       <label htmlFor="specializations">
                         Please choose up to 5 specializations:
                       </label>
                       <Select
-                        styles={customStyles}
+                        // styles={customStyles}
                         onChange={(
                           selectedOption: ValueType<SpecializationType>,
                         ) =>
