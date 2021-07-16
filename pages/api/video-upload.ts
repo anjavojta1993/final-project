@@ -16,9 +16,10 @@ const endpoint = async (req: NextApiRequest, res: NextApiResponse) => {
         keepExtensions: true,
         multiples: false,
       });
+      console.log('form', form);
       form.parse(req, (err, fields, files) => {
         if (err) return reject(err);
-        resolve({ file: files.file as Formidable.File });
+        resolve({ file: files.myFile as Formidable.File });
         console.log('err', err);
         console.log('fields', fields);
         console.log('files', files);
@@ -27,6 +28,9 @@ const endpoint = async (req: NextApiRequest, res: NextApiResponse) => {
   );
 
   console.log('what is this data', data);
+
+  console.log('data file', data.file);
+  console.log('data file path', data.file.path);
   console.log('formidable file', Formidable.File);
 
   try {

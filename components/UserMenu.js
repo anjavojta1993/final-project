@@ -5,7 +5,7 @@ import { normalText } from '../styles/sharedStyles';
 const navBarContainer = css`
   margin: 0;
   display: flex;
-  height: 100vh;
+  height: 180vh;
   width: 200px;
   align-self: flex-start;
   flex-direction: column;
@@ -13,9 +13,9 @@ const navBarContainer = css`
   border-right: 1px solid black;
 
   p {
-    display: flex;
+    display: block;
     padding-top: 10px;
-    justify-content: center;
+    text-align: center;
     font-size: ${normalText};
   }
 

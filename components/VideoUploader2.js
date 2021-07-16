@@ -55,7 +55,7 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
   };
   return (
     <div>
-      <form onSubmit={handleVideoUpload} enctype="multipart/form-data">
+      <form onSubmit={handleVideoUpload}>
         {/* <label htmlFor="files" class="btn">
           Select Video
         </label> */}
@@ -66,10 +66,9 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
         <br />
         <pre>{JSON.stringify(videoUrl, null, 2)}</pre>
         <div>
-          <input type="submit" />
-          {/* <button css={coloredButtonStyles} type="submit">
+          <button css={coloredButtonStyles} type="submit">
             Save
-          </button> */}
+          </button>
         </div>
       </form>
     </div>
