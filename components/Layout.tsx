@@ -4,6 +4,7 @@ import Header from './Header';
 
 const containerStyles = css`
   margin: 0;
+  display: flex;
 `;
 
 type Props = {
