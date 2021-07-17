@@ -4,6 +4,7 @@ import Formidable from 'formidable';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const endpoint = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log('response', res);
   cloudinary.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -31,17 +32,23 @@ const endpoint = async (req: NextApiRequest, res: NextApiResponse) => {
 
   console.log('data file', data.file);
   console.log('data file path', data.file.path);
-  console.log('formidable file', Formidable.File);
 
   try {
-    const uploadedVideo = await cloudinary.uploader.upload(data.file.path);
+    const uploadedVideo = await cloudinary.uploader.upload(
+      data.file.path,
+      { resource_type: 'video' },
+      function (error, result) {
+        console.log(result, error);
+      },
+    );
     res.statusCode = 200;
-    res.json({ videoUrl: uploadedVideo.secure_url });
+    res.json({ secure_url: uploadedVideo.secure_url });
     console.log('uploaded video', uploadedVideo);
+    console.log('uploaded video url', uploadedVideo.secure_url);
   } catch (error) {
     console.log(error);
     res.statusCode = 500;
-    res.json({ videoUrl: 'error' });
+    res.json({ secure_url: 'error' });
   }
 };
 
