@@ -26,34 +26,37 @@ const coloredButtonStyles = css`
   }
 `;
 
-const videoUpload = (videoUploading) => css`
-  opacity: ${videoUploading ? '1' : '0'};
-`;
+const videoUpload = (videoUploading) => () =>
+  css`
+    opacity: ${videoUploading ? '1' : '0'};
+  `;
 
 export default function VideoUploader({ videoUrl, setVideoUrl }) {
-  const videoLoading = () => {
-    if (videoUrl) {
-      return (
-        <video
-          alt="preview of your uploaded video"
-          src={videoUrl}
-          controls
-          style={{ height: 300, width: 500 }}
-        >
-          <track
-            src="captions_en.vtt"
-            kind="captions"
-            srcLang="en"
-            label="english_captions"
-          />
-        </video>
-      );
-    } else {
-      return <img src="/images/spinner.svg" alt="video loading" />;
-    }
-  };
+  const [loading, setLoading] = useState(false);
+  // const videoLoading = () => {
+  //   if (videoUrl) {
+  //     return (
+  //       <video
+  //         alt="preview of your uploaded video"
+  //         src={videoUrl}
+  //         controls
+  //         style={{ height: 300, width: 500 }}
+  //       >
+  //         <track
+  //           src="captions_en.vtt"
+  //           kind="captions"
+  //           srcLang="en"
+  //           label="english_captions"
+  //         />
+  //       </video>
+  //     );
+  //   } else {
+  //     return <img src="/images/spinner.svg" alt="video loading" />;
+  //   }
+  // };
 
   const handleVideoUpload = (event) => {
+    setLoading(true);
     event.preventDefault();
     console.log('event', event);
     console.log('event current target', event.currentTarget);
@@ -91,8 +94,11 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
         <div>
           <input id="myFile" type="file" accept="video/*" />
         </div>
-        <div css={videoUpload(handleVideoUpload)}>
-          {videoUrl ? (
+        {/* <div css={videoUpload(handleVideoUpload())}> */}
+        <div>
+          {loading === false ? (
+            <div />
+          ) : videoUrl ? (
             <video
               alt="preview of your uploaded video"
               src={videoUrl}
@@ -111,8 +117,7 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
           )}
         </div>
         <br />
-        RESULT
-        <pre>{videoUrl}</pre>
+
         <button css={coloredButtonStyles} type="submit">
           Upload
         </button>
