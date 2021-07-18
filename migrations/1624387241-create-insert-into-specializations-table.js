@@ -1,5 +1,6 @@
 const specializations = [
   { specialization_name: 'ADHD' },
+  { specialization_name: 'Addictions' },
   { specialization_name: 'Alzheimers' },
   { specialization_name: 'Anger Management' },
   { specialization_name: 'Anxiety/Fears' },
@@ -50,7 +51,7 @@ const specializations = [
   { specialization_name: 'Sports Psychology' },
   { specialization_name: 'Stopping Smoking' },
   { specialization_name: 'Stress' },
-  { specialization_name: 'Substance Addiction' },
+  { specialization_name: 'Substance Abuse' },
   { specialization_name: 'Suicidal Thoughts' },
   { specialization_name: 'Thinking Disorders' },
   { specialization_name: 'Trauma and PTSD' },
