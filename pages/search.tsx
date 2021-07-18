@@ -184,7 +184,7 @@ export default function SearchTherapist(props: Props) {
     { value: 'styria', label: 'Styria' },
   ];
 
-  const maxOptions = 5;
+  const maxOptions = 4;
 
   const [selectedSpecializations, setSelectedSpecializations] =
     useState<SpecializationType[]>();
@@ -232,7 +232,7 @@ export default function SearchTherapist(props: Props) {
                 }
                 noOptionsMessage={() => {
                   return selectedSpecializations?.length === maxOptions
-                    ? 'You cannot choose more than 5 specializations'
+                    ? 'You cannot choose more than 4 specializations'
                     : 'No options available';
                 }}
                 value={selectedSpecializations}
