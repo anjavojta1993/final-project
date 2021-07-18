@@ -96,7 +96,7 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
         </div>
         {/* <div css={videoUpload(handleVideoUpload())}> */}
         <div>
-          {loading === false ? (
+          {!loading ? (
             <div />
           ) : videoUrl ? (
             <video
