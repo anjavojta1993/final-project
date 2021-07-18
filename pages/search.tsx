@@ -10,6 +10,7 @@ import {
   Specialization,
   SpecializationType,
   Therapist,
+  TherapistSpecializationType,
   User,
 } from '../util/types';
 
@@ -20,6 +21,7 @@ type Props = {
   errors?: ApplicationError[];
   specializationName: string;
   specialization: SpecializationType[];
+  therapistSpecializations: TherapistSpecializationType[];
   userId: Number;
 };
 
@@ -197,6 +199,27 @@ const regionOptions = [
 ];
 
 export default function SearchTherapist(props: Props) {
+  // Matchmaking function for Region and ZIP code
+  const checkRegionAndZipCode = () => {
+    therapistsWithOneSpecialization.map();
+  };
+
+  // Matchmaking monster function
+
+  const matchMaking = () => {
+    if (selectedSpecializations?.length === 1) {
+      const therapistsWithOneSpecialization =
+        props.therapistSpecializations.filter(
+          (therapistSpecialization) =>
+            therapistSpecialization.specializationId ===
+            selectedSpecializations[0].value,
+        );
+      const checkRegionAndZipCode = () => {
+        therapistsWithOneSpecialization;
+      };
+    }
+  };
+
   // define variables needed for specialization dropdown
   const maxOptions = 4;
 
@@ -295,6 +318,7 @@ export default function SearchTherapist(props: Props) {
         <section css={resultsContainer}>
           <div css={headingContainer} ref={myRef}>
             <h1>Your matches</h1>
+            <p>{props.therapistSpecializations[0].specializationId}</p>
           </div>
         </section>
       </div>
@@ -303,12 +327,17 @@ export default function SearchTherapist(props: Props) {
 }
 
 export async function getServerSideProps() {
-  const { getAllSpecializations } = await import('../util/database');
+  const { getAllSpecializations, getAllTherapistsSpecializations } =
+    await import('../util/database');
 
   console.log('list of all specializations', getAllSpecializations);
 
   const specialization = await getAllSpecializations();
   console.log('specializations list', specialization);
+
+  // this is an array of objects consisting of all specializationIds and therapistIds
+  const therapistSpecializations = await getAllTherapistsSpecializations();
+  console.log('therapist specializations list', therapistSpecializations);
 
   return {
     props: {
@@ -318,6 +347,7 @@ export async function getServerSideProps() {
           label: spec.specializationName,
         };
       }),
+      therapistSpecializations: therapistSpecializations,
     },
   };
 }
