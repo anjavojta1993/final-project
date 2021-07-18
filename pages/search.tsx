@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Select from 'react-select';
 import { ValueType } from 'react-select/lib/types';
 import Layout from '../components/Layout';
@@ -32,14 +32,26 @@ const pageContainer = css`
   flex-direction: column;
 `;
 
+const searchContainer = css`
+  display: flex;
+  flex-direction: column;
+  background-color: green;
+`;
+
+const resultsContainer = css`
+  display: flex;
+  background-color: orange;
+  flex-direction: column;
+`;
+
 const imageContainer = css`
-  position: absolute;
+  //position: absolute;
   //background-color: blue;
   top: 30%;
-  align-items: center;
   text-align: right;
-  bottom: 0px;
-  right: 0;
+  margin-left: auto;
+  margin-right: 0;
+
   width: 1000px;
   /* left: 50%;
   transform: translateX(-50%); */
@@ -47,6 +59,7 @@ const imageContainer = css`
   > img {
     width: 70%;
     height: auto;
+    margin-right: 0;
     //background-color: orange;
   }
 `;
@@ -169,21 +182,22 @@ const zipCodeOptions = [
   { value: '1230', label: '1230' },
 ];
 
+// define const for regions
+
+const regionOptions = [
+  { value: 'vienna', label: 'Vienna' },
+  { value: 'burgenland', label: 'Burgenland' },
+  { value: 'upperaustria', label: 'Upper Austria' },
+  { value: 'loweraustria', label: 'Lower Austria' },
+  { value: 'salzburg', label: 'Salzburg' },
+  { value: 'tyrol', label: 'Tyrol' },
+  { value: 'vorarlberg', label: 'Vorarlberg' },
+  { value: 'carinthia', label: 'Carinthia' },
+  { value: 'styria', label: 'Styria' },
+];
+
 export default function SearchTherapist(props: Props) {
-  // define const for regions
-
-  const regionOptions = [
-    { value: 'vienna', label: 'Vienna' },
-    { value: 'burgenland', label: 'Burgenland' },
-    { value: 'upperaustria', label: 'Upper Austria' },
-    { value: 'loweraustria', label: 'Lower Austria' },
-    { value: 'salzburg', label: 'Salzburg' },
-    { value: 'tyrol', label: 'Tyrol' },
-    { value: 'vorarlberg', label: 'Vorarlberg' },
-    { value: 'carinthia', label: 'Carinthia' },
-    { value: 'styria', label: 'Styria' },
-  ];
-
+  // define variables needed for specialization dropdown
   const maxOptions = 4;
 
   const [selectedSpecializations, setSelectedSpecializations] =
@@ -201,73 +215,88 @@ export default function SearchTherapist(props: Props) {
 
   console.log('chosen region', region);
 
+  const myRef = useRef(null);
+
+  const executeScroll = () => myRef.current.scrollIntoView();
+  // run this function from an event handler or an effect to execute scroll
+
   return (
     <Layout email={props.email}>
       <Head>
         <title>Find a therapist</title>
       </Head>
       <div css={pageContainer}>
-        <div css={headingContainer}>
-          <h1>What are you looking for?</h1>
-        </div>
-        <div css={imageContainer}>
-          <img
-            src="/images/women_chatting_2.png"
-            alt="two women sitting on floor and chatting in front of buildings and trees"
-          />
-        </div>
-        <div css={itemsContainer}>
-          <div css={singleItemContainerSpecializations}>
-            <div css={itemHeading}>I need help with:</div>
-            <div css={itemDropdown}>
-              <Select
-                onChange={(selectedOption: ValueType<SpecializationType>) =>
-                  handleTypeSelect(selectedOption as SpecializationType[])
-                }
-                isMulti
-                options={
-                  selectedSpecializations?.length === maxOptions
-                    ? []
-                    : props.specialization
-                }
-                noOptionsMessage={() => {
-                  return selectedSpecializations?.length === maxOptions
-                    ? 'You cannot choose more than 4 specializations'
-                    : 'No options available';
-                }}
-                value={selectedSpecializations}
-              />
+        <section css={searchContainer}>
+          <div css={headingContainer}>
+            <h1>What are you looking for?</h1>
+          </div>
+
+          <div css={itemsContainer}>
+            <div css={singleItemContainerSpecializations}>
+              <div css={itemHeading}>I need help with:</div>
+              <div css={itemDropdown}>
+                <Select
+                  onChange={(selectedOption: ValueType<SpecializationType>) =>
+                    handleTypeSelect(selectedOption as SpecializationType[])
+                  }
+                  isMulti
+                  options={
+                    selectedSpecializations?.length === maxOptions
+                      ? []
+                      : props.specialization
+                  }
+                  noOptionsMessage={() => {
+                    return selectedSpecializations?.length === maxOptions
+                      ? 'You cannot choose more than 4 specializations'
+                      : 'No options available';
+                  }}
+                  value={selectedSpecializations}
+                />
+              </div>
+            </div>
+            <div css={singleItemContainer}>
+              <div css={itemHeading}>Region:</div>
+              <div>
+                <Select
+                  options={regionOptions}
+                  value={region}
+                  onChange={(event) => {
+                    setRegion(event);
+                  }}
+                />
+              </div>
+            </div>
+            <div css={singleItemContainer}>
+              <div css={itemHeading}>ZIP Code:</div>
+              <div>
+                <Select
+                  options={zipCodeOptions}
+                  value={zipCode}
+                  onChange={(event) => {
+                    setZipCode(event);
+                  }}
+                />
+              </div>
+            </div>
+            <div css={singleItemContainer}>
+              <div css={itemHeading} />
+              <button css={buttonStylesDark} onClick={executeScroll}>
+                Search
+              </button>
             </div>
           </div>
-          <div css={singleItemContainer}>
-            <div css={itemHeading}>Region:</div>
-            <div>
-              <Select
-                options={regionOptions}
-                value={region}
-                onChange={(event) => {
-                  setRegion(event);
-                }}
-              />
-            </div>
+          <div css={imageContainer}>
+            <img
+              src="/images/women_chatting_2.png"
+              alt="two women sitting on floor and chatting in front of buildings and trees"
+            />
           </div>
-          <div css={singleItemContainer}>
-            <div css={itemHeading}>ZIP Code:</div>
-            <div>
-              <Select
-                options={zipCodeOptions}
-                value={zipCode}
-                onChange={(event) => {
-                  setZipCode(event);
-                }}
-              />
-            </div>
+        </section>
+        <section css={resultsContainer}>
+          <div css={headingContainer} ref={myRef}>
+            <h1>Your matches</h1>
           </div>
-          <div css={singleItemContainer}>
-            <div css={itemHeading}></div>
-            <button css={buttonStylesDark}>Search</button>
-          </div>
-        </div>
+        </section>
       </div>
     </Layout>
   );
