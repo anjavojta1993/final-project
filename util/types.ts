@@ -45,4 +45,9 @@ export type RegionType = {
   label: string;
 };
 
+export type ZipCodeType = {
+  value: number;
+  label: string;
+};
+
 export type ApplicationError = { message: string };
