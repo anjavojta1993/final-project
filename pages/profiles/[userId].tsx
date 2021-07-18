@@ -16,6 +16,7 @@ import {
   SpecializationType,
   Therapist,
   User,
+  ZipCodeType,
 } from '../../util/types';
 import { TherapistProfileResponse } from '../api/therapistprofile';
 
@@ -131,10 +132,38 @@ const regionOptions = [
   { value: 'styria', label: 'Styria' },
 ];
 
+// define const for ZIP codes
+
+const zipCodeOptions = [
+  { value: '1010', label: '1010' },
+  { value: '1020', label: '1020' },
+  { value: '1030', label: '1030' },
+  { value: '1040', label: '1040' },
+  { value: '1050', label: '1050' },
+  { value: '1060', label: '1060' },
+  { value: '1070', label: '1070' },
+  { value: '1080', label: '1080' },
+  { value: '1090', label: '1090' },
+  { value: '1100', label: '1100' },
+  { value: '1110', label: '1110' },
+  { value: '1120', label: '1120' },
+  { value: '1130', label: '1130' },
+  { value: '1140', label: '1140' },
+  { value: '1150', label: '1150' },
+  { value: '1160', label: '1160' },
+  { value: '1170', label: '1170' },
+  { value: '1180', label: '1180' },
+  { value: '1190', label: '1190' },
+  { value: '1200', label: '1200' },
+  { value: '1210', label: '1210' },
+  { value: '1220', label: '1220' },
+  { value: '1230', label: '1230' },
+];
+
 export default function SingleClientProfile(props: Props) {
   console.log('alle props', props);
 
-  const maxOptions = 5;
+  const maxOptions = 4;
   const [selectedSpecializations, setSelectedSpecializations] =
     useState<SpecializationType[]>();
   const [companyName, setCompanyName] = useState('');
@@ -143,7 +172,7 @@ export default function SingleClientProfile(props: Props) {
   const [videoUrl, setVideoUrl] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
   const [streetNumber, setStreetNumber] = useState('');
-  const [zipCode, setZipCode] = useState('');
+  const [zipCode, setZipCode] = useState<ZipCodeType>();
   const [region, setRegion] = useState<RegionType>();
   const [error, setError] = useState('');
 
@@ -176,7 +205,7 @@ export default function SingleClientProfile(props: Props) {
           websiteUrl: websiteUrl,
           videoUrl: videoUrl,
           region: region?.value,
-          zipCode: zipCode,
+          zipCode: zipCode?.value,
           streetAddress: streetAddress,
           streetNumber: streetNumber,
           specializationIds: selectedSpecializations?.map((spec) => spec.value),
@@ -339,13 +368,11 @@ export default function SingleClientProfile(props: Props) {
                       }}
                     />
                   </div>
-                  <input
-                    placeholder="ZIP Code e.g 1010"
-                    aria-label="zip-code"
-                    data-cy="zip-code"
+                  <Select
+                    options={zipCodeOptions}
                     value={zipCode}
                     onChange={(event) => {
-                      setZipCode(event.currentTarget.value);
+                      setZipCode(event);
                     }}
                   />
 
@@ -391,7 +418,7 @@ export default function SingleClientProfile(props: Props) {
                         }
                         noOptionsMessage={() => {
                           return selectedSpecializations?.length === maxOptions
-                            ? 'You cannot choose more than 5 specializations'
+                            ? 'You cannot choose more than 4 specializations'
                             : 'No options available';
                         }}
                         value={selectedSpecializations}
