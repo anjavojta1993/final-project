@@ -6,6 +6,7 @@ import {
   Specialization,
   SpecializationType,
   Therapist,
+  TherapistSpecializationType,
   User,
   UserWithPasswordHash,
 } from './types';
@@ -422,6 +423,26 @@ export async function getAllSpecializations() {
   `;
   console.log('give me the specializations', specializations);
   return specializations.map((specialization) => camelcaseKeys(specialization));
+}
+
+// get all therapists_specializations
+
+export async function getAllTherapistsSpecializations() {
+  const therapistSpecializations = await sql<[TherapistSpecializationType]>`
+    SELECT
+    specialization_id,
+ therapist_id
+
+    FROM
+    therapists_specializations
+  `;
+  console.log(
+    'give me the specializations and therapist ids',
+    therapistSpecializations,
+  );
+  return therapistSpecializations.map((specialization) =>
+    camelcaseKeys(specialization),
+  );
 }
 
 // export async function getSpecializationById() {
