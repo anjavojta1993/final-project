@@ -61,7 +61,7 @@ const buttonStylesDark = css`
   background-color: black;
   font-size: ${normalText};
   font-weight: 400;
-  border: none;
+  border: 1px solid black;
   border-radius: 8px;
   padding: 16px 40px;
   letter-spacing: 2px;
