@@ -50,4 +50,9 @@ export type ZipCodeType = {
   label: string;
 };
 
+export type TherapistSpecializationType = {
+  specializationId: number;
+  therapistId: number;
+};
+
 export type ApplicationError = { message: string };
