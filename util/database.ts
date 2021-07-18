@@ -178,18 +178,6 @@ export async function updateTherapistById(
     (${therapists[0].id}, ${specializationIds[2]}),
     (${therapists[0].id}, ${specializationIds[3]})
   `;
-  } else if (specializationIds.length === 5) {
-    const therapistId = await sql`
-  INSERT INTO therapists_specializations
--- this is the name of the column
-  (therapist_id, specialization_id)
-VALUES
-  (${therapists[0].id}, ${specializationIds[0]}),
-  (${therapists[0].id}, ${specializationIds[1]}),
-  (${therapists[0].id}, ${specializationIds[2]}),
-  (${therapists[0].id}, ${specializationIds[3]}),
-  (${therapists[0].id}, ${specializationIds[4]})
-`;
     console.log(therapistId);
   }
 
