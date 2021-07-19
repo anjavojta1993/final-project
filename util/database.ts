@@ -473,7 +473,9 @@ export async function getFilteredTherapistsAndSpecializations(
   clientZipCode: string,
   clientSpecializationsIds: number[],
 ) {
-  const filteredTherapistsSpecializations = await sql`
+  const filteredTherapistsSpecializations = await sql<
+    TherapistSpecializationType[]
+  >`
     SELECT
  therapists.id as therapist_id,
  therapists_specializations.specialization_id as specialization_id

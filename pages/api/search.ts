@@ -2,12 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getFilteredTherapistsAndSpecializations } from '../../util/database';
 import {
   ApplicationError,
-  Therapist,
   TherapistSpecializationType,
 } from '../../util/types';
 
 export type SearchTherapist =
-  | { therapist: Therapist }
   | { filteredTherapistsSpecializations: TherapistSpecializationType }
   | { errors: ApplicationError[] };
 

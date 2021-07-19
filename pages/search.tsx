@@ -199,27 +199,27 @@ const regionOptions = [
   { value: 'styria', label: 'Styria' },
 ];
 
-export default function SearchTherapist(props: Props) {
-  // Matchmaking function for Region and ZIP code
-  const checkRegionAndZipCode = () => {
-    therapistsWithOneSpecialization.map();
-  };
+export default function SearchForTherapist(props: Props) {
+  //   // Matchmaking function for Region and ZIP code
+  //   const checkRegionAndZipCode = () => {
+  //     therapistsWithOneSpecialization.map();
+  //   };
 
   // Matchmaking monster function
 
-  const matchMaking = () => {
-    if (selectedSpecializations?.length === 1) {
-      const therapistsWithOneSpecialization =
-        props.therapistSpecializations.filter(
-          (therapistSpecialization) =>
-            therapistSpecialization.specializationId ===
-            selectedSpecializations[0].value,
-        );
-      const checkRegionAndZipCode = () => {
-        therapistsWithOneSpecialization;
-      };
-    }
-  };
+  // const matchMaking = () => {
+  //   if (selectedSpecializations?.length === 1) {
+  //     const therapistsWithOneSpecialization =
+  //       props.therapistSpecializations.filter(
+  //         (therapistSpecialization) =>
+  //           therapistSpecialization.specializationId ===
+  //           selectedSpecializations[0].value,
+  //       );
+  //     const checkRegionAndZipCode = () => {
+  //       therapistsWithOneSpecialization;
+  //     };
+  //   }
+  // };
 
   // define variables needed for specialization dropdown
   const maxOptions = 4;
@@ -234,8 +234,10 @@ export default function SearchTherapist(props: Props) {
     console.log('selected option', selectedOption);
   };
 
-  const [region, setRegion] = useState('Vienna');
-  const [zipCode, setZipCode] = useState('');
+  // these are objects
+
+  const [region, setRegion] = useState<any>();
+  const [zipCode, setZipCode] = useState<any>();
 
   console.log('chosen region', region);
 
@@ -270,8 +272,8 @@ export default function SearchTherapist(props: Props) {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  clientRegion: region,
-                  clientZipCode: zipCode,
+                  clientRegion: region.value,
+                  clientZipCode: zipCode.value,
                   clientSpecializationsIds: selectedSpecializations?.map(
                     (spec) => spec.value,
                   ),
@@ -359,9 +361,16 @@ export default function SearchTherapist(props: Props) {
   );
 }
 
-export async function getServerSideProps() {
-  const { getAllSpecializations, getAllTherapistsSpecializations } =
-    await import('../util/database');
+export async function getServerSideProps(
+  region: string,
+  zipCode: string,
+  selectedSpecializations: number[],
+) {
+  const {
+    getAllSpecializations,
+    getAllTherapistsSpecializations,
+    getFilteredTherapistsAndSpecializations,
+  } = await import('../util/database');
 
   console.log('list of all specializations', getAllSpecializations);
 
@@ -372,6 +381,15 @@ export async function getServerSideProps() {
   const therapistSpecializations = await getAllTherapistsSpecializations();
   console.log('therapist specializations list', therapistSpecializations);
 
+  const filteredTherapistsAndSpecializations =
+    await getFilteredTherapistsAndSpecializations(
+      region,
+      zipCode,
+      selectedSpecializations?.map((spec: any) => spec.value),
+    );
+  console.log('filtered therapists', filteredTherapistsAndSpecializations);
+  console.log('testing in props', selectedSpecializations);
+
   return {
     props: {
       specialization: specialization.map((spec) => {
@@ -381,6 +399,8 @@ export async function getServerSideProps() {
         };
       }),
       therapistSpecializations: therapistSpecializations,
+      filteredTherapistsAndSpecializations:
+        filteredTherapistsAndSpecializations,
     },
   };
 }
