@@ -13,6 +13,7 @@ import {
   TherapistSpecializationType,
   User,
 } from '../util/types';
+import { SearchTherapist } from './api/search';
 
 type Props = {
   user?: User;
@@ -238,10 +239,14 @@ export default function SearchTherapist(props: Props) {
 
   console.log('chosen region', region);
 
+  // define variable and functions for the smooth scrolling on submit of form
+
   const myRef = useRef(null);
 
   const executeScroll = () => myRef.current.scrollIntoView();
   // run this function from an event handler or an effect to execute scroll
+
+  const [error, setError] = useState('');
 
   return (
     <Layout email={props.email}>
@@ -253,61 +258,89 @@ export default function SearchTherapist(props: Props) {
           <div css={headingContainer}>
             <h1>What are you looking for?</h1>
           </div>
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault();
 
-          <div css={itemsContainer}>
-            <div css={singleItemContainerSpecializations}>
-              <div css={itemHeading}>I need help with:</div>
-              <div css={itemDropdown}>
-                <Select
-                  onChange={(selectedOption: ValueType<SpecializationType>) =>
-                    handleTypeSelect(selectedOption as SpecializationType[])
-                  }
-                  isMulti
-                  options={
-                    selectedSpecializations?.length === maxOptions
-                      ? []
-                      : props.specialization
-                  }
-                  noOptionsMessage={() => {
-                    return selectedSpecializations?.length === maxOptions
-                      ? 'You cannot choose more than 4 specializations'
-                      : 'No options available';
-                  }}
-                  value={selectedSpecializations}
-                />
+              // Send the email and password to the API
+              // for verification
+              const response = await fetch(`/api/search`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  clientRegion: region,
+                  clientZipCode: zipCode,
+                  clientSpecializationsIds: selectedSpecializations?.map(
+                    (spec) => spec.value,
+                  ),
+                }),
+              });
+
+              const json = (await response.json()) as SearchTherapist;
+
+              if ('errors' in json) {
+                setError(json.errors[0].message);
+                return;
+              }
+
+              executeScroll();
+            }}
+          >
+            <div css={itemsContainer}>
+              <div css={singleItemContainerSpecializations}>
+                <div css={itemHeading}>I need help with:</div>
+                <div css={itemDropdown}>
+                  <Select
+                    onChange={(selectedOption: ValueType<SpecializationType>) =>
+                      handleTypeSelect(selectedOption as SpecializationType[])
+                    }
+                    isMulti
+                    options={
+                      selectedSpecializations?.length === maxOptions
+                        ? []
+                        : props.specialization
+                    }
+                    noOptionsMessage={() => {
+                      return selectedSpecializations?.length === maxOptions
+                        ? 'You cannot choose more than 4 specializations'
+                        : 'No options available';
+                    }}
+                    value={selectedSpecializations}
+                  />
+                </div>
+              </div>
+              <div css={singleItemContainer}>
+                <div css={itemHeading}>Region:</div>
+                <div>
+                  <Select
+                    options={regionOptions}
+                    value={region}
+                    onChange={(event) => {
+                      setRegion(event);
+                    }}
+                  />
+                </div>
+              </div>
+              <div css={singleItemContainer}>
+                <div css={itemHeading}>ZIP Code:</div>
+                <div>
+                  <Select
+                    options={zipCodeOptions}
+                    value={zipCode}
+                    onChange={(event) => {
+                      setZipCode(event);
+                    }}
+                  />
+                </div>
+              </div>
+              <div css={singleItemContainer}>
+                <div css={itemHeading} />
+                <button css={buttonStylesDark}>Search</button>
               </div>
             </div>
-            <div css={singleItemContainer}>
-              <div css={itemHeading}>Region:</div>
-              <div>
-                <Select
-                  options={regionOptions}
-                  value={region}
-                  onChange={(event) => {
-                    setRegion(event);
-                  }}
-                />
-              </div>
-            </div>
-            <div css={singleItemContainer}>
-              <div css={itemHeading}>ZIP Code:</div>
-              <div>
-                <Select
-                  options={zipCodeOptions}
-                  value={zipCode}
-                  onChange={(event) => {
-                    setZipCode(event);
-                  }}
-                />
-              </div>
-            </div>
-            <div css={singleItemContainer}>
-              <div css={itemHeading} />
-              <button css={buttonStylesDark} onClick={executeScroll}>
-                Search
-              </button>
-            </div>
-          </div>
+          </form>
           <div css={imageContainer}>
             <img
               src="/images/women_chatting_2.png"
