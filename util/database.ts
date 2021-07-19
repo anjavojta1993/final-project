@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
+import { useState } from 'react';
 import {
   Session,
   Specialization,
@@ -10,6 +11,7 @@ import {
   User,
   UserWithPasswordHash,
 } from './types';
+import { selectedSpecializations } from '.search';
 
 // import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 
@@ -70,7 +72,7 @@ export async function insertUser(
   `;
 
   console.log('give me the users', users);
-  console.log(users[0]);
+  console.log('users 0', users[0]);
   console.log(users[0].id);
 
   // if therapist is true or false do second insert into therapist
@@ -425,7 +427,7 @@ export async function getAllSpecializations() {
   return specializations.map((specialization) => camelcaseKeys(specialization));
 }
 
-// get all therapists_specializations
+// get all therapists_specializations - this is a list of specialization ids and the corresponding therapist ids
 
 export async function getAllTherapistsSpecializations() {
   const therapistSpecializations = await sql<[TherapistSpecializationType]>`
@@ -441,6 +443,55 @@ export async function getAllTherapistsSpecializations() {
     therapistSpecializations,
   );
   return therapistSpecializations.map((specialization) =>
+    camelcaseKeys(specialization),
+  );
+}
+
+// get therapist ID by specialization ID
+
+export async function getTherapistIdBySpecializationId() {
+  const therapistSpecializations = await sql<[TherapistSpecializationType]>`
+    SELECT
+ therapist_id
+
+    FROM
+    therapists_specializations
+  `;
+  console.log(
+    'give me the specializations and therapist ids',
+    therapistSpecializations,
+  );
+  return therapistSpecializations.map((specialization) =>
+    camelcaseKeys(specialization),
+  );
+}
+
+// get filtered therapists
+
+export async function getFilteredTherapistsAndSpecializations(
+  clientRegion: string,
+  clientZipCode: string,
+  clientSpecializationsIds: number[],
+) {
+  const filteredTherapistsSpecializations = await sql`
+    SELECT
+ therapists.id as therapist_id,
+ therapists_specializations.specialization_id as specialization_id
+
+    FROM
+    therapists_specializations,
+    therapists
+
+    WHERE
+    therapists_specializations.specialization_id = ${clientSpecializationsIds} AND
+    therapists.region = ${clientRegion} AND
+    therapists.zip_code = ${clientZipCode}
+  `;
+  console.log(
+    'give me the specializations and therapist ids',
+    filteredTherapistsSpecializations,
+  );
+  return filteredTherapistsSpecializations.map((specialization) =>
     camelcaseKeys(specialization),
   );
 }
