@@ -495,12 +495,13 @@ export async function getFilteredTherapistsAndSpecializations(
     return undefined;
   }
 
-  const filteredTherapistsSpecializations = for (let i = 0; i < ${clientSpecializationsIds}, i++) {
-  await sql<
-    TherapistSpecializationType[]
-  >`
+  if (clientSpecializationsIds.length === 1) {
+    const filteredTherapistsSpecializations = await sql<
+      TherapistSpecializationType[]
+    >`
   SELECT
- DISTINCT therapists.id as therapist_id,
+  DISTINCT
+ therapists.id as therapist_id,
  therapists_specializations.specialization_id as specialization_id
 
     FROM
@@ -512,13 +513,40 @@ export async function getFilteredTherapistsAndSpecializations(
     therapists.region = ${clientRegion} AND
     therapists.zip_code = ${clientZipCode}
   `;
-  console.log(
-    'give me the specializations and therapist ids',
-    filteredTherapistsSpecializations,
-  );
-  return filteredTherapistsSpecializations.map((specialization) =>
-    camelcaseKeys(specialization),
-  );
+    console.log(
+      'give me the specializations and therapist ids',
+      filteredTherapistsSpecializations,
+    );
+    return filteredTherapistsSpecializations.map((specialization) =>
+      camelcaseKeys(specialization),
+    );
+  } else if (clientSpecializationsIds.length === 2) {
+    const filteredTherapistsSpecializations = await sql<
+      TherapistSpecializationType[]
+    >`
+  SELECT
+  DISTINCT
+ therapists.id as therapist_id,
+ therapists_specializations.specialization_id as specialization_id
+
+    FROM
+    therapists_specializations,
+    therapists
+
+    WHERE
+    therapists_specializations.specialization_id = (${clientSpecializationsIds[0]} OR ${clientSpecializationsIds[1]})
+    AND
+    therapists.region = ${clientRegion} AND
+    therapists.zip_code = ${clientZipCode}
+  `;
+    console.log(
+      'give me the specializations and therapist ids',
+      filteredTherapistsSpecializations,
+    );
+    console.log('client spec backend', clientSpecializationsIds[1]);
+    return filteredTherapistsSpecializations.map((specialization) =>
+      camelcaseKeys(specialization),
+    );
   }
 }
 
