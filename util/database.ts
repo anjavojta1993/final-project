@@ -534,7 +534,7 @@ export async function getFilteredTherapistsAndSpecializations(
     therapists
 
     WHERE
-    therapists_specializations.specialization_id = (${clientSpecializationsIds[0]} OR ${clientSpecializationsIds[1]})
+    therapists_specializations.specialization_id IN (${clientSpecializationsIds[0]}, ${clientSpecializationsIds[1]})
     AND
     therapists.region = ${clientRegion} AND
     therapists.zip_code = ${clientZipCode}
