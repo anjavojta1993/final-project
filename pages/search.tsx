@@ -7,13 +7,15 @@ import Layout from '../components/Layout';
 import { h1, h2, largeText, normalText } from '../styles/sharedStyles';
 import {
   ApplicationError,
+  RegionType,
   Specialization,
   SpecializationType,
   Therapist,
+  TherapistRegionZipCode,
   TherapistSpecializationType,
   User,
+  ZipCodeType,
 } from '../util/types';
-import { SearchTherapist } from './api/search';
 
 type Props = {
   user?: User;
@@ -23,6 +25,7 @@ type Props = {
   specializationName: string;
   specialization: SpecializationType[];
   therapistSpecializations: TherapistSpecializationType[];
+  therapistRegionAndZipCode: TherapistRegionZipCode[];
   userId: Number;
 };
 
@@ -200,32 +203,45 @@ const regionOptions = [
 ];
 
 export default function SearchForTherapist(props: Props) {
-  //   // Matchmaking function for Region and ZIP code
-  //   const checkRegionAndZipCode = () => {
-  //     therapistsWithOneSpecialization.map();
-  //   };
+  // Matchmaking function for Region and ZIP code
+  // const checkRegionAndZipCode = () => {
+  //   therapistsWithOneSpecialization.map();
+  // };
 
-  // Matchmaking monster function
+  // declare variables for matchMaking function
+  // let therapistsWithOneSpecialization;
+
+  //  // Matchmaking monster function
 
   // const matchMaking = () => {
+
+  //   executeScroll();
+  //   // this is the condition if the client chooses one specialization
   //   if (selectedSpecializations?.length === 1) {
-  //     const therapistsWithOneSpecialization =
+  //     therapistsWithOneSpecialization =
   //       props.therapistSpecializations.filter(
   //         (therapistSpecialization) =>
   //           therapistSpecialization.specializationId ===
   //           selectedSpecializations[0].value,
   //       );
-  //     const checkRegionAndZipCode = () => {
-  //       therapistsWithOneSpecialization;
-  //     };
+  //     const therapistsWithOneSpecializationRegionAndZipCode =
+  //       props.therapistRegionAndZipCode.map((id) => props.therapistRegionAndZipCode.id === therapistsWithOneSpecialization.;
+  //     // const checkRegionAndZipCode = () => {
+  //     //   therapistsWithOneSpecialization;
+  //     // };
+  //     console.log(
+  //       'whats inside the the array',
+  //       therapistsWithOneSpecialization,
+  //     );
   //   }
   // };
 
   // define variables needed for specialization dropdown
   const maxOptions = 4;
 
-  const [selectedSpecializations, setSelectedSpecializations] =
-    useState<SpecializationType[]>();
+  const [selectedSpecializations, setSelectedSpecializations] = useState<
+    SpecializationType[]
+  >([]);
 
   console.log('client choice of specializations', selectedSpecializations);
 
@@ -236,19 +252,22 @@ export default function SearchForTherapist(props: Props) {
 
   // these are objects
 
-  const [region, setRegion] = useState<any>();
-  const [zipCode, setZipCode] = useState<any>();
+  const [region, setRegion] = useState<RegionType>();
+  const [zipCode, setZipCode] = useState<ZipCodeType>();
 
   console.log('chosen region', region);
-
+  console.log('chosen zip code', zipCode);
+  console.log('selected client spec', selectedSpecializations);
   // define variable and functions for the smooth scrolling on submit of form
 
   const myRef = useRef(null);
 
-  const executeScroll = () => myRef.current.scrollIntoView();
   // run this function from an event handler or an effect to execute scroll
+  const executeScroll = () => myRef.current.scrollIntoView();
 
   const [error, setError] = useState('');
+
+  const [filteredTherapists, setFilteredTherapists] = useState([]);
 
   return (
     <Layout email={props.email}>
@@ -272,22 +291,25 @@ export default function SearchForTherapist(props: Props) {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  clientRegion: region.value,
-                  clientZipCode: zipCode.value,
-                  clientSpecializationsIds: selectedSpecializations?.map(
+                  clientRegion: region?.value,
+                  clientZipCode: zipCode?.value,
+                  clientSpecializationsIds: selectedSpecializations.map(
                     (spec) => spec.value,
                   ),
                 }),
               });
 
-              const json = (await response.json()) as SearchTherapist;
+              executeScroll();
 
-              if ('errors' in json) {
-                setError(json.errors[0].message);
+              const data = await response.json();
+              setFilteredTherapists(data.filteredTherapistsSpecializations);
+              console.log('data', data);
+              console.log('filtered therapists', filteredTherapists);
+
+              if ('errors' in data) {
+                setError(data.errors[0].message);
                 return;
               }
-
-              executeScroll();
             }}
           >
             <div css={itemsContainer}>
@@ -300,12 +322,12 @@ export default function SearchForTherapist(props: Props) {
                     }
                     isMulti
                     options={
-                      selectedSpecializations?.length === maxOptions
+                      selectedSpecializations.length === maxOptions
                         ? []
                         : props.specialization
                     }
                     noOptionsMessage={() => {
-                      return selectedSpecializations?.length === maxOptions
+                      return selectedSpecializations.length === maxOptions
                         ? 'You cannot choose more than 4 specializations'
                         : 'No options available';
                     }}
@@ -342,18 +364,20 @@ export default function SearchForTherapist(props: Props) {
                 <button css={buttonStylesDark}>Search</button>
               </div>
             </div>
+
+            <div css={imageContainer}>
+              <img
+                src="/images/women_chatting_2.png"
+                alt="two women sitting on floor and chatting in front of buildings and trees"
+              />
+            </div>
           </form>
-          <div css={imageContainer}>
-            <img
-              src="/images/women_chatting_2.png"
-              alt="two women sitting on floor and chatting in front of buildings and trees"
-            />
-          </div>
         </section>
         <section css={resultsContainer}>
           <div css={headingContainer} ref={myRef}>
             <h1>Your matches</h1>
-            <p>{props.therapistSpecializations[0].specializationId}</p>
+            {/* <p>{props.therapistSpecializations[0].specializationId}</p> */}
+            {!filteredTherapists ? <div /> : <div>{filteredTherapists}</div>}
           </div>
         </section>
       </div>
@@ -362,14 +386,15 @@ export default function SearchForTherapist(props: Props) {
 }
 
 export async function getServerSideProps(
-  region: string,
-  zipCode: string,
+  region: RegionType,
+  zipCode: ZipCodeType,
   selectedSpecializations: number[],
 ) {
   const {
     getAllSpecializations,
     getAllTherapistsSpecializations,
     getFilteredTherapistsAndSpecializations,
+    getAllRegionsAndZipCodes,
   } = await import('../util/database');
 
   console.log('list of all specializations', getAllSpecializations);
@@ -381,14 +406,18 @@ export async function getServerSideProps(
   const therapistSpecializations = await getAllTherapistsSpecializations();
   console.log('therapist specializations list', therapistSpecializations);
 
-  const filteredTherapistsAndSpecializations =
-    await getFilteredTherapistsAndSpecializations(
-      region,
-      zipCode,
-      selectedSpecializations?.map((spec: any) => spec.value),
-    );
-  console.log('filtered therapists', filteredTherapistsAndSpecializations);
-  console.log('testing in props', selectedSpecializations);
+  // this is an array of objects consisting of all regions & zip codes for each therapist id
+  const therapistRegionAndZipCode = await getAllRegionsAndZipCodes();
+  console.log('therapist region and zip code', therapistRegionAndZipCode);
+
+  // const filteredTherapistsAndSpecializations =
+  //   await getFilteredTherapistsAndSpecializations(
+  //     region.value,
+  //     zipCode.value,
+  //     selectedSpecializations.map((spec: any) => spec.value),
+  //   );
+  // console.log('filtered therapists', filteredTherapistsAndSpecializations);
+  // console.log('testing in props', selectedSpecializations);
 
   return {
     props: {
@@ -399,8 +428,9 @@ export async function getServerSideProps(
         };
       }),
       therapistSpecializations: therapistSpecializations,
-      filteredTherapistsAndSpecializations:
-        filteredTherapistsAndSpecializations,
+      therapistRegionAndZipCode: therapistRegionAndZipCode,
+      // filteredTherapistsAndSpecializations:
+      //   filteredTherapistsAndSpecializations,
     },
   };
 }
