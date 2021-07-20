@@ -495,7 +495,8 @@ export async function getFilteredTherapistsAndSpecializations(
     return undefined;
   }
 
-  const filteredTherapistsSpecializations = await sql<
+  const filteredTherapistsSpecializations = for (let i = 0; i < ${clientSpecializationsIds}, i++) {
+  await sql<
     TherapistSpecializationType[]
   >`
   SELECT
@@ -518,6 +519,7 @@ export async function getFilteredTherapistsAndSpecializations(
   return filteredTherapistsSpecializations.map((specialization) =>
     camelcaseKeys(specialization),
   );
+  }
 }
 
 // export async function getSpecializationById() {

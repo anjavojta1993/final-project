@@ -78,8 +78,8 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
       .then((response) => response.json())
       .then((data) => {
         setVideoUrl(data.secure_url);
-        console.error('data for video', data);
-        console.error('data secure url', data.secure_url);
+        console.log('data for video', data);
+        console.log('data secure url', data.secure_url);
       })
       .catch((error) => {
         console.error(error);

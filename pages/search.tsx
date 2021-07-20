@@ -269,6 +269,38 @@ export default function SearchForTherapist(props: Props) {
 
   const [filteredTherapists, setFilteredTherapists] = useState([]);
 
+  // function to send information to API
+  const formSubmit = async (event: any) => {
+    event.preventDefault();
+
+    const response = await fetch(`/api/search`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        clientRegion: region?.value,
+        clientZipCode: zipCode?.value,
+        clientSpecializationsIds: selectedSpecializations.map(
+          (spec) => spec.value,
+        ),
+      }),
+    });
+
+    executeScroll();
+
+    const data = await response.json();
+    setFilteredTherapists(data.filteredTherapistsSpecializations);
+    console.log('data', data);
+    console.log('data filtered', data.filteredTherapistsSpecializations);
+    console.log('filtered therapists', filteredTherapists);
+
+    if ('errors' in data) {
+      setError(data.errors[0].message);
+      return;
+    }
+  };
+
   return (
     <Layout email={props.email}>
       <Head>
@@ -279,39 +311,7 @@ export default function SearchForTherapist(props: Props) {
           <div css={headingContainer}>
             <h1>What are you looking for?</h1>
           </div>
-          <form
-            onSubmit={async (event) => {
-              event.preventDefault();
-
-              // Send the email and password to the API
-              // for verification
-              const response = await fetch(`/api/search`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  clientRegion: region?.value,
-                  clientZipCode: zipCode?.value,
-                  clientSpecializationsIds: selectedSpecializations.map(
-                    (spec) => spec.value,
-                  ),
-                }),
-              });
-
-              executeScroll();
-
-              const data = await response.json();
-              setFilteredTherapists(data.filteredTherapistsSpecializations);
-              console.log('data', data);
-              console.log('filtered therapists', filteredTherapists);
-
-              if ('errors' in data) {
-                setError(data.errors[0].message);
-                return;
-              }
-            }}
-          >
+          <form onSubmit={formSubmit}>
             <div css={itemsContainer}>
               <div css={singleItemContainerSpecializations}>
                 <div css={itemHeading}>I need help with:</div>
