@@ -41,18 +41,24 @@ export type SpecializationType = {
 };
 
 export type RegionType = {
-  value: number;
+  value: string;
   label: string;
 };
 
 export type ZipCodeType = {
-  value: number;
+  value: string;
   label: string;
 };
 
 export type TherapistSpecializationType = {
   specializationId: number;
   therapistId: number;
+};
+
+export type TherapistRegionZipCode = {
+  id: number;
+  region: string;
+  zipCode: string;
 };
 
 export type ApplicationError = { message: string };
