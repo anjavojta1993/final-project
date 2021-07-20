@@ -11,7 +11,6 @@ import {
   User,
   UserWithPasswordHash,
 } from './types';
-import { selectedSpecializations } from '.search';
 
 // import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 
@@ -447,6 +446,25 @@ export async function getAllTherapistsSpecializations() {
   );
 }
 
+// get all regions & zip codes with therapist id
+
+export async function getAllRegionsAndZipCodes() {
+  const therapistRegionAndZipCode = await sql<[TherapistSpecializationType]>`
+    SELECT
+ id,
+ region,
+ zip_code
+
+    FROM
+    therapists
+  `;
+  console.log(
+    'give me all the regions and zip codes ',
+    therapistRegionAndZipCode,
+  );
+  return therapistRegionAndZipCode.map((therapist) => camelcaseKeys(therapist));
+}
+
 // get therapist ID by specialization ID
 
 export async function getTherapistIdBySpecializationId() {
@@ -471,13 +489,17 @@ export async function getTherapistIdBySpecializationId() {
 export async function getFilteredTherapistsAndSpecializations(
   clientRegion: string,
   clientZipCode: string,
-  clientSpecializationsIds: number[],
+  clientSpecializationsIds?: number[],
 ) {
+  if (!clientRegion || !clientZipCode || !clientSpecializationsIds) {
+    return undefined;
+  }
+
   const filteredTherapistsSpecializations = await sql<
     TherapistSpecializationType[]
   >`
-    SELECT
- therapists.id as therapist_id,
+  SELECT
+ DISTINCT therapists.id as therapist_id,
  therapists_specializations.specialization_id as specialization_id
 
     FROM
@@ -485,7 +507,7 @@ export async function getFilteredTherapistsAndSpecializations(
     therapists
 
     WHERE
-    therapists_specializations.specialization_id = ${clientSpecializationsIds} AND
+    therapists_specializations.specialization_id = ${clientSpecializationsIds[0]} AND
     therapists.region = ${clientRegion} AND
     therapists.zip_code = ${clientZipCode}
   `;
