@@ -55,6 +55,16 @@ export type TherapistSpecializationType = {
   therapistId: number;
 };
 
+export type FilteredTherapists = {
+  therapistId: number;
+  specializationId: number;
+};
+
+export type FilteredTherapistsWithScore = {
+  id: number;
+  count: number;
+};
+
 export type TherapistRegionZipCode = {
   id: number;
   region: string;
