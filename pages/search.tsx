@@ -273,7 +273,7 @@ export default function SearchForTherapist(props: Props) {
   const [filteredTherapists, setFilteredTherapists] = useState<
     FilteredTherapists[]
   >([]);
-  const filteredTherapistsWithScore: FilteredTherapistsWithScore = [];
+  const filteredTherapistsWithScore: FilteredTherapistsWithScore[] = [];
 
   // function to send information to API
   const formSubmit = async (event: any) => {
@@ -412,9 +412,9 @@ export default function SearchForTherapist(props: Props) {
       if (alreadyCounted.includes(ther.therapistId)) {
         filteredTherapistsWithScore[
           alreadyCounted.indexOf(ther.therapistId)
-        ].count += 1;
+        ].score += 1;
       } else {
-        filteredTherapistsWithScore.push({ id: ther.therapistId, count: 1 });
+        filteredTherapistsWithScore.push({ id: ther.therapistId, score: 1 });
       }
     }
 

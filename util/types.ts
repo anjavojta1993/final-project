@@ -62,7 +62,7 @@ export type FilteredTherapists = {
 
 export type FilteredTherapistsWithScore = {
   id: number;
-  count: number;
+  score: number;
 };
 
 export type TherapistRegionZipCode = {
