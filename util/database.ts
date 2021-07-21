@@ -486,6 +486,34 @@ export async function getTherapistIdBySpecializationId() {
 
 // get filtered therapists
 
+// export async function getFilteredTherapistsAndSpecializations(
+//   clientRegion: string,
+//   clientZipCode: string,
+//   clientSpecializationsIds: number[],
+// ) {
+//   const filteredTherapistsSpecializations = await sql`
+//     SELECT DISTINCT
+// therapists_specializations.therapist_id as therapist_id,
+//  therapists_specializations.specialization_id as specialization_id
+//     FROM
+//     therapists_specializations,
+//     therapists
+//     WHERE
+//     therapists.id = therapists_specializations.therapist_id AND
+//     therapists_specializations.specialization_id = ${clientSpecializationsIds[0]} AND
+//     therapists.region = ${clientRegion} AND
+//     therapists.zip_code = ${clientZipCode}
+//   `;
+//   console.log('user choice', clientSpecializationsIds[0]);
+//   console.log(
+//     'give me the specializations and therapist ids',
+//     filteredTherapistsSpecializations,
+//   );
+//   return filteredTherapistsSpecializations.map((specialization) =>
+//     camelcaseKeys(specialization),
+//   );
+// }
+
 export async function getFilteredTherapistsAndSpecializations(
   clientRegion: string,
   clientZipCode: string,
@@ -501,7 +529,7 @@ export async function getFilteredTherapistsAndSpecializations(
     >`
   SELECT
   DISTINCT
- therapists.id as therapist_id,
+ therapists_specializations.therapist_id as therapist_id,
  therapists_specializations.specialization_id as specialization_id
 
     FROM
@@ -509,6 +537,8 @@ export async function getFilteredTherapistsAndSpecializations(
     therapists
 
     WHERE
+
+    therapists.id = therapists_specializations.therapist_id AND
     therapists_specializations.specialization_id = ${clientSpecializationsIds[0]} AND
     therapists.region = ${clientRegion} AND
     therapists.zip_code = ${clientZipCode}
@@ -526,7 +556,7 @@ export async function getFilteredTherapistsAndSpecializations(
     >`
   SELECT
   DISTINCT
- therapists.id as therapist_id,
+ therapists_specializations.therapist_id as therapist_id,
  therapists_specializations.specialization_id as specialization_id
 
     FROM
@@ -534,6 +564,7 @@ export async function getFilteredTherapistsAndSpecializations(
     therapists
 
     WHERE
+    therapists.id = therapists_specializations.therapist_id AND
     therapists_specializations.specialization_id IN (${clientSpecializationsIds[0]}, ${clientSpecializationsIds[1]})
     AND
     therapists.region = ${clientRegion} AND
@@ -544,6 +575,60 @@ export async function getFilteredTherapistsAndSpecializations(
       filteredTherapistsSpecializations,
     );
     console.log('client spec backend', clientSpecializationsIds[1]);
+    return filteredTherapistsSpecializations.map((specialization) =>
+      camelcaseKeys(specialization),
+    );
+  } else if (clientSpecializationsIds.length === 3) {
+    const filteredTherapistsSpecializations = await sql<
+      TherapistSpecializationType[]
+    >`
+  SELECT
+  DISTINCT
+ therapists_specializations.therapist_id as therapist_id,
+ therapists_specializations.specialization_id as specialization_id
+
+    FROM
+    therapists_specializations,
+    therapists
+
+    WHERE
+    therapists.id = therapists_specializations.therapist_id AND
+    therapists_specializations.specialization_id IN (${clientSpecializationsIds[0]}, ${clientSpecializationsIds[1]}, ${clientSpecializationsIds[2]})
+    AND
+    therapists.region = ${clientRegion} AND
+    therapists.zip_code = ${clientZipCode}
+  `;
+    console.log(
+      'give me the specializations and therapist ids',
+      filteredTherapistsSpecializations,
+    );
+    return filteredTherapistsSpecializations.map((specialization) =>
+      camelcaseKeys(specialization),
+    );
+  } else if (clientSpecializationsIds.length === 4) {
+    const filteredTherapistsSpecializations = await sql<
+      TherapistSpecializationType[]
+    >`
+  SELECT
+  DISTINCT
+ therapists_specializations.therapist_id as therapist_id,
+ therapists_specializations.specialization_id as specialization_id
+
+    FROM
+    therapists_specializations,
+    therapists
+
+    WHERE
+    therapists.id = therapists_specializations.therapist_id AND
+    therapists_specializations.specialization_id IN (${clientSpecializationsIds[0]}, ${clientSpecializationsIds[1]}, ${clientSpecializationsIds[2]}, ${clientSpecializationsIds[3]})
+    AND
+    therapists.region = ${clientRegion} AND
+    therapists.zip_code = ${clientZipCode}
+  `;
+    console.log(
+      'give me the specializations and therapist ids',
+      filteredTherapistsSpecializations,
+    );
     return filteredTherapistsSpecializations.map((specialization) =>
       camelcaseKeys(specialization),
     );

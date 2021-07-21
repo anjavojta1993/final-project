@@ -377,7 +377,11 @@ export default function SearchForTherapist(props: Props) {
           <div css={headingContainer} ref={myRef}>
             <h1>Your matches</h1>
             {/* <p>{props.therapistSpecializations[0].specializationId}</p> */}
-            {!filteredTherapists ? <div /> : <div>{filteredTherapists}</div>}
+            {/* {!filteredTherapists.length === 0 ? (
+              <div />
+            ) : (
+              <div>{filteredTherapists}</div>
+            )} */}
           </div>
         </section>
       </div>
