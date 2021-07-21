@@ -542,6 +542,7 @@ export async function getFilteredTherapistsAndSpecializations(
     therapists_specializations.specialization_id = ${clientSpecializationsIds[0]} AND
     therapists.region = ${clientRegion} AND
     therapists.zip_code = ${clientZipCode}
+
   `;
     console.log(
       'give me the specializations and therapist ids',
@@ -569,6 +570,7 @@ export async function getFilteredTherapistsAndSpecializations(
     AND
     therapists.region = ${clientRegion} AND
     therapists.zip_code = ${clientZipCode}
+
   `;
     console.log(
       'give me the specializations and therapist ids',
@@ -597,6 +599,7 @@ export async function getFilteredTherapistsAndSpecializations(
     AND
     therapists.region = ${clientRegion} AND
     therapists.zip_code = ${clientZipCode}
+
   `;
     console.log(
       'give me the specializations and therapist ids',
@@ -624,6 +627,7 @@ export async function getFilteredTherapistsAndSpecializations(
     AND
     therapists.region = ${clientRegion} AND
     therapists.zip_code = ${clientZipCode}
+
   `;
     console.log(
       'give me the specializations and therapist ids',
