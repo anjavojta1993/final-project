@@ -3,10 +3,13 @@ import Head from 'next/head';
 import { useRef, useState } from 'react';
 import Select from 'react-select';
 import { ValueType } from 'react-select/lib/types';
+import { getScrollParent } from 'react-select/src/utils';
 import Layout from '../components/Layout';
 import { h1, h2, largeText, normalText } from '../styles/sharedStyles';
 import {
   ApplicationError,
+  FilteredTherapists,
+  FilteredTherapistsWithScore,
   RegionType,
   Specialization,
   SpecializationType,
@@ -267,7 +270,10 @@ export default function SearchForTherapist(props: Props) {
 
   const [error, setError] = useState('');
 
-  const [filteredTherapists, setFilteredTherapists] = useState([]);
+  const [filteredTherapists, setFilteredTherapists] = useState<
+    FilteredTherapists[]
+  >([]);
+  const filteredTherapistsWithScore: FilteredTherapistsWithScore = [];
 
   // function to send information to API
   const formSubmit = async (event: any) => {
@@ -294,6 +300,132 @@ export default function SearchForTherapist(props: Props) {
     console.log('data', data);
     console.log('data filtered', data.filteredTherapistsSpecializations);
     console.log('filtered therapists', filteredTherapists);
+
+    // const checkScore = async () => {
+    //   await filteredTherapists;
+    //   console.log('awaited filtered therapists', filteredTherapists);
+    //   filteredTherapists.map((ther: any) => {
+    //     let count = 0;
+    //     if (ther.id === ther.therapistId) {
+    //       return filteredTherapistsWithScore.push({
+    //         id: ther.therapistId,
+    //         count: count++,
+    //       });
+    //     }
+    //   });
+    // };
+
+    // checkScore();
+
+    // function getScore(id: number, ther: FilteredTherapists[]) {
+    //   let count = 0;
+
+    //   for (var i = 0; i < ther.length; i++) {
+    //     if ('id' in ther[i] && ther[i].therapistId === id) count++;
+    //   }
+
+    //   return filteredTherapistsWithScore.push({
+    //     id: ther[i].therapistId,
+    //     count: count,
+    //   });
+    // }
+
+    // filteredTherapists.forEach(getScore);
+
+    // filteredTherapists.reduce(function (
+    //     acc,
+    //     curr,
+    //   ) {
+    //     return (
+    //       acc[curr.therapistId]
+    //         ? ++acc[curr.therapistId]
+    //         : (acc[curr.therapistId] = 1),
+    //       acc
+    //     );
+    //     filteredTherapistsWithScore.push({
+    //           id: ther[i].therapistId,
+    //           count: count,
+    //         })
+    //   }
+
+    // filteredTherapists
+    //   .reduce((ther, count) => {
+    //     if (ther.therapistId.has(count)) ther.therapistId.set(count, ther.therapistId.get(count) + 1);
+    //     else ther.therapistId.set(count, 1);
+    //     return ther;
+    //   }, new Map())
+    //   .forEach((, count, map) => {
+    //     filteredTherapistsWithScore.push({
+    //       id: id,
+    //       count: count,
+    //     });
+    //   });
+
+    // THIS IS WORKING BUT IN AN OBJECT
+
+    // const filteredTherapistWithScore = filteredTherapists.reduce(function (
+    //   acc,
+    //   curr,
+    // ) {
+    //   return (
+    //     acc[curr.therapistId]
+    //       ? ++acc[curr.therapistId]
+    //       : (acc[curr.therapistId] = 1),
+    //     acc
+    //   );
+    // },
+    // {});
+
+    // function findCount(filteredTherapistsWithScore, key) {
+    //   filteredTherapists.forEach((x) => {
+    //     // Checking if there is any object in arr2
+    //     // which contains the key value
+    //     if (
+    //       filteredTherapistsWithScore.some((val) => {
+    //         return val[key.therapistId] === x[key.therapistId];
+    //       })
+    //     ) {
+    //       // If yes! then increase the occurrence by 1
+    //       filteredTherapistsWithScore.forEach((k) => {
+    //         if (k[key.therapistId] === x[key.therapistId]) {
+    //           k['count']++;
+    //         }
+    //       });
+    //     } else {
+    //       // If not! Then create a new object initialize
+    //       // it with the present iteration key's value and
+    //       // set the occurrence to 1
+    //       let a = {};
+    //       a[key] = x[key];
+    //       a['count'] = 1;
+    //       filteredTherapistsWithScore.push(a);
+    //     }
+    //   });
+
+    //   return filteredTherapistsWithScore;
+    // }
+
+    for (const ther of filteredTherapists) {
+      const alreadyCounted = filteredTherapistsWithScore.map(
+        (therapist) => therapist.id,
+      );
+      if (alreadyCounted.includes(ther.therapistId)) {
+        filteredTherapistsWithScore[
+          alreadyCounted.indexOf(ther.therapistId)
+        ].count += 1;
+      } else {
+        filteredTherapistsWithScore.push({ id: ther.therapistId, count: 1 });
+      }
+    }
+
+    console.log('score', filteredTherapistsWithScore);
+
+    // const countFunction = (keys: any) => {
+    //   filteredTherapistsWithScore[keys.therapistId] =
+    //     ++filteredTherapistsWithScore[keys.therapistId] || 1;
+    // };
+
+    // filteredTherapists.forEach(countFunction);
 
     if ('errors' in data) {
       setError(data.errors[0].message);
