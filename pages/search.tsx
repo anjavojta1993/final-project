@@ -255,6 +255,12 @@ const websiteContainer = css`
   height: auto;
 `;
 
+const matchingPercentageContainer = css`
+  display: flex;
+  width: 20%;
+  height: 250px;
+`;
+
 // define const for zipCodes
 
 const zipCodeOptions = [
@@ -286,15 +292,15 @@ const zipCodeOptions = [
 // define const for regions
 
 const regionOptions = [
-  { value: 'vienna', label: 'Vienna' },
-  { value: 'burgenland', label: 'Burgenland' },
-  { value: 'upperaustria', label: 'Upper Austria' },
-  { value: 'loweraustria', label: 'Lower Austria' },
-  { value: 'salzburg', label: 'Salzburg' },
-  { value: 'tyrol', label: 'Tyrol' },
-  { value: 'vorarlberg', label: 'Vorarlberg' },
-  { value: 'carinthia', label: 'Carinthia' },
-  { value: 'styria', label: 'Styria' },
+  { label: 'vienna', value: 'Vienna' },
+  { label: 'burgenland', value: 'Burgenland' },
+  { label: 'upperaustria', value: 'Upper Austria' },
+  { label: 'loweraustria', value: 'Lower Austria' },
+  { label: 'salzburg', value: 'Salzburg' },
+  { label: 'tyrol', value: 'Tyrol' },
+  { label: 'vorarlberg', value: 'Vorarlberg' },
+  { label: 'carinthia', value: 'Carinthia' },
+  { label: 'styria', value: 'Styria' },
 ];
 
 export default function SearchForTherapist(props: Props) {

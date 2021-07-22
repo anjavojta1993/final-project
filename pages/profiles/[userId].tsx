@@ -121,15 +121,15 @@ const coloredButtonStyles = css`
 // define const for regions
 
 const regionOptions = [
-  { value: 'vienna', label: 'Vienna' },
-  { value: 'burgenland', label: 'Burgenland' },
-  { value: 'upperaustria', label: 'Upper Austria' },
-  { value: 'loweraustria', label: 'Lower Austria' },
-  { value: 'salzburg', label: 'Salzburg' },
-  { value: 'tyrol', label: 'Tyrol' },
-  { value: 'vorarlberg', label: 'Vorarlberg' },
-  { value: 'carinthia', label: 'Carinthia' },
-  { value: 'styria', label: 'Styria' },
+  { label: 'vienna', value: 'Vienna' },
+  { label: 'burgenland', value: 'Burgenland' },
+  { label: 'upperaustria', value: 'Upper Austria' },
+  { label: 'loweraustria', value: 'Lower Austria' },
+  { label: 'salzburg', value: 'Salzburg' },
+  { label: 'tyrol', value: 'Tyrol' },
+  { label: 'vorarlberg', value: 'Vorarlberg' },
+  { label: 'carinthia', value: 'Carinthia' },
+  { label: 'styria', value: 'Styria' },
 ];
 
 // define const for ZIP codes
