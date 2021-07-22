@@ -206,38 +206,7 @@ const regionOptions = [
 ];
 
 export default function SearchForTherapist(props: Props) {
-  // Matchmaking function for Region and ZIP code
-  // const checkRegionAndZipCode = () => {
-  //   therapistsWithOneSpecialization.map();
-  // };
-
-  // declare variables for matchMaking function
-  // let therapistsWithOneSpecialization;
-
-  //  // Matchmaking monster function
-
-  // const matchMaking = () => {
-
-  //   executeScroll();
-  //   // this is the condition if the client chooses one specialization
-  //   if (selectedSpecializations?.length === 1) {
-  //     therapistsWithOneSpecialization =
-  //       props.therapistSpecializations.filter(
-  //         (therapistSpecialization) =>
-  //           therapistSpecialization.specializationId ===
-  //           selectedSpecializations[0].value,
-  //       );
-  //     const therapistsWithOneSpecializationRegionAndZipCode =
-  //       props.therapistRegionAndZipCode.map((id) => props.therapistRegionAndZipCode.id === therapistsWithOneSpecialization.;
-  //     // const checkRegionAndZipCode = () => {
-  //     //   therapistsWithOneSpecialization;
-  //     // };
-  //     console.log(
-  //       'whats inside the the array',
-  //       therapistsWithOneSpecialization,
-  //     );
-  //   }
-  // };
+  const [loading, setLoading] = useState(false);
 
   // define variables needed for specialization dropdown
   const maxOptions = 4;
@@ -261,18 +230,22 @@ export default function SearchForTherapist(props: Props) {
   console.log('chosen region', region);
   console.log('chosen zip code', zipCode);
   console.log('selected client spec', selectedSpecializations);
+
   // define variable and functions for the smooth scrolling on submit of form
 
   const myRef = useRef(null);
-
-  // run this function from an event handler or an effect to execute scroll
   const executeScroll = () => myRef.current.scrollIntoView();
 
   const [error, setError] = useState('');
 
+  // define variables for filtered therapists, that all match region AND zipcode AND at least one of the chosen specializations
+
   const [filteredTherapists, setFilteredTherapists] = useState<
     FilteredTherapists[]
   >([]);
+
+  // define variable for final therapist scoreboard
+
   const filteredTherapistsWithScore: FilteredTherapistsWithScore[] = [];
 
   // function to send information to API
@@ -294,6 +267,7 @@ export default function SearchForTherapist(props: Props) {
     });
 
     executeScroll();
+    setLoading(true);
 
     const data = await response.json();
     setFilteredTherapists(data.filteredTherapistsSpecializations);
@@ -506,31 +480,31 @@ export default function SearchForTherapist(props: Props) {
           </form>
         </section>
         <section css={resultsContainer}>
-          <div css={headingContainer} ref={myRef}>
-            <h1>Your matches</h1>
-            {/* <p>{props.therapistSpecializations[0].specializationId}</p> */}
-            {/* {!filteredTherapists.length === 0 ? (
-              <div />
-            ) : (
-              <div>{filteredTherapists}</div>
-            )} */}
-          </div>
+          {!loading ? (
+            <div />
+          ) : filteredTherapists.length === 0 ? (
+            <div css={headingContainer} ref={myRef}>
+              <h1>
+                Sorry, there are no therapists that match your search criteria.
+                Please try another request!
+              </h1>
+            </div>
+          ) : (
+            <div css={headingContainer} ref={myRef}>
+              <h1>It's a match!</h1>
+            </div>
+          )}
         </section>
       </div>
     </Layout>
   );
 }
 
-export async function getServerSideProps(
-  region: RegionType,
-  zipCode: ZipCodeType,
-  selectedSpecializations: number[],
-) {
+export async function getServerSideProps() {
   const {
     getAllSpecializations,
     getAllTherapistsSpecializations,
-    getFilteredTherapistsAndSpecializations,
-    getAllRegionsAndZipCodes,
+    getAllTherapists,
   } = await import('../util/database');
 
   console.log('list of all specializations', getAllSpecializations);
@@ -542,9 +516,12 @@ export async function getServerSideProps(
   const therapistSpecializations = await getAllTherapistsSpecializations();
   console.log('therapist specializations list', therapistSpecializations);
 
+  const allTherapists = await getAllTherapists();
+  console.log('all therapists', allTherapists);
+
   // this is an array of objects consisting of all regions & zip codes for each therapist id
-  const therapistRegionAndZipCode = await getAllRegionsAndZipCodes();
-  console.log('therapist region and zip code', therapistRegionAndZipCode);
+  // const therapistRegionAndZipCode = await getAllRegionsAndZipCodes();
+  // console.log('therapist region and zip code', therapistRegionAndZipCode);
 
   // const filteredTherapistsAndSpecializations =
   //   await getFilteredTherapistsAndSpecializations(
@@ -564,9 +541,7 @@ export async function getServerSideProps(
         };
       }),
       therapistSpecializations: therapistSpecializations,
-      therapistRegionAndZipCode: therapistRegionAndZipCode,
-      // filteredTherapistsAndSpecializations:
-      //   filteredTherapistsAndSpecializations,
+      therapists: allTherapists,
     },
   };
 }

@@ -446,43 +446,66 @@ export async function getAllTherapistsSpecializations() {
   );
 }
 
-// get all regions & zip codes with therapist id
+// get all therapists
 
-export async function getAllRegionsAndZipCodes() {
-  const therapistRegionAndZipCode = await sql<[TherapistSpecializationType]>`
+// Perform a first query
+export async function getAllTherapists() {
+  const therapists = await sql<Therapist[]>`
+
     SELECT
- id,
- region,
- zip_code
+    id,
+  company_name,
+  cost_per_hour,
+  website_url,
+  video_url,
+  region,
+  zip_code,
+  address_street,
+  address_number
 
     FROM
-    therapists
+      therapists
   `;
-  console.log(
-    'give me all the regions and zip codes ',
-    therapistRegionAndZipCode,
-  );
-  return therapistRegionAndZipCode.map((therapist) => camelcaseKeys(therapist));
+  return therapists.map((therapist) => camelcaseKeys(therapist));
 }
+
+// get all regions & zip codes with therapist id
+
+// export async function getAllRegionsAndZipCodes() {
+//   const therapistRegionAndZipCode = await sql<[TherapistSpecializationType]>`
+//     SELECT
+//  id,
+//  region,
+//  zip_code
+
+//     FROM
+//     therapists
+//   `;
+//   console.log(
+//     'give me all the regions and zip codes ',
+//     therapistRegionAndZipCode,
+//   );
+//   return therapistRegionAndZipCode.map((therapist) => camelcaseKeys(therapist));
+// }
 
 // get therapist ID by specialization ID
 
-export async function getTherapistIdBySpecializationId() {
-  const therapistSpecializations = await sql<[TherapistSpecializationType]>`
-    SELECT
- therapist_id
+// export async function getTherapistIdBySpecializationId() {
+//   const therapistSpecializations = await sql<[TherapistSpecializationType]>`
+//     SELECT
+//  therapist_id
 
-    FROM
-    therapists_specializations
-  `;
-  console.log(
-    'give me the specializations and therapist ids',
-    therapistSpecializations,
-  );
-  return therapistSpecializations.map((specialization) =>
-    camelcaseKeys(specialization),
-  );
-}
+//     FROM
+//     therapists_specializations
+//   `;
+//   console.log(
+//     'give me the specializations and therapist ids',
+//     therapistSpecializations,
+//   );
+//   return therapistSpecializations.map((specialization) =>
+//     camelcaseKeys(specialization),
+//   );
+// }
 
 // get filtered therapists
 
