@@ -15,8 +15,8 @@ export type Therapist = {
   region: object;
   zipCode: string;
   user_id?: number;
-  streetAddress: string;
-  streetNumber: string;
+  addressNumber: string;
+  addressStreet: string;
 };
 
 export type Specialization = {
