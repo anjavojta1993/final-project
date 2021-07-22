@@ -1,35 +1,36 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRef, useState } from 'react';
+import { AiOutlineEuro } from 'react-icons/ai';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { FiExternalLink } from 'react-icons/fi';
+import { GoLocation } from 'react-icons/go';
 import Select from 'react-select';
 import { ValueType } from 'react-select/lib/types';
-import { getScrollParent } from 'react-select/src/utils';
 import Layout from '../components/Layout';
-import { h1, h2, largeText, normalText } from '../styles/sharedStyles';
 import {
-  ApplicationError,
+  h1,
+  h2,
+  largeText,
+  mediumText,
+  normalText,
+} from '../styles/sharedStyles';
+import {
   FilteredTherapists,
   FilteredTherapistsWithScore,
   RegionType,
   SpecializationType,
   Therapist,
-  TherapistRegionZipCode,
   TherapistSpecializationType,
-  User,
   ZipCodeType,
 } from '../util/types';
 
 type Props = {
-  user?: User;
-  therapist?: Therapist;
   email: string;
-  errors?: ApplicationError[];
-  specializationName: string;
   specialization: SpecializationType[];
   therapistSpecializations: TherapistSpecializationType[];
-  therapistRegionAndZipCode: TherapistRegionZipCode[];
   therapists: Therapist[];
-  userId: Number;
 };
 
 const pageContainer = css`
@@ -171,29 +172,45 @@ const buttonStylesDark = css`
 
 const singleTherapistContainer = css`
   display: flex;
-  width: 80%;
-  height: 300px;
+  width: 80vw;
+  height: 350px;
   justify-content: center;
-  align-items: center;
+  align-self: center;
+  background-color: green;
+  margin-bottom: 20px;
 `;
 
 const therapistContainer = css`
   display: flex;
-  width: 80%;
-  height: 250px;
+  justify-content: center;
+  align-self: center;
+  width: 90%;
+  height: 350px;
+  box-shadow: 0 7px 17px rgb(0 0 0 / 13%);
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 20px;
+  background-color: orange;
+  margin-right: 20px;
 `;
 
 const leftInfoContainer = css`
   display: flex;
   flex-direction: column;
-  width: 40%;
-  height: 250px;
+  justify-content: center;
+  width: 45%;
+  background-color: yellow;
+  height: 300px;
 `;
 
 const therapistNameContainer = css`
   display: flex;
+  align-items: center;
   width: auto;
   height: 20%;
+  font-size: ${largeText};
+  font-weight: bold;
+  background-color: purple;
 `;
 
 const videoContainer = css`
@@ -205,63 +222,145 @@ const videoContainer = css`
 const rightInfoContainer = css`
   display: flex;
   flex-direction: column;
-  width: 60%;
-  height: 250px;
+  width: 50%;
+  height: 300px;
 `;
 
 const headingContainer = css`
   display: flex;
   width: auto;
   height: 20%;
+  align-items: center;
+  font-size: ${largeText};
+  font-weight: bold;
+  background-color: red;
 `;
 
 const headlineContainer = css`
   display: flex;
-  width: auto;
-  height: 20%;
+  align-items: center;
+  width: 80%;
+  height: 100%;
+  background-color: blue;
 `;
 
 const favoritesContainer = css`
+  align-items: center;
   display: flex;
-  width: auto;
-  height: 20%;
-`;
-
-const specializationsContainer = css`
-  display: flex;
-  width: auto;
-  height: 60%;
+  justify-content: flex-end;
+  width: 20%;
+  height: 100%;
+  background-color: yellow;
 `;
 
 const otherInfosContainer = css`
   display: flex;
   width: auto;
-  height: 20%;
+  height: 15%;
+  background-color: green;
+`;
+
+const iconContainer = css`
+  display: flex;
+  align-items: center;
+  width: 10%;
+  height: 100%;
+  background-color: red;
+`;
+
+const specializationsContainer = css`
+  display: inline;
+  width: auto;
+  height: 35%;
+  background-color: purple;
 `;
 
 const addressContainer = css`
   display: flex;
-  width: 40%;
-  height: auto;
+  align-items: center;
+  width: auto;
+  height: 100%;
+  font-size: ${mediumText};
+  background-color: yellow;
 `;
 
 const priceContainer = css`
   display: flex;
-  width: 20%;
-  height: auto;
+  align-items: center;
+  width: auto;
+  height: 100%;
+  font-size: ${mediumText};
 `;
 
 const websiteContainer = css`
   display: flex;
-  width: 40%;
-  height: auto;
+  align-items: center;
+  width: auto;
+  height: 100%;
+  font-size: ${mediumText};
+
+  > a {
+    text-decoration: none;
+    color: black;
+
+    :hover {
+      font-weight: bold;
+      color: black;
+      cursor: pointer;
+    }
+  }
 `;
 
 const matchingPercentageContainer = css`
   display: flex;
-  width: 20%;
-  height: 250px;
+  width: 10%;
+  height: 300px;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  background-color: blue;
 `;
+
+const matchingPercentageBox = css`
+  display: flex;
+  width: 100%;
+  height: 35%;
+  justify-content: center;
+  align-items: center;
+  font-size: ${h2};
+  font-weight: bold;
+  border-radius: 50%;
+  box-shadow: 0 7px 17px rgb(0 0 0 / 13%);
+  background: linear-gradient(to left, #faffd1, #a1ffce);
+`;
+
+const coloredButtonStyles = css`
+  background: linear-gradient(to left, #faffd1, #a1ffce);
+  justify-content: center;
+  font-weight: 800;
+  border: 1px solid black;
+  width: 150px;
+  display: inline-block;
+  padding: 10px 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-size: ${mediumText};
+
+  // const coloredBorder = css
+`;
+//   background: linear-gradient(to left, #faffd1, #a1ffce);
+//   padding: 3px;
+//   width: 20%;
+//   height: 300px;
+//   padding: 1rem;
+//   border-radius: 50%;
+//   position: relative;
+//   z-index: 1;
+//   box-shadow: 0 7px 17px rgb(0 0 0 / 13%);
+// `;
 
 // define const for zipCodes
 
@@ -523,55 +622,73 @@ export default function SearchForTherapist(props: Props) {
               </div>
               {finalTherapists.map((therapist) => {
                 return (
-                  <div key={therapist.id}>
-                    <div css={singleTherapistContainer}>
-                      <div css={therapistContainer}>
-                        <div css={leftInfoContainer}>
-                          <div css={therapistNameContainer}>
-                            {therapist.companyName}
-                          </div>
-                          <div css={videoContainer}>
-                            <video
-                              alt="preview of your uploaded video"
-                              src={therapist.videoUrl}
-                              controls
-                            >
-                              <track
-                                src="captions_en.vtt"
-                                kind="captions"
-                                srcLang="en"
-                                label="english_captions"
-                              />
-                            </video>
+                  <div css={singleTherapistContainer} key={therapist.id}>
+                    <div css={therapistContainer}>
+                      <div css={leftInfoContainer}>
+                        <div css={therapistNameContainer}>
+                          {therapist.companyName}
+                        </div>
+                        <div css={videoContainer}>
+                          <video src={therapist.videoUrl} controls>
+                            <track
+                              src="captions_en.vtt"
+                              kind="captions"
+                              srcLang="en"
+                              label="english_captions"
+                            />
+                          </video>
+                        </div>
+                      </div>
+                      <div css={rightInfoContainer}>
+                        <div css={headingContainer}>
+                          <div css={headlineContainer}>Specializations</div>
+                          <div css={favoritesContainer}>
+                            <FaRegHeart />
                           </div>
                         </div>
-                        <div css={rightInfoContainer}>
-                          <div css={headingContainer}>
-                            <div css={headlineContainer}>
-                              AREAS OF EXPERTISE
-                            </div>
-                            <div css={favoritesContainer}>FAVORITES HEART</div>
+                        <div css={specializationsContainer}>
+                          <button css={coloredButtonStyles}>SPEC 1</button>
+                          <button css={coloredButtonStyles}>SPEC 2</button>
+                          <button css={coloredButtonStyles}>SPEC 3</button>
+                          <button css={coloredButtonStyles}>SPEC 4</button>
+                        </div>
+                        <div css={otherInfosContainer}>
+                          <div css={iconContainer}>
+                            <GoLocation size={32} />{' '}
                           </div>
-                          <div css={specializationsContainer}>
-                            SPECIALIZATIONS
+                          <div css={addressContainer}>
+                            {therapist.addressStreet} {therapist.addressNumber},{' '}
+                            {therapist.zipCode} {therapist.region}
                           </div>
-                          <div css={otherInfosContainer}>
-                            <div css={addressContainer}>
-                              ICON + {therapist.addressStreet}{' '}
-                              {therapist.addressNumber} {therapist.region}{' '}
-                              {therapist.zipCode}
-                            </div>
-                            <div css={priceContainer}>
-                              {therapist.costPerHour}
-                            </div>
-                            <div css={websiteContainer}>
-                              {therapist.websiteUrl}
-                            </div>
+                        </div>
+                        <div css={otherInfosContainer}>
+                          <div css={iconContainer}>
+                            <AiOutlineEuro size={32} />{' '}
+                          </div>
+                          <div css={priceContainer}>
+                            {therapist.costPerHour} € / hour
+                          </div>
+                        </div>
+                        <div css={otherInfosContainer}>
+                          <div css={iconContainer}>
+                            <FiExternalLink size={32} />
+                          </div>
+                          <div css={websiteContainer}>
+                            {' '}
+                            <Link href="{therapist.websiteUrl}">
+                              <a>Visit website</a>
+                            </Link>
                           </div>
                         </div>
                       </div>
-                      <div css={matchingPercentageContainer}>
-                        MATCHING PERCENTAGE
+                    </div>
+                    <div css={matchingPercentageContainer}>
+                      <div css={matchingPercentageBox}>
+                        {Math.round(
+                          (selectedSpecializations.length / therapist.score) *
+                            100,
+                        )}{' '}
+                        %
                       </div>
                     </div>
                   </div>

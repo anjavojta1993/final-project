@@ -13,6 +13,9 @@
   "dependencies": {
     "@emotion/babel-plugin": "^11.3.0",
     "@emotion/react": "^11.4.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "argon2": "^0.28.2",
     "camelcase-keys": "^6.2.2",
     "cloudinary": "^1.26.2",
@@ -20,6 +23,7 @@
     "csrf": "^3.1.0",
     "dotenv-cli": "^4.0.0",
     "dotenv-safe": "^8.2.0",
+    "font-awesome": "^4.7.0",
     "formidable": "^1.2.2",
     "js-cookie": "^2.2.1",
     "ley": "^0.7.1",
@@ -27,6 +31,7 @@
     "postgres": "^2.0.0-beta.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-icons": "^4.2.0",
     "react-select": "^4.3.1"
   },
   "devDependencies": {
