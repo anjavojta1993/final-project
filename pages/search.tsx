@@ -41,6 +41,8 @@ const pageContainer = css`
   flex-direction: column;
 `;
 
+// here start the css styles for the search (top page)
+
 const searchContainer = css`
   display: flex;
   flex-direction: column;
@@ -73,7 +75,7 @@ const imageContainer = css`
   }
 `;
 
-const headingContainer = css`
+const searchHeadingContainer = css`
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -88,7 +90,7 @@ const headingContainer = css`
   }
 `;
 
-const itemsContainer = css`
+const searchItemsContainer = css`
   display: flex;
   flex-direction: row;
   //background-color: green;
@@ -164,6 +166,96 @@ const buttonStylesDark = css`
     cursor: pointer;
   }
 `;
+
+// here start the css styles for the results (bottom page)
+
+const singleTherapistContainer = css`
+  display: flex;
+  width: 80%;
+  height: 300px;
+`;
+
+const therapistContainer = css`
+  display: flex;
+  width: 80%;
+  height: 250px;
+`;
+
+const leftInfoContainer = css`
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  height: 250px;
+`;
+
+const therapistNameContainer = css`
+  display: flex;
+  width: auto;
+  height: 20%;
+`;
+
+const videoContainer = css`
+  display: flex;
+  width: auto;
+  height: 80%;
+`;
+
+const rightInfoContainer = css`
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  height: 250px;
+`;
+
+const headingContainer = css`
+  display: flex;
+  width: auto;
+  height: 20%;
+`;
+
+const headlineContainer = css`
+  display: flex;
+  width: auto;
+  height: 20%;
+`;
+
+const favoritesContainer = css`
+  display: flex;
+  width: auto;
+  height: 20%;
+`;
+
+const specializationsContainer = css`
+  display: flex;
+  width: auto;
+  height: 60%;
+`;
+
+const otherInfosContainer = css`
+  display: flex;
+  width: auto;
+  height: 20%;
+`;
+
+const addressContainer = css`
+  display: flex;
+  width: 40%;
+  height: auto;
+`;
+
+const priceContainer = css`
+  display: flex;
+  width: 20%;
+  height: auto;
+`;
+
+const websiteContainer = css`
+  display: flex;
+  width: 40%;
+  height: auto;
+`;
+
+// define const for zipCodes
 
 const zipCodeOptions = [
   { value: '1010', label: '1010' },
@@ -390,6 +482,7 @@ export default function SearchForTherapist(props: Props) {
       } else {
         filteredTherapistsWithScore.push({ id: ther.therapistId, score: 1 });
       }
+      filteredTherapistsWithScore.sort((a, b) => b.score - a.score);
     }
 
     console.log('score', filteredTherapistsWithScore);
@@ -414,11 +507,11 @@ export default function SearchForTherapist(props: Props) {
       </Head>
       <div css={pageContainer}>
         <section css={searchContainer}>
-          <div css={headingContainer}>
+          <div css={searchHeadingContainer}>
             <h1>What are you looking for?</h1>
           </div>
           <form onSubmit={formSubmit}>
-            <div css={itemsContainer}>
+            <div css={searchItemsContainer}>
               <div css={singleItemContainerSpecializations}>
                 <div css={itemHeading}>I need help with:</div>
                 <div css={itemDropdown}>
@@ -481,18 +574,42 @@ export default function SearchForTherapist(props: Props) {
         </section>
         <section css={resultsContainer}>
           {!loading ? (
-            <div />
+            <div css={searchHeadingContainer} ref={myRef} />
           ) : filteredTherapists.length === 0 ? (
-            <div css={headingContainer} ref={myRef}>
+            <div css={searchHeadingContainer} ref={myRef}>
               <h1>
                 Sorry, there are no therapists that match your search criteria.
                 Please try another request!
               </h1>
             </div>
           ) : (
-            <div css={headingContainer} ref={myRef}>
-              <h1>It's a match!</h1>
-            </div>
+            <>
+              <div css={searchHeadingContainer} ref={myRef}>
+                <h1>It's a match!</h1>
+              </div>
+              {/* // TODO function: for each therapists that matches return the following divs */}
+              <div css={singleTherapistContainer}>
+                <div css={therapistContainer}>
+                  <div css={leftInfoContainer}>
+                    <div css={therapistNameContainer}>THER NAME PROPS</div>
+                    <div css={videoContainer}>VIDEO PROPS</div>
+                  </div>
+                  <div css={rightInfoContainer}>
+                    <div css={headingContainer}>
+                      <div css={headlineContainer}>AREAS OF EXPERTISE</div>
+                      <div css={favoritesContainer}>FAVORITES HEART</div>
+                    </div>
+                    <div css={specializationsContainer}>SPECIALIZATIONS</div>
+                    <div css={otherInfosContainer}>
+                      <div css={addressContainer}>ICON + ADDRESS</div>
+                      <div css={priceContainer}>PRICE</div>
+                      <div css={websiteContainer}>WEBSITE LINK</div>
+                    </div>
+                  </div>
+                </div>
+                <div css={matchingPercentageContainer}>MATCHING PERCENTAGE</div>
+              </div>
+            </>
           )}
         </section>
       </div>
