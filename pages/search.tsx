@@ -521,28 +521,62 @@ export default function SearchForTherapist(props: Props) {
               <div css={searchHeadingContainer} ref={myRef}>
                 <h1>It's a match!</h1>
               </div>
-              {/* // TODO function: for each therapists that matches return the following divs */}
-              <div css={singleTherapistContainer}>
-                <div css={therapistContainer}>
-                  <div css={leftInfoContainer}>
-                    <div css={therapistNameContainer}>THER NAME PROPS</div>
-                    <div css={videoContainer}>VIDEO PROPS</div>
-                  </div>
-                  <div css={rightInfoContainer}>
-                    <div css={headingContainer}>
-                      <div css={headlineContainer}>AREAS OF EXPERTISE</div>
-                      <div css={favoritesContainer}>FAVORITES HEART</div>
+              {finalTherapists.map((therapist) => {
+                return (
+                  <div key={therapist.id}>
+                    <div css={singleTherapistContainer}>
+                      <div css={therapistContainer}>
+                        <div css={leftInfoContainer}>
+                          <div css={therapistNameContainer}>
+                            {therapist.companyName}
+                          </div>
+                          <div css={videoContainer}>
+                            <video
+                              alt="preview of your uploaded video"
+                              src={therapist.videoUrl}
+                              controls
+                            >
+                              <track
+                                src="captions_en.vtt"
+                                kind="captions"
+                                srcLang="en"
+                                label="english_captions"
+                              />
+                            </video>
+                          </div>
+                        </div>
+                        <div css={rightInfoContainer}>
+                          <div css={headingContainer}>
+                            <div css={headlineContainer}>
+                              AREAS OF EXPERTISE
+                            </div>
+                            <div css={favoritesContainer}>FAVORITES HEART</div>
+                          </div>
+                          <div css={specializationsContainer}>
+                            SPECIALIZATIONS
+                          </div>
+                          <div css={otherInfosContainer}>
+                            <div css={addressContainer}>
+                              ICON + {therapist.addressStreet}{' '}
+                              {therapist.addressNumber} {therapist.region}{' '}
+                              {therapist.zipCode}
+                            </div>
+                            <div css={priceContainer}>
+                              {therapist.costPerHour}
+                            </div>
+                            <div css={websiteContainer}>
+                              {therapist.websiteUrl}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div css={matchingPercentageContainer}>
+                        MATCHING PERCENTAGE
+                      </div>
                     </div>
-                    <div css={specializationsContainer}>SPECIALIZATIONS</div>
-                    <div css={otherInfosContainer}>
-                      <div css={addressContainer}>ICON + ADDRESS</div>
-                      <div css={priceContainer}>PRICE</div>
-                      <div css={websiteContainer}>WEBSITE LINK</div>
-                    </div>
                   </div>
-                </div>
-                <div css={matchingPercentageContainer}>MATCHING PERCENTAGE</div>
-              </div>
+                );
+              })}
             </>
           )}
         </section>
