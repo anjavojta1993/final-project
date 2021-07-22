@@ -11,7 +11,6 @@ import {
   FilteredTherapists,
   FilteredTherapistsWithScore,
   RegionType,
-  Specialization,
   SpecializationType,
   Therapist,
   TherapistRegionZipCode,
@@ -29,6 +28,7 @@ type Props = {
   specialization: SpecializationType[];
   therapistSpecializations: TherapistSpecializationType[];
   therapistRegionAndZipCode: TherapistRegionZipCode[];
+  therapists: Therapist[];
   userId: Number;
 };
 
@@ -173,6 +173,8 @@ const singleTherapistContainer = css`
   display: flex;
   width: 80%;
   height: 300px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const therapistContainer = css`
@@ -292,19 +294,59 @@ const zipCodeOptions = [
 // define const for regions
 
 const regionOptions = [
-  { label: 'vienna', value: 'Vienna' },
-  { label: 'burgenland', value: 'Burgenland' },
-  { label: 'upperaustria', value: 'Upper Austria' },
-  { label: 'loweraustria', value: 'Lower Austria' },
-  { label: 'salzburg', value: 'Salzburg' },
-  { label: 'tyrol', value: 'Tyrol' },
-  { label: 'vorarlberg', value: 'Vorarlberg' },
-  { label: 'carinthia', value: 'Carinthia' },
-  { label: 'styria', value: 'Styria' },
+  { value: 'vienna', label: 'Vienna' },
+  { value: 'burgenland', label: 'Burgenland' },
+  { value: 'upperaustria', label: 'Upper Austria' },
+  { value: 'loweraustria', label: 'Lower Austria' },
+  { value: 'salzburg', label: 'Salzburg' },
+  { value: 'tyrol', label: 'Tyrol' },
+  { value: 'vorarlberg', label: 'Vorarlberg' },
+  { value: 'carinthia', label: 'Carinthia' },
+  { value: 'styria', label: 'Styria' },
 ];
 
 export default function SearchForTherapist(props: Props) {
+  // define variables for filtered therapists, that all match region AND zipcode AND at least one of the chosen specializations
+
+  const [filteredTherapists, setFilteredTherapists] = useState<
+    FilteredTherapists[]
+  >([]);
+
+  // define variable for final therapist scoreboard
+
+  const [filteredTherapistsWithScore, setFilteredTherapistsWithScore] =
+    useState<FilteredTherapistsWithScore[]>([]);
+
   const [loading, setLoading] = useState(false);
+
+  // functions to return final therapist info for frontend
+
+  const [therapistProps, setTherapistProps] = useState(props.therapists);
+
+  // final therapist info WITHOUT specializations
+
+  const finalTherapists = filteredTherapistsWithScore.map(
+    (ther: FilteredTherapistsWithScore) => {
+      console.log(therapistProps);
+      const copyFinalTherapists = therapistProps.find(
+        (therapist: Therapist) => therapist.id === ther.id,
+      );
+      return {
+        id: copyFinalTherapists?.id,
+        companyName: copyFinalTherapists?.companyName,
+        costPerHour: copyFinalTherapists?.costPerHour,
+        websiteUrl: copyFinalTherapists?.websiteUrl,
+        videoUrl: copyFinalTherapists?.videoUrl,
+        region: copyFinalTherapists?.region,
+        zipCode: copyFinalTherapists?.zipCode,
+        addressStreet: copyFinalTherapists?.addressStreet,
+        addressNumber: copyFinalTherapists?.addressNumber,
+        score: ther.score,
+      };
+    },
+  );
+
+  console.log('final therapists', finalTherapists);
 
   // define variables needed for specialization dropdown
   const maxOptions = 4;
@@ -336,16 +378,6 @@ export default function SearchForTherapist(props: Props) {
 
   const [error, setError] = useState('');
 
-  // define variables for filtered therapists, that all match region AND zipcode AND at least one of the chosen specializations
-
-  const [filteredTherapists, setFilteredTherapists] = useState<
-    FilteredTherapists[]
-  >([]);
-
-  // define variable for final therapist scoreboard
-
-  const filteredTherapistsWithScore: FilteredTherapistsWithScore[] = [];
-
   // function to send information to API
   const formSubmit = async (event: any) => {
     event.preventDefault();
@@ -366,6 +398,7 @@ export default function SearchForTherapist(props: Props) {
 
     executeScroll();
     setLoading(true);
+    setFilteredTherapistsWithScore([]);
 
     const data = await response.json();
     setFilteredTherapists(data.filteredTherapistsSpecializations);
@@ -373,132 +406,27 @@ export default function SearchForTherapist(props: Props) {
     console.log('data filtered', data.filteredTherapistsSpecializations);
     console.log('filtered therapists', filteredTherapists);
 
-    // const checkScore = async () => {
-    //   await filteredTherapists;
-    //   console.log('awaited filtered therapists', filteredTherapists);
-    //   filteredTherapists.map((ther: any) => {
-    //     let count = 0;
-    //     if (ther.id === ther.therapistId) {
-    //       return filteredTherapistsWithScore.push({
-    //         id: ther.therapistId,
-    //         count: count++,
-    //       });
-    //     }
-    //   });
-    // };
-
-    // checkScore();
-
-    // function getScore(id: number, ther: FilteredTherapists[]) {
-    //   let count = 0;
-
-    //   for (var i = 0; i < ther.length; i++) {
-    //     if ('id' in ther[i] && ther[i].therapistId === id) count++;
-    //   }
-
-    //   return filteredTherapistsWithScore.push({
-    //     id: ther[i].therapistId,
-    //     count: count,
-    //   });
-    // }
-
-    // filteredTherapists.forEach(getScore);
-
-    // filteredTherapists.reduce(function (
-    //     acc,
-    //     curr,
-    //   ) {
-    //     return (
-    //       acc[curr.therapistId]
-    //         ? ++acc[curr.therapistId]
-    //         : (acc[curr.therapistId] = 1),
-    //       acc
-    //     );
-    //     filteredTherapistsWithScore.push({
-    //           id: ther[i].therapistId,
-    //           count: count,
-    //         })
-    //   }
-
-    // filteredTherapists
-    //   .reduce((ther, count) => {
-    //     if (ther.therapistId.has(count)) ther.therapistId.set(count, ther.therapistId.get(count) + 1);
-    //     else ther.therapistId.set(count, 1);
-    //     return ther;
-    //   }, new Map())
-    //   .forEach((, count, map) => {
-    //     filteredTherapistsWithScore.push({
-    //       id: id,
-    //       count: count,
-    //     });
-    //   });
-
-    // THIS IS WORKING BUT IN AN OBJECT
-
-    // const filteredTherapistWithScore = filteredTherapists.reduce(function (
-    //   acc,
-    //   curr,
-    // ) {
-    //   return (
-    //     acc[curr.therapistId]
-    //       ? ++acc[curr.therapistId]
-    //       : (acc[curr.therapistId] = 1),
-    //     acc
-    //   );
-    // },
-    // {});
-
-    // function findCount(filteredTherapistsWithScore, key) {
-    //   filteredTherapists.forEach((x) => {
-    //     // Checking if there is any object in arr2
-    //     // which contains the key value
-    //     if (
-    //       filteredTherapistsWithScore.some((val) => {
-    //         return val[key.therapistId] === x[key.therapistId];
-    //       })
-    //     ) {
-    //       // If yes! then increase the occurrence by 1
-    //       filteredTherapistsWithScore.forEach((k) => {
-    //         if (k[key.therapistId] === x[key.therapistId]) {
-    //           k['count']++;
-    //         }
-    //       });
-    //     } else {
-    //       // If not! Then create a new object initialize
-    //       // it with the present iteration key's value and
-    //       // set the occurrence to 1
-    //       let a = {};
-    //       a[key] = x[key];
-    //       a['count'] = 1;
-    //       filteredTherapistsWithScore.push(a);
-    //     }
-    //   });
-
-    //   return filteredTherapistsWithScore;
-    // }
+    const filteredTherapistsWithScoreCopy = [...filteredTherapistsWithScore];
 
     for (const ther of filteredTherapists) {
-      const alreadyCounted = filteredTherapistsWithScore.map(
+      const alreadyCounted = filteredTherapistsWithScoreCopy.map(
         (therapist) => therapist.id,
       );
       if (alreadyCounted.includes(ther.therapistId)) {
-        filteredTherapistsWithScore[
+        filteredTherapistsWithScoreCopy[
           alreadyCounted.indexOf(ther.therapistId)
         ].score += 1;
       } else {
-        filteredTherapistsWithScore.push({ id: ther.therapistId, score: 1 });
+        filteredTherapistsWithScoreCopy.push({
+          id: ther.therapistId,
+          score: 1,
+        });
       }
-      filteredTherapistsWithScore.sort((a, b) => b.score - a.score);
+      filteredTherapistsWithScoreCopy.sort((a, b) => b.score - a.score);
+      setFilteredTherapistsWithScore(filteredTherapistsWithScoreCopy);
     }
 
     console.log('score', filteredTherapistsWithScore);
-
-    // const countFunction = (keys: any) => {
-    //   filteredTherapistsWithScore[keys.therapistId] =
-    //     ++filteredTherapistsWithScore[keys.therapistId] || 1;
-    // };
-
-    // filteredTherapists.forEach(countFunction);
 
     if ('errors' in data) {
       setError(data.errors[0].message);
@@ -639,21 +567,9 @@ export async function getServerSideProps() {
   const therapistSpecializations = await getAllTherapistsSpecializations();
   console.log('therapist specializations list', therapistSpecializations);
 
+  // this is an array of objects containing all information from each therapist
   const allTherapists = await getAllTherapists();
   console.log('all therapists', allTherapists);
-
-  // this is an array of objects consisting of all regions & zip codes for each therapist id
-  // const therapistRegionAndZipCode = await getAllRegionsAndZipCodes();
-  // console.log('therapist region and zip code', therapistRegionAndZipCode);
-
-  // const filteredTherapistsAndSpecializations =
-  //   await getFilteredTherapistsAndSpecializations(
-  //     region.value,
-  //     zipCode.value,
-  //     selectedSpecializations.map((spec: any) => spec.value),
-  //   );
-  // console.log('filtered therapists', filteredTherapistsAndSpecializations);
-  // console.log('testing in props', selectedSpecializations);
 
   return {
     props: {
