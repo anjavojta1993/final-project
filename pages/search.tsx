@@ -47,12 +47,12 @@ const pageContainer = css`
 const searchContainer = css`
   display: flex;
   flex-direction: column;
-  background-color: green;
+  //background-color: green;
 `;
 
 const resultsContainer = css`
   display: flex;
-  background-color: orange;
+  //background-color: orange;
   flex-direction: column;
 `;
 
@@ -176,7 +176,7 @@ const singleTherapistContainer = css`
   height: 350px;
   justify-content: center;
   align-self: center;
-  background-color: green;
+  //background-color: green;
   margin-bottom: 20px;
 `;
 
@@ -190,7 +190,7 @@ const therapistContainer = css`
   border-radius: 5px;
   border: 1px solid black;
   padding: 20px;
-  background-color: orange;
+  //background-color: orange;
   margin-right: 20px;
 `;
 
@@ -199,7 +199,7 @@ const leftInfoContainer = css`
   flex-direction: column;
   justify-content: center;
   width: 45%;
-  background-color: yellow;
+  //background-color: yellow;
   height: 300px;
 `;
 
@@ -210,7 +210,7 @@ const therapistNameContainer = css`
   height: 20%;
   font-size: ${largeText};
   font-weight: bold;
-  background-color: purple;
+  //background-color: purple;
 `;
 
 const videoContainer = css`
@@ -233,7 +233,7 @@ const headingContainer = css`
   align-items: center;
   font-size: ${largeText};
   font-weight: bold;
-  background-color: red;
+  //background-color: red;
 `;
 
 const headlineContainer = css`
@@ -241,7 +241,7 @@ const headlineContainer = css`
   align-items: center;
   width: 80%;
   height: 100%;
-  background-color: blue;
+  //background-color: blue;
 `;
 
 const favoritesContainer = css`
@@ -250,14 +250,14 @@ const favoritesContainer = css`
   justify-content: flex-end;
   width: 20%;
   height: 100%;
-  background-color: yellow;
+  //background-color: yellow;
 `;
 
 const otherInfosContainer = css`
   display: flex;
   width: auto;
-  height: 15%;
-  background-color: green;
+  height: 13%;
+  //background-color: green;
 `;
 
 const iconContainer = css`
@@ -265,14 +265,15 @@ const iconContainer = css`
   align-items: center;
   width: 10%;
   height: 100%;
-  background-color: red;
+  //background-color: red;
 `;
 
 const specializationsContainer = css`
-  display: inline;
+  display: flex;
   width: auto;
-  height: 35%;
-  background-color: purple;
+  height: 41%;
+  //background-color: purple;
+  flex-wrap: wrap;
 `;
 
 const addressContainer = css`
@@ -281,7 +282,7 @@ const addressContainer = css`
   width: auto;
   height: 100%;
   font-size: ${mediumText};
-  background-color: yellow;
+  //background-color: yellow;
 `;
 
 const priceContainer = css`
@@ -318,7 +319,7 @@ const matchingPercentageContainer = css`
   justify-content: center;
   align-items: center;
   align-self: center;
-  background-color: blue;
+  //background-color: blue;
 `;
 
 const matchingPercentageBox = css`
@@ -337,17 +338,19 @@ const matchingPercentageBox = css`
 const coloredButtonStyles = css`
   background: linear-gradient(to left, #faffd1, #a1ffce);
   justify-content: center;
-  font-weight: 800;
+  font-weight: 600;
   border: 1px solid black;
-  width: 150px;
+  width: auto;
+  height: 40px;
   display: inline-block;
   padding: 10px 20px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  margin-right: 5px;
+  margin-right: 10px;
   margin-bottom: 10px;
   border-radius: 8px;
-  font-size: ${mediumText};
+  font-size: ${normalText};
+  display: inline-flex;
 
   // const coloredBorder = css
 `;
@@ -422,6 +425,12 @@ export default function SearchForTherapist(props: Props) {
 
   const [therapistProps, setTherapistProps] = useState(props.therapists);
 
+  const [specializationProps, setSpecializationProps] = useState(
+    props.specialization,
+  );
+
+  console.log('specialization props', props.specialization);
+
   // final therapist info WITHOUT specializations
 
   const finalTherapists = filteredTherapistsWithScore.map(
@@ -444,6 +453,40 @@ export default function SearchForTherapist(props: Props) {
       };
     },
   );
+
+  // const specWithNamesPerTherapist = filteredTherapists.map((ther) => {
+  //   if (ther.specializationId === props.specialization.value) {
+  //     return {
+  //       ...ther,
+  //       specializationName: props.specialization.label,
+  //     };
+  //   }
+  // });
+
+  // console.log('spec names', specWithNamesPerTherapist);
+
+  const filteredTherapistsWithSpecializations = filteredTherapists.map(
+    (ther: FilteredTherapists) => {
+      const copyFilteredTherapistsWithSpecializations =
+        specializationProps.find((s) => ther.specializationId === s.value);
+      return {
+        therapistId: ther.therapistId,
+        specializationId: ther.specializationId,
+        specializationName: copyFilteredTherapistsWithSpecializations?.label,
+      };
+    },
+  );
+
+  console.log(
+    'therapists with spec name',
+    filteredTherapistsWithSpecializations,
+  );
+
+  // filteredTherapists.map((ther: FilteredTherapists) => {
+  //   if (ther.therapistId === filteredTherapists.id) {
+  //     specIdsOfFilteredTherapists.push();
+  //   }
+  // });
 
   console.log('final therapists', finalTherapists);
 
@@ -647,10 +690,19 @@ export default function SearchForTherapist(props: Props) {
                           </div>
                         </div>
                         <div css={specializationsContainer}>
-                          <button css={coloredButtonStyles}>SPEC 1</button>
-                          <button css={coloredButtonStyles}>SPEC 2</button>
-                          <button css={coloredButtonStyles}>SPEC 3</button>
-                          <button css={coloredButtonStyles}>SPEC 4</button>
+                          {filteredTherapistsWithSpecializations
+                            .filter(
+                              (specialization) =>
+                                specialization.therapistId === therapist.id,
+                            )
+                            .map((spec) => (
+                              <div
+                                key={spec.specializationId}
+                                css={coloredButtonStyles}
+                              >
+                                {spec.specializationName}
+                              </div>
+                            ))}
                         </div>
                         <div css={otherInfosContainer}>
                           <div css={iconContainer}>
