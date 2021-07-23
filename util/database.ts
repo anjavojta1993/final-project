@@ -469,6 +469,7 @@ export async function getAllTherapists() {
   return therapists.map((therapist) => camelcaseKeys(therapist));
 }
 
+
 // get all regions & zip codes with therapist id
 
 // export async function getAllRegionsAndZipCodes() {
