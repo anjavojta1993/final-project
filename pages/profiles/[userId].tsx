@@ -6,7 +6,8 @@ import { useState } from 'react';
 import Select from 'react-select';
 import { ValueType } from 'react-select/lib/types';
 import Layout from '../../components/Layout';
-import UserMenu from '../../components/UserMenu';
+import UserMenuClient from '../../components/UserMenuClient';
+import UserMenuTherapist from '../../components/UserMenuTherapist';
 import VideoUploader2 from '../../components/VideoUploader2';
 import { normalText } from '../../styles/sharedStyles';
 import {
@@ -46,7 +47,7 @@ const formContainer = css`
   align-items: center;
   margin-top: 10px;
   width: 50vw;
-  background-color: orange;
+  //background-color: orange;
   border-radius: 8px;
   border: 1px solid black;
   padding: 5px;
@@ -59,13 +60,13 @@ const inputsContainer = css`
   width: 600px;
   margin-right: 5px;
   margin-bottom: 10px;
-  background-color: green;
+  //background-color: green;
 
   label {
     font-size: ${normalText};
     margin: 10px;
     display: block;
-    background-color: purple;
+    //background-color: purple;
     text-align: left;
   }
 
@@ -253,7 +254,7 @@ export default function SingleClientProfile(props: Props) {
     console.log('role of client', props.user);
     return (
       <Layout email={props.email}>
-        <UserMenu
+        <UserMenuClient
           firstName={props.user.firstName}
           lastName={props.user.lastName}
           userId={props.userId}
@@ -280,7 +281,7 @@ export default function SingleClientProfile(props: Props) {
   } else {
     return (
       <Layout email={props.email}>
-        <UserMenu
+        <UserMenuTherapist
           firstName={props.user.firstName}
           lastName={props.user.lastName}
           userId={props.user.id}
