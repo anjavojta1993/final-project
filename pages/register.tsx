@@ -144,6 +144,12 @@ const coloredButtonStyles = css`
   }
 `;
 
+const errorStyles = css`
+  color: red;
+  height: 20px;
+  text-align: center;
+`;
+
 const therapist = 'therapist';
 const client = 'client';
 
@@ -220,7 +226,7 @@ export default function Register(props: Props) {
   };
 
   return (
-    <Layout email={props.email}>
+    <Layout email={props.email} userId={props.userId}>
       <Head>
         <title>Register</title>
       </Head>
@@ -312,6 +318,7 @@ export default function Register(props: Props) {
                 </label>
               </div>
               <button css={coloredButtonStyles}>Sign up</button>
+              <div css={errorStyles}>{error}</div>
             </div>
           </form>
         </div>
@@ -344,6 +351,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     await import('../util/database');
 
   // Import and initialize the `csrf` library
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   const Tokens = await (await import('csrf')).default;
   const tokens = new Tokens();
 
@@ -352,18 +360,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const sessionToken = context.req.cookies.sessionToken;
 
   const session = await getValidSessionByToken(sessionToken);
-
-  // if (session) {
-  //   Redirect the user when they have a session
-  //   token by returning an object with the `redirect` prop
-  //   https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
-  //   return {
-  //     redirect: {
-  //       destination: `/`,
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+  console.log('session', session);
 
   await deleteExpiredSessions();
 

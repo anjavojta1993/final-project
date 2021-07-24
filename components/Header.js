@@ -67,6 +67,8 @@ const buttonStyles = css`
 `;
 
 export default function Header(props) {
+  console.log('user props', props.userId);
+  console.log('all props', props);
   return (
     <header
       css={headerStyles}
@@ -87,8 +89,8 @@ export default function Header(props) {
         <a css={navBar}>Contact</a>
       </Link>
       {props.email ? (
-        <Link href="/logout">
-          <a css={buttonStyles}>Logout</a>
+        <Link href={`/profiles/${props.userId}`}>
+          <a css={buttonStyles}>Profile</a>
         </Link>
       ) : (
         <Link href="/register">

@@ -1,15 +1,15 @@
 import { css, Global } from '@emotion/react';
-import { AppProps } from 'next/dist/next-server/lib/router/router';
 import Head from 'next/head';
 import { useCallback, useEffect, useState } from 'react';
 
 function MyApp({ Component, pageProps }) {
   const [email, setEmail] = useState();
+  const [id, setId] = useState();
 
   // Declare a function that we will use in any page or
   // component (via passing props) to refresh the
   // username (if it has gotten out of date)
-  const refreshEmail =
+  const refreshEmailAndId =
     // useCallback: Prevent this function from getting
     // a different reference on every rerender
     //
@@ -30,13 +30,14 @@ function MyApp({ Component, pageProps }) {
       // Set the username state variable which we can use
       // in other components via passing props
       setEmail(json.user?.email);
+      setId(json.user?.userId);
     }, []);
 
   // Retrieve username information ONCE the first time
   // that a user loads the page
   useEffect(() => {
-    refreshEmail();
-  }, [refreshEmail]);
+    refreshEmailAndId();
+  }, [refreshEmailAndId]);
 
   return (
     <>
@@ -54,15 +55,13 @@ function MyApp({ Component, pageProps }) {
           }
         `}
       />
-      <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Epilogue:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-      <Component {...pageProps} refreshEmail={refreshEmail} email={email} />
+      <Head />
+      <Component
+        {...pageProps}
+        refreshEmail={refreshEmailAndId}
+        email={email}
+        id={id}
+      />
     </>
   );
 }

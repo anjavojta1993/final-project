@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-// import Footer from './Footer';
 import Header from './Header';
 
 const containerStyles = css`
@@ -10,12 +9,13 @@ const containerStyles = css`
 type Props = {
   children: React.ReactNode;
   email: string;
+  userId: number;
 };
 
 export default function Layout(props: Props) {
   return (
     <>
-      <Header email={props.email} />
+      <Header email={props.email} userId={props.userId} />
       <div css={containerStyles}>{props.children}</div>
       {/* <Footer /> */}
     </>

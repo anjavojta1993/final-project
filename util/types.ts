@@ -60,6 +60,12 @@ export type FilteredTherapists = {
   specializationId: number;
 };
 
+export type FilteredTherapistsSpecNames = {
+  therapistId: number;
+  specializationId: number;
+  specializationName: string;
+};
+
 export type FilteredTherapistsWithScore = {
   id: number;
   score: number;

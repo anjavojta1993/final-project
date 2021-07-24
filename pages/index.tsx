@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-// import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import Layout from '../components/Layout';
 
@@ -28,11 +28,41 @@ export default function Home(props: Props) {
           background: 'linear-gradient(to left, #FAFFD1, #A1FFCE)',
         }}
       >
-        <Layout email={props.email}>
+        <Layout email={props.email} userId={props.userId}>
           <Hero />
           {/* <Footer /> */}
         </Layout>
       </div>
     </>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { getUserById, getValidSessionByToken } = await import(
+    '../util/database'
+  );
+
+  const session = await getValidSessionByToken(
+    context.req.cookies.sessionToken,
+  );
+
+  if (!session || session.userId !== Number(context.query.userId)) {
+    return {
+      props: {
+        user: null,
+        errors: [{ message: 'Access denied' }],
+      },
+    };
+  }
+
+  const user = await getUserById(Number(context.query.userId));
+
+  const userId = context.query.userId;
+
+  return {
+    props: {
+      user: user || null,
+      userId: userId,
+    },
+  };
 }

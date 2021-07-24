@@ -14,7 +14,7 @@ export default function Logout(props: Props) {
   useEffect(() => props.refreshEmail(), [props]);
 
   return (
-    <Layout email={props.email}>
+    <Layout email={props.email} userId={props.userId}>
       <Head>
         <title>Logout</title>
       </Head>

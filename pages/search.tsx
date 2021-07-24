@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AiOutlineEuro } from 'react-icons/ai';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
@@ -18,18 +18,17 @@ import {
 } from '../styles/sharedStyles';
 import {
   FilteredTherapists,
+  FilteredTherapistsSpecNames,
   FilteredTherapistsWithScore,
   RegionType,
   SpecializationType,
   Therapist,
-  TherapistSpecializationType,
   ZipCodeType,
 } from '../util/types';
 
 type Props = {
   email: string;
   specialization: SpecializationType[];
-  therapistSpecializations: TherapistSpecializationType[];
   therapists: Therapist[];
 };
 
@@ -153,14 +152,6 @@ const itemHeading = css`
 
 const itemDropdown = css`
   align-content: center;
-`;
-
-const heroButtonsContainer = css`
-  position: absolute;
-  bottom: 10%;
-  left: 10%;
-  width: 800px;
-  height: auto;
 `;
 
 const buttonStylesDark = css`
@@ -370,9 +361,14 @@ const coloredButtonStyles = css`
   border-radius: 8px;
   font-size: ${normalText};
   display: inline-flex;
-
-  // const coloredBorder = css
 `;
+
+const errorStyles = css`
+  color: red;
+  text-align: center;
+`;
+
+// const coloredBorder = css
 //   background: linear-gradient(to left, #faffd1, #a1ffce);
 //   padding: 3px;
 //   width: 20%;
@@ -437,7 +433,7 @@ export default function SearchForTherapist(props: Props) {
   const [
     filteredTherapistsWithSpecializations,
     setFilteredTherapistsWithSpecializations,
-  ] = useState([]);
+  ] = useState<FilteredTherapistsSpecNames[]>([]);
   // define variable for final therapist scoreboard
 
   const [filteredTherapistsWithScore, setFilteredTherapistsWithScore] =
@@ -447,11 +443,9 @@ export default function SearchForTherapist(props: Props) {
 
   // functions to return final therapist info for frontend
 
-  const [therapistProps, setTherapistProps] = useState(props.therapists);
+  const therapistProps = props.therapists;
 
-  const [specializationProps, setSpecializationProps] = useState(
-    props.specialization,
-  );
+  const specializationProps = props.specialization;
 
   console.log('specialization props', props.specialization);
 
@@ -527,8 +521,8 @@ export default function SearchForTherapist(props: Props) {
 
   // define variable and functions for the smooth scrolling on submit of form
 
-  const myRef = useRef(null);
-  const executeScroll = () => myRef.current.scrollIntoView();
+  const divRef = useRef<HTMLDivElement>(null);
+  const executeScroll = () => divRef.current?.scrollIntoView();
 
   const [error, setError] = useState('');
 
@@ -537,7 +531,6 @@ export default function SearchForTherapist(props: Props) {
   // function to send information to API
   const formSubmit = async (event: any) => {
     event.preventDefault();
-    console.log('!!!!!!!', formSubmit);
     const response = await fetch(`/api/search`, {
       method: 'POST',
       headers: {
@@ -617,7 +610,7 @@ export default function SearchForTherapist(props: Props) {
 
   console.log('filtered therapists', filteredTherapistsWithSpecializations);
   return (
-    <Layout email={props.email}>
+    <Layout email={props.email} userId={props.userId}>
       <Head>
         <title>Find a therapist</title>
       </Head>
@@ -666,8 +659,10 @@ export default function SearchForTherapist(props: Props) {
                   <Select
                     options={regionOptions}
                     value={region}
-                    onChange={(event) => {
-                      setRegion(event);
+                    onChange={(
+                      selectedOption: ValueType<RegionType, false>,
+                    ) => {
+                      setRegion(selectedOption as RegionType);
                     }}
                   />
                 </div>
@@ -678,8 +673,10 @@ export default function SearchForTherapist(props: Props) {
                   <Select
                     options={zipCodeOptions}
                     value={zipCode}
-                    onChange={(event) => {
-                      setZipCode(event);
+                    onChange={(
+                      selectedOption: ValueType<ZipCodeType, false>,
+                    ) => {
+                      setZipCode(selectedOption as ZipCodeType);
                     }}
                   />
                 </div>
@@ -700,23 +697,30 @@ export default function SearchForTherapist(props: Props) {
         </section>
         <section css={resultsContainer}>
           {!loading ? (
-            <div style={{ display: 'none' }} ref={myRef} />
+            <>
+              <div style={{ display: 'none' }} ref={divRef} />
+              <div css={errorStyles}>{error}</div>
+            </>
           ) : filteredTherapistsWithScore.length === 0 ? (
-            <div
-              css={resultsHeadingContainer}
-              ref={myRef}
-              style={{
-                height: 200,
-              }}
-            >
-              <h2>
-                Sorry, there are no therapists that match your search criteria.
-                Please try another request! <FaHeart />
-              </h2>
-            </div>
+            <>
+              <div
+                css={resultsHeadingContainer}
+                ref={divRef}
+                style={{
+                  height: 200,
+                }}
+              >
+                <h2>
+                  Sorry, there are no therapists that match your search
+                  criteria. Please try another request! <FaHeart />
+                </h2>
+              </div>
+              <div css={errorStyles}>{error}</div>
+            </>
           ) : (
             <>
-              <div css={resultsHeadingContainer} ref={myRef}>
+              <div css={errorStyles}>{error}</div>
+              <div css={resultsHeadingContainer} ref={divRef}>
                 <h1>It's a match!</h1>
               </div>
               {finalTherapists.map((therapist) => {

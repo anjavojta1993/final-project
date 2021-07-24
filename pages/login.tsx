@@ -118,6 +118,12 @@ const coloredButtonStyles = css`
   }
 `;
 
+const errorStyles = css`
+  color: red;
+  height: 20px;
+  text-align: center;
+`;
+
 export default function Login(props: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -125,7 +131,7 @@ export default function Login(props: Props) {
   const router = useRouter();
 
   return (
-    <Layout email={props.email}>
+    <Layout email={props.email} userId={props.userId}>
       <Head>
         <title>Login</title>
       </Head>
@@ -205,6 +211,7 @@ export default function Login(props: Props) {
               </div>
             </div>
             <button css={coloredButtonStyles}>Login</button>
+            <div css={errorStyles}>{error}</div>
           </form>
         </div>
       </div>

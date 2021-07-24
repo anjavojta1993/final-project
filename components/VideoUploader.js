@@ -53,7 +53,7 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
     <div>
       {videoUrl ? (
         <video
-          alt={'preview of upload '}
+          alt='preview of your video upload'
           src={videoUrl.replace('upload/', 'upload/w_600/')}
           style={{ height: 200, width: 400 }}
         >

@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { h1, h2, normalText } from '../styles/sharedStyles';
-import Layout from './Layout';
 
 const pageContainer = css`
   display: flex;

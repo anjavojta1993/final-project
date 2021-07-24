@@ -3,8 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import router from 'next/router';
 import { useState } from 'react';
-import Select from 'react-select';
-import { ValueType } from 'react-select/lib/types';
+import Select, { ValueType } from 'react-select';
 import Layout from '../../components/Layout';
 import UserMenuClient from '../../components/UserMenuClient';
 import UserMenuTherapist from '../../components/UserMenuTherapist';
@@ -27,7 +26,7 @@ type Props = {
   errors?: ApplicationError[];
   specializationName: string;
   specialization: SpecializationType[];
-  userId: Number;
+  userId: number;
 };
 
 const pageContainer = css`
@@ -116,6 +115,12 @@ const coloredButtonStyles = css`
     -moz-transform: scale(1.1, 1.1);
     cursor: pointer;
   }
+`;
+
+const errorStyles = css`
+  color: red;
+  height: 20px;
+  text-align: center;
 `;
 
 // define const for regions
@@ -229,7 +234,7 @@ export default function SingleClientProfile(props: Props) {
   const errors = props.errors;
   if (errors) {
     return (
-      <Layout email={props.email}>
+      <Layout email={props.email} userId={props.userId}>
         <Head>
           <title>Error</title>
         </Head>
@@ -241,7 +246,7 @@ export default function SingleClientProfile(props: Props) {
   // Show message if user does not exist
   if (!props.user) {
     return (
-      <Layout email={props.email}>
+      <Layout email={props.email} userId={props.userId}>
         <Head>
           <title>User not found!</title>
         </Head>
@@ -253,7 +258,7 @@ export default function SingleClientProfile(props: Props) {
   if (!props.therapist) {
     console.log('role of client', props.user);
     return (
-      <Layout email={props.email}>
+      <Layout email={props.email} userId={props.userId}>
         <UserMenuClient
           firstName={props.user.firstName}
           lastName={props.user.lastName}
@@ -280,7 +285,7 @@ export default function SingleClientProfile(props: Props) {
     );
   } else {
     return (
-      <Layout email={props.email}>
+      <Layout email={props.email} userId={props.userId}>
         <UserMenuTherapist
           firstName={props.user.firstName}
           lastName={props.user.lastName}
@@ -320,7 +325,7 @@ export default function SingleClientProfile(props: Props) {
                       What is your company name?{' '}
                     </label>
                     <input
-                      placeholder="e.g. Mindful zone, Dr. Antje Enzi"
+                      placeholder="e.g. Mindful zone"
                       aria-label="company-name"
                       data-cy="company-name"
                       value={companyName}
@@ -335,7 +340,7 @@ export default function SingleClientProfile(props: Props) {
                       Please enter your average cost/hour for a session:
                     </label>
                     <input
-                      placeholder="e.g. 100"
+                      placeholder="100"
                       aria-label="cost-per-hour"
                       data-cy="cost-per-hour"
                       value={costPerHour}
@@ -350,7 +355,7 @@ export default function SingleClientProfile(props: Props) {
                       Please enter your address:
                     </label>
                     <input
-                      placeholder="Street name e.g. Gartenweg"
+                      placeholder="Testweg"
                       aria-label="street-name"
                       data-cy="street-name"
                       value={streetAddress}
@@ -359,7 +364,7 @@ export default function SingleClientProfile(props: Props) {
                       }}
                     />
                     <input
-                      placeholder="Street number e.g. 4"
+                      placeholder="14"
                       aria-label="street-number"
                       data-cy="street-number"
                       value={streetNumber}
@@ -371,16 +376,20 @@ export default function SingleClientProfile(props: Props) {
                   <Select
                     options={zipCodeOptions}
                     value={zipCode}
-                    onChange={(event) => {
-                      setZipCode(event);
+                    onChange={(
+                      selectedOption: ValueType<ZipCodeType, false>,
+                    ) => {
+                      setZipCode(selectedOption as ZipCodeType);
                     }}
                   />
 
                   <Select
                     options={regionOptions}
                     value={region}
-                    onChange={(event) => {
-                      setRegion(event);
+                    onChange={(
+                      selectedOption: ValueType<RegionType, false>,
+                    ) => {
+                      setRegion(selectedOption as RegionType);
                     }}
                   />
                   <div>
@@ -388,7 +397,7 @@ export default function SingleClientProfile(props: Props) {
                       Please enter your website url:
                     </label>
                     <input
-                      placeholder="e.g. https://www.mindfultherapy.com"
+                      placeholder="https://www.exampletherapy.com"
                       aria-label="website-url"
                       data-cy="website-url"
                       value={websiteUrl}
@@ -399,12 +408,12 @@ export default function SingleClientProfile(props: Props) {
 
                     <div>
                       <label htmlFor="specializations">
-                        Please choose up to 5 specializations:
+                        Please choose up to 4 specializations:
                       </label>
                       <Select
                         // styles={customStyles}
                         onChange={(
-                          selectedOption: ValueType<SpecializationType>,
+                          selectedOption: ValueType<SpecializationType, true>,
                         ) =>
                           handleTypeSelect(
                             selectedOption as SpecializationType[],
@@ -425,6 +434,7 @@ export default function SingleClientProfile(props: Props) {
                       />
                     </div>
                     <button css={coloredButtonStyles}>Save</button>
+                    <div css={errorStyles}>{error}</div>
                   </div>
                 </div>
               </div>

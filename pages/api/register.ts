@@ -1,4 +1,5 @@
 import argon2 from 'argon2';
+// eslint-disable-next-line unicorn/prefer-node-protocol
 import crypto from 'crypto';
 import Tokens from 'csrf';
 import { NextApiRequest, NextApiResponse } from 'next';

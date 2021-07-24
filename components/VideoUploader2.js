@@ -26,34 +26,8 @@ const coloredButtonStyles = css`
   }
 `;
 
-const videoUpload = (videoUploading) => () =>
-  css`
-    opacity: ${videoUploading ? '1' : '0'};
-  `;
-
 export default function VideoUploader({ videoUrl, setVideoUrl }) {
   const [loading, setLoading] = useState(false);
-  // const videoLoading = () => {
-  //   if (videoUrl) {
-  //     return (
-  //       <video
-  //         alt="preview of your uploaded video"
-  //         src={videoUrl}
-  //         controls
-  //         style={{ height: 300, width: 500 }}
-  //       >
-  //         <track
-  //           src="captions_en.vtt"
-  //           kind="captions"
-  //           srcLang="en"
-  //           label="english_captions"
-  //         />
-  //       </video>
-  //     );
-  //   } else {
-  //     return <img src="/images/spinner.svg" alt="video loading" />;
-  //   }
-  // };
 
   const handleVideoUpload = (event) => {
     setLoading(true);
@@ -94,7 +68,6 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
         <div>
           <input id="myFile" type="file" accept="video/*" />
         </div>
-        {/* <div css={videoUpload(handleVideoUpload())}> */}
         <div>
           {!loading ? (
             <div />
@@ -121,25 +94,6 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
         <button css={coloredButtonStyles} type="submit">
           Upload
         </button>
-        {/* {videoUrl ? (
-          <img
-            alt="preview of your uploaded video"
-            src={videoUrl}
-            style={{ height: 200, width: 400 }}
-          />
-        ) : (
-          <div>
-            {loading === 0 ? (
-              <div>
-                <input id="myFile" type="file" accept="image/*" />
-              </div>
-            ) : (
-              <span>{loading}%</span>
-            )}
-
-
-          </div>
-        )} */}
       </form>
     </div>
   );
