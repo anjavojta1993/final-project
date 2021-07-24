@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AiOutlineEuro } from 'react-icons/ai';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
@@ -54,6 +54,7 @@ const resultsContainer = css`
   display: flex;
   //background-color: orange;
   flex-direction: column;
+  border-top: 1px solid black;
 `;
 
 const imageContainer = css`
@@ -79,7 +80,25 @@ const imageContainer = css`
 const searchHeadingContainer = css`
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 20px;
+  //background-color: orange;
+
+  h1 {
+    font-size: ${h1};
+    line-height: 1.5em;
+    font-weight: 400;
+    text-align: center;
+    text-transform: uppercase;
+  }
+`;
+
+const resultsHeadingContainer = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+
   //background-color: orange;
 
   h1 {
@@ -407,13 +426,18 @@ const regionOptions = [
   { value: 'styria', label: 'Styria' },
 ];
 
+// this is the start of the function Component
+
 export default function SearchForTherapist(props: Props) {
   // define variables for filtered therapists, that all match region AND zipcode AND at least one of the chosen specializations
 
   const [filteredTherapists, setFilteredTherapists] = useState<
     FilteredTherapists[]
   >([]);
-
+  const [
+    filteredTherapistsWithSpecializations,
+    setFilteredTherapistsWithSpecializations,
+  ] = useState([]);
   // define variable for final therapist scoreboard
 
   const [filteredTherapistsWithScore, setFilteredTherapistsWithScore] =
@@ -465,18 +489,6 @@ export default function SearchForTherapist(props: Props) {
 
   // console.log('spec names', specWithNamesPerTherapist);
 
-  const filteredTherapistsWithSpecializations = filteredTherapists.map(
-    (ther: FilteredTherapists) => {
-      const copyFilteredTherapistsWithSpecializations =
-        specializationProps.find((s) => ther.specializationId === s.value);
-      return {
-        therapistId: ther.therapistId,
-        specializationId: ther.specializationId,
-        specializationName: copyFilteredTherapistsWithSpecializations?.label,
-      };
-    },
-  );
-
   console.log(
     'therapists with spec name',
     filteredTherapistsWithSpecializations,
@@ -521,9 +533,11 @@ export default function SearchForTherapist(props: Props) {
   const [error, setError] = useState('');
 
   // function to send information to API
+
+  // function to send information to API
   const formSubmit = async (event: any) => {
     event.preventDefault();
-
+    console.log('!!!!!!!', formSubmit);
     const response = await fetch(`/api/search`, {
       method: 'POST',
       headers: {
@@ -538,19 +552,15 @@ export default function SearchForTherapist(props: Props) {
       }),
     });
 
-    executeScroll();
-    setLoading(true);
-    setFilteredTherapistsWithScore([]);
-
     const data = await response.json();
-    setFilteredTherapists(data.filteredTherapistsSpecializations);
+    const dataFilteredTherapists = data.filteredTherapistsSpecializations;
     console.log('data', data);
     console.log('data filtered', data.filteredTherapistsSpecializations);
     console.log('filtered therapists', filteredTherapists);
 
     const filteredTherapistsWithScoreCopy = [...filteredTherapistsWithScore];
 
-    for (const ther of filteredTherapists) {
+    for (const ther of dataFilteredTherapists) {
       const alreadyCounted = filteredTherapistsWithScoreCopy.map(
         (therapist) => therapist.id,
       );
@@ -565,10 +575,39 @@ export default function SearchForTherapist(props: Props) {
         });
       }
       filteredTherapistsWithScoreCopy.sort((a, b) => b.score - a.score);
-      setFilteredTherapistsWithScore(filteredTherapistsWithScoreCopy);
     }
 
-    console.log('score', filteredTherapistsWithScore);
+    let filteredTherapistsWithSpecializationsCopy = [
+      ...filteredTherapistsWithSpecializations,
+    ];
+
+    filteredTherapistsWithSpecializationsCopy = dataFilteredTherapists.map(
+      (ther: FilteredTherapists) => {
+        const copyFilteredTherapistsWithSpecializations =
+          specializationProps.find((s) => ther.specializationId === s.value);
+        return {
+          therapistId: ther.therapistId,
+          specializationId: ther.specializationId,
+          specializationName: copyFilteredTherapistsWithSpecializations?.label,
+        };
+      },
+    );
+
+    console.log('filtered copy', filteredTherapistsWithSpecializationsCopy);
+
+    setFilteredTherapists(dataFilteredTherapists);
+    setFilteredTherapistsWithSpecializations(
+      filteredTherapistsWithSpecializationsCopy,
+    );
+    setFilteredTherapistsWithScore(filteredTherapistsWithScoreCopy);
+
+    console.log(
+      'filtered therapists with spec',
+      filteredTherapistsWithSpecializations,
+    );
+
+    executeScroll();
+    setLoading(true);
 
     if ('errors' in data) {
       setError(data.errors[0].message);
@@ -576,13 +615,24 @@ export default function SearchForTherapist(props: Props) {
     }
   };
 
+  console.log('filtered therapists', filteredTherapistsWithSpecializations);
   return (
     <Layout email={props.email}>
       <Head>
         <title>Find a therapist</title>
       </Head>
-      <div css={pageContainer}>
-        <section css={searchContainer}>
+      <div
+        css={pageContainer}
+        style={{
+          background: 'linear-gradient(to left, #FAFFD1, #A1FFCE)',
+        }}
+      >
+        <section
+          css={searchContainer}
+          style={{
+            background: 'linear-gradient(to left, #FAFFD1, #A1FFCE)',
+          }}
+        >
           <div css={searchHeadingContainer}>
             <h1>What are you looking for?</h1>
           </div>
@@ -650,17 +700,23 @@ export default function SearchForTherapist(props: Props) {
         </section>
         <section css={resultsContainer}>
           {!loading ? (
-            <div css={searchHeadingContainer} ref={myRef} />
-          ) : filteredTherapists.length === 0 ? (
-            <div css={searchHeadingContainer} ref={myRef}>
-              <h1>
+            <div style={{ display: 'none' }} ref={myRef} />
+          ) : filteredTherapistsWithScore.length === 0 ? (
+            <div
+              css={resultsHeadingContainer}
+              ref={myRef}
+              style={{
+                height: 200,
+              }}
+            >
+              <h2>
                 Sorry, there are no therapists that match your search criteria.
-                Please try another request!
-              </h1>
+                Please try another request! <FaHeart />
+              </h2>
             </div>
           ) : (
             <>
-              <div css={searchHeadingContainer} ref={myRef}>
+              <div css={resultsHeadingContainer} ref={myRef}>
                 <h1>It's a match!</h1>
               </div>
               {finalTherapists.map((therapist) => {
@@ -727,8 +783,8 @@ export default function SearchForTherapist(props: Props) {
                           </div>
                           <div css={websiteContainer}>
                             {' '}
-                            <Link href="{therapist.websiteUrl}">
-                              <a>Visit website</a>
+                            <Link href={`${therapist.websiteUrl}`}>
+                              <a target="blank">Visit website</a>
                             </Link>
                           </div>
                         </div>
@@ -737,7 +793,7 @@ export default function SearchForTherapist(props: Props) {
                     <div css={matchingPercentageContainer}>
                       <div css={matchingPercentageBox}>
                         {Math.round(
-                          (selectedSpecializations.length / therapist.score) *
+                          (therapist.score / selectedSpecializations.length) *
                             100,
                         )}{' '}
                         %
