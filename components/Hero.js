@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
+import meditatingWoman from '../public/images/woman_meditating.png';
 import { h1, h2, normalText } from '../styles/sharedStyles';
 
 const pageContainer = css`
@@ -14,12 +16,12 @@ const heroImageContainer = css`
   right: 0;
   display: flex;
   justify-content: flex-end;
-  width: 30vw;
+  width: 45vw;
   height: 80vh;
   //background-color: orange;
   bottom: 0;
 
-  > img {
+  > Image {
     align-content: right;
   }
 `;
@@ -102,8 +104,8 @@ export default function Hero() {
       <Head>abc</Head>
       <div css={pageContainer}>
         <div css={heroImageContainer}>
-          <img
-            src="/images/woman_meditating.png"
+          <Image
+            src={meditatingWoman}
             alt="woman with dark skin and big afro sitting before forest meditating"
           />
         </div>
