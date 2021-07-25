@@ -41,14 +41,8 @@ const formContainer = css`
 `;
 
 const logoContainer = css`
-  display: flex;
-  justify-content: center;
   align-items: center;
-  width: 250px;
-
-  > img {
-    width: 200px;
-  }
+  width: 200px;
 `;
 
 const loginOrSignUpContainer = css`
@@ -62,7 +56,7 @@ const loginOrSignUpContainer = css`
 const inputsContainer = css`
   justify-content: center;
   align-items: center;
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   width: 250px;
   margin-right: 5px;
