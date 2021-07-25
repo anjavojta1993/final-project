@@ -1,14 +1,15 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { AiOutlineEuro } from 'react-icons/ai';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
 import { GoLocation } from 'react-icons/go';
-import Select from 'react-select';
-import { ValueType } from 'react-select/lib/types';
+import Select, { ValueType } from 'react-select';
 import Layout from '../components/Layout';
+import womenChatting from '../public/images/women_chatting_2.png';
 import {
   h1,
   h2,
@@ -537,7 +538,7 @@ export default function SearchForTherapist(props: Props) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        clientRegion: region?.value,
+        clientRegion: region?.label,
         clientZipCode: zipCode?.value,
         clientSpecializationsIds: selectedSpecializations.map(
           (spec) => spec.value,
@@ -635,7 +636,9 @@ export default function SearchForTherapist(props: Props) {
                 <div css={itemHeading}>I need help with:</div>
                 <div css={itemDropdown}>
                   <Select
-                    onChange={(selectedOption: ValueType<SpecializationType>) =>
+                    onChange={(
+                      selectedOption: ValueType<SpecializationType, true>,
+                    ) =>
                       handleTypeSelect(selectedOption as SpecializationType[])
                     }
                     isMulti
@@ -688,8 +691,8 @@ export default function SearchForTherapist(props: Props) {
             </div>
 
             <div css={imageContainer}>
-              <img
-                src="/images/women_chatting_2.png"
+              <Image
+                src={womenChatting}
                 alt="two women sitting on floor and chatting in front of buildings and trees"
               />
             </div>
