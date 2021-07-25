@@ -209,7 +209,7 @@ export default function SingleClientProfile(props: Props) {
           costPerHour: costPerHour,
           websiteUrl: websiteUrl,
           videoUrl: videoUrl,
-          region: region?.value,
+          region: region?.label,
           zipCode: zipCode?.value,
           streetAddress: streetAddress,
           streetNumber: streetNumber,
