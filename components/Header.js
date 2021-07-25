@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import Link from 'next/link';
+import Logo from '../public/images/logo.png';
 import { normalText } from '../styles/sharedStyles';
 
 const headerStyles = css`
@@ -35,12 +37,8 @@ const logoContainer = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 300px;
-
-  > img {
-    margin-left: 10%;
-    width: 200px;
-  }
+  width: 200px;
+  margin-left: 5%;
 `;
 
 const buttonStyles = css`
@@ -77,7 +75,7 @@ export default function Header(props) {
       }}
     >
       <div css={logoContainer}>
-        <img src="/images/logo.png" alt="lotus flower with ease brand name" />
+        <Image src={Logo} alt="lotus flower with ease brand name" />
       </div>
       <Link href="/">
         <a css={navBar}>Home</a>
