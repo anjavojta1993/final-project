@@ -1,8 +1,9 @@
 import { serialize } from 'cookie';
-import cookies from 'js-cookie';
+
+// import cookies from 'js-cookie';
 
 export function createSerializedSessionTokenCookie(token: string) {
-  const maxAge = 60 * 60 * 24; //24 hours
+  const maxAge = 60 * 60 * 24; // 24 hours
 
   const isProduction = process.env.NODE_ENV === 'production';
   // TODO: Save the token in a cookie on the user's machine
