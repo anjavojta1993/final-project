@@ -43,14 +43,9 @@ const formContainer = css`
 `;
 
 const logoContainer = css`
-  display: flex;
-  justify-content: center;
   align-items: center;
-  width: 250px;
-
-  > img {
-    width: 200px;
-  }
+  width: 200px;
+  text-align: center;
 `;
 
 const loginOrSignUpContainer = css`
@@ -237,7 +232,9 @@ export default function Register(props: Props) {
         <div css={formContainer}>
           <form onSubmit={formSubmit}>
             <div css={logoContainer}>
-              <Image src={Logo} alt="lotus flower with ease brand name" />
+              <div>
+                <Image src={Logo} alt="lotus flower with ease brand name" />
+              </div>
             </div>
             <div css={loginOrSignUpContainer}>
               <Link href="/register">
