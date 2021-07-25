@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import Link from 'next/link';
+import Avatar from '../public/images/avatar.png';
 import { normalText } from '../styles/sharedStyles';
 
 const navBarContainer = css`
@@ -48,8 +50,8 @@ export default function UserMenuTherapist(props) {
   return (
     <div css={navBarContainer}>
       <div css={profileImageContainer}>
-        <img
-          src="/images/avatar.png"
+        <Image
+          src={Avatar}
           alt="woman with dark skin and afro and happy face avatar"
         />
       </div>
