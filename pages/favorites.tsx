@@ -1,14 +1,15 @@
 import { css } from '@emotion/react';
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
-import { AiFillFacebook, AiFillInstagram } from 'react-icons/ai';
-import { MdEmail } from 'react-icons/md';
 import Layout from '../components/Layout';
+import UserMenuClient from '../components/UserMenuClient';
 import { h2 } from '../styles/sharedStyles';
+import { User } from '../util/types';
 
 type Props = {
   email: string;
   userId: number;
+  user?: User;
 };
 
 const pageContainer = css`
@@ -64,38 +65,45 @@ const singleLogoContainer = css`
 export default function Favorites(props: Props) {
   return (
     <Layout email={props.email} userId={props.userId}>
+      <UserMenuClient
+        firstName={props.user.firstName}
+        lastName={props.user.lastName}
+        userId={props.userId}
+      />
       <Head>
-        <title>Contact</title>
+        <title>Favorites</title>
       </Head>
-      <div css={pageContainer}>
-        <h1>Reach us on social media or contact us via email.</h1>
-        <div css={allLogoContainer}>
-          <div css={singleLogoContainer}>
-            <Link href="https://www.example.com/ease">
-              <a target="blank">
-                {' '}
-                <AiFillInstagram size={46} />
-              </a>
-            </Link>
-          </div>
-          <div css={singleLogoContainer}>
-            <Link href="https://www.example.com/ease">
-              <a target="blank">
-                {' '}
-                <AiFillFacebook size={46} />
-              </a>
-            </Link>
-          </div>
-          <div css={singleLogoContainer}>
-            <Link href="mailto:anja.vojta@gmail.com">
-              <a>
-                {' '}
-                <MdEmail size={46} />
-              </a>
-            </Link>
-          </div>
-        </div>
-      </div>
+      <div css={pageContainer}>YOUR FAVORITES</div>
     </Layout>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { getUserById, getValidSessionByToken } = await import(
+    '../util/database'
+  );
+
+  const session = await getValidSessionByToken(
+    context.req.cookies.sessionToken,
+  );
+
+  if (!session || session.userId !== Number(context.query.userId)) {
+    return {
+      props: {
+        user: null,
+        errors: [{ message: 'Access denied' }],
+      },
+    };
+  }
+
+  const user = await getUserById(Number(context.query.userId));
+
+  const userId = context.query.userId;
+
+  return {
+    props: {
+      user: user || null,
+      userId: userId,
+    },
+  };
 }
