@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { AiFillFacebook, AiFillInstagram } from 'react-icons/ai';
 import { MdEmail } from 'react-icons/md';
 import Layout from '../components/Layout';
-import { h2 } from '../styles/sharedStyles';
+import { largeText } from '../styles/sharedStyles';
 
 type Props = {
   email: string;
@@ -19,8 +19,9 @@ const pageContainer = css`
   justify-content: center;
   margin-top: 40px;
 
-  > h1 {
-    font-size: ${h2};
+  > h2 {
+    font-size: ${largeText};
+    font-weight: 200;
   }
 `;
 
@@ -68,7 +69,7 @@ export default function Contact(props: Props) {
         <title>Contact</title>
       </Head>
       <div css={pageContainer}>
-        <h1>Reach us on social media or contact us via email.</h1>
+        <h2>Reach us on social media or contact us via email.</h2>
         <div css={allLogoContainer}>
           <div css={singleLogoContainer}>
             <Link href="https://www.example.com/ease">
