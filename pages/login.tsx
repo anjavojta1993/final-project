@@ -14,6 +14,7 @@ import { LoginResponse } from './api/login';
 type Props = {
   refreshEmail: () => void;
   email: string;
+  userId: number;
 };
 
 const pageContainer = css`

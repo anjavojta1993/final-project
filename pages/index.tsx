@@ -14,6 +14,7 @@ const pageContainer = css`
 
 type Props = {
   email: string;
+  userId: number;
 };
 
 export default function Home(props: Props) {

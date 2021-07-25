@@ -8,6 +8,7 @@ import { h2 } from '../styles/sharedStyles';
 
 type Props = {
   email: string;
+  userId: number;
 };
 
 const pageContainer = css`
@@ -62,7 +63,7 @@ const singleLogoContainer = css`
 
 export default function Contact(props: Props) {
   return (
-    <Layout email={props.email}>
+    <Layout email={props.email} userId={props.userId}>
       <Head>
         <title>Contact</title>
       </Head>

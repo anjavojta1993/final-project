@@ -3,11 +3,12 @@ import Layout from '../../components/Layout';
 
 type Props = {
   email: string;
+  userId: number;
 };
 
 export default function SuccessfulCreation(props: Props) {
   return (
-    <Layout email={props.email}>
+    <Layout email={props.email} userId={props.userId}>
       <Head>
         <title>Login</title>
       </Head>

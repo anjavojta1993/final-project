@@ -16,6 +16,7 @@ type Props = {
   refreshEmail: () => void;
   email: string;
   csrfToken: string;
+  userId: number;
 };
 
 const pageContainer = css`

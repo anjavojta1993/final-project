@@ -8,6 +8,7 @@ import { deleteSessionByToken } from '../util/database';
 type Props = {
   refreshEmail: () => void;
   email: string;
+  userId: number;
 };
 
 export default function Logout(props: Props) {

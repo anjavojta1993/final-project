@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 function MyApp({ Component, pageProps }) {
   const [email, setEmail] = useState();
-  const [id, setId] = useState();
+  const [userId, setUserId] = useState();
 
   // Declare a function that we will use in any page or
   // component (via passing props) to refresh the
@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }) {
       // Set the username state variable which we can use
       // in other components via passing props
       setEmail(json.user?.email);
-      setId(json.user?.userId);
+      setUserId(json.user?.id);
     }, []);
 
   // Retrieve username information ONCE the first time
@@ -60,7 +60,7 @@ function MyApp({ Component, pageProps }) {
         {...pageProps}
         refreshEmail={refreshEmailAndId}
         email={email}
-        id={id}
+        userId={userId}
       />
     </>
   );

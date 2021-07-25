@@ -31,6 +31,7 @@ type Props = {
   email: string;
   specialization: SpecializationType[];
   therapists: Therapist[];
+  userId: number;
 };
 
 const pageContainer = css`
