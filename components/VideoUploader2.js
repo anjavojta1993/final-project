@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import { useState } from 'react';
+import spinner from '../public/images/spinner.gif';
 import { normalText } from '../styles/sharedStyles';
 
 const coloredButtonStyles = css`
@@ -86,7 +88,7 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
               />
             </video>
           ) : (
-            <img src="/images/spinner.svg" alt="video loading" />
+            <Image src={spinner} alt="video loading" />
           )}
         </div>
         <br />
