@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Layout from '../components/Layout';
+import Logo from '../public/images/logo.png';
 import { normalText } from '../styles/sharedStyles';
 import { getValidSessionByToken } from '../util/database';
 import { LoginResponse } from './api/login';
@@ -170,10 +172,7 @@ export default function Login(props: Props) {
             }}
           >
             <div css={logoContainer}>
-              <img
-                src="/images/logo.png"
-                alt="lotus flower with ease brand name"
-              />
+              <Image src={Logo} alt="lotus flower with ease brand name" />
             </div>
             <div css={loginOrSignUpContainer}>
               <Link href="/register">

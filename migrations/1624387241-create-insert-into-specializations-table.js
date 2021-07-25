@@ -43,7 +43,6 @@ const specializations = [
   { specialization_name: 'Self Esteem' },
   { specialization_name: 'Sex Therapy' },
   { specialization_name: 'Sexual Abuse' },
-  { specialization_name: 'Addictions' },
   { specialization_name: 'Sleep Disorder' },
   { specialization_name: 'Social Anxiety' },
   { specialization_name: 'Social Isolation' },
@@ -69,5 +68,6 @@ exports.down = async function down(sql) {
   await sql`
       DELETE FROM
         specializations
+
     `;
 };

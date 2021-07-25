@@ -1,8 +1,8 @@
 exports.up = async function up(sql) {
   await sql`
 CREATE TABLE favorites (
-      user_id integer REFERENCES users (id),
-			therapist_id integer REFERENCES therapists (id),
+      user_id integer REFERENCES users (id) ON DELETE CASCADE,
+			therapist_id integer REFERENCES therapists (id) ON DELETE CASCADE,
 			PRIMARY KEY (user_id, therapist_id)
     )
   `;

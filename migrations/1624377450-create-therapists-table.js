@@ -13,7 +13,7 @@ CREATE TABLE therapists (
 			address_number varchar(10),
 			zip_code varchar(4),
 			region varchar(20),
-			user_id INT UNIQUE REFERENCES users (id)  NOT NULL
+			user_id integer REFERENCES users (id) ON DELETE CASCADE
     )
   `;
 };

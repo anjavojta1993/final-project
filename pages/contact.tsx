@@ -70,7 +70,7 @@ export default function Contact(props: Props) {
         <h1>Reach us on social media or contact us via email.</h1>
         <div css={allLogoContainer}>
           <div css={singleLogoContainer}>
-            <Link href="https://www.example.com">
+            <Link href="https://www.example.com/ease">
               <a target="blank">
                 {' '}
                 <AiFillInstagram size={46} />
@@ -78,7 +78,7 @@ export default function Contact(props: Props) {
             </Link>
           </div>
           <div css={singleLogoContainer}>
-            <Link href="https://www.example.com">
+            <Link href="https://www.example.com/ease">
               <a target="blank">
                 {' '}
                 <AiFillFacebook size={46} />

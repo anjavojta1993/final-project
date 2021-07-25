@@ -5,8 +5,8 @@ exports.up = async function up(sql) {
   await sql`
 CREATE TABLE therapists_specializations(
   PRIMARY KEY (specialization_id, therapist_id),
-      specialization_id integer REFERENCES specializations (id),
-			therapist_id integer REFERENCES therapists (id)
+      specialization_id integer REFERENCES specializations (id) ON DELETE CASCADE,
+			therapist_id integer REFERENCES therapists (id) ON DELETE CASCADE
 
     )
   `;

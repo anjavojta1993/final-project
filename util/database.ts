@@ -1,11 +1,9 @@
 import camelcaseKeys from 'camelcase-keys';
 import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
-import { useState } from 'react';
 import {
   Session,
   Specialization,
-  SpecializationType,
   Therapist,
   TherapistSpecializationType,
   User,
@@ -150,6 +148,7 @@ export async function updateTherapistById(
   VALUES
     (${therapists[0].id}, ${specializationIds[0]})
   `;
+    console.log(therapistId);
   } else if (specializationIds.length === 2) {
     const therapistId = await sql`
     INSERT INTO therapists_specializations
@@ -159,6 +158,7 @@ export async function updateTherapistById(
     (${therapists[0].id}, ${specializationIds[0]}),
     (${therapists[0].id}, ${specializationIds[1]})
   `;
+    console.log(therapistId);
   } else if (specializationIds.length === 3) {
     const therapistId = await sql`
     INSERT INTO therapists_specializations
@@ -169,6 +169,7 @@ export async function updateTherapistById(
     (${therapists[0].id}, ${specializationIds[1]}),
     (${therapists[0].id}, ${specializationIds[2]})
   `;
+    console.log(therapistId);
   } else if (specializationIds.length === 4) {
     const therapistId = await sql`
     INSERT INTO therapists_specializations
@@ -188,31 +189,31 @@ export async function updateTherapistById(
 
 // function to insertSpecializations
 
-export async function insertTherapistSpecializations(
-  specializationName: string,
-  id: string,
-) {
-  if (!id) return undefined;
+// export async function insertTherapistSpecializations(
+//   specializationName: string,
+//   id: string,
+// ) {
+//   if (!id) return undefined;
 
-  const specializationById = await sql<Specialization[]>`
+//   const specializationById = await sql<Specialization[]>`
 
-SELECT
-specialization_id
-FROM
- specializations
- WHERE
- specialization_name= ${specializationName}
- `;
+// SELECT
+// specialization_id
+// FROM
+//  specializations
+//  WHERE
+//  specialization_name= ${specializationName}
+//  `;
 
-  const specializationId = await sql<Specialization[]>`
-INSERT INTO therapists_specializations
-(specialization_id)
-VALUES
-(${id})
+//   const specializationId = await sql<Specialization[]>`
+// INSERT INTO therapists_specializations
+// (specialization_id)
+// VALUES
+// (${id})
 
-  `;
-  return specializationId.map((spec) => camelcaseKeys(spec))[0];
-}
+//   `;
+//   return specializationId.map((spec) => camelcaseKeys(spec))[0];
+// }
 
 // const specializationId = await sql<[Specialization]>`
 //     SELECT
@@ -468,7 +469,6 @@ export async function getAllTherapists() {
   `;
   return therapists.map((therapist) => camelcaseKeys(therapist));
 }
-
 
 // get all regions & zip codes with therapist id
 
