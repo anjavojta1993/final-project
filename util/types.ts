@@ -77,4 +77,9 @@ export type TherapistRegionZipCode = {
   zipCode: string;
 };
 
+export type Favorite = {
+  therapistId: number,
+  userId: number,
+}
+
 export type ApplicationError = { message: string };

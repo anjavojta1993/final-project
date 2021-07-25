@@ -3,6 +3,7 @@ import dotenvSafe from 'dotenv-safe';
 import postgres from 'postgres';
 import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
 import {
+  Favorite,
   Session,
   Specialization,
   Therapist,
@@ -660,6 +661,34 @@ export async function getFilteredTherapistsAndSpecializations(
       camelcaseKeys(specialization),
     );
   }
+}
+
+// add to favorites function
+
+export async function insertFavorite(userId: number, therapistId: number) {
+  const favorite = await sql<Favorite[]>`
+    INSERT INTO favorites
+      (user_id, therapist_id)
+    VALUES
+      (${userId}, ${therapistId})
+    RETURNING
+      id,
+      user_id,
+      therapist_id
+  `;
+  return favorite.map((fav) => camelcaseKeys(fav))[0];
+}
+
+export async function getFavoritesByUserId(userId: number) {
+  const favoriteTherapistsIds = await sql<Favorite[]>`
+    SELECT
+      therapist_id
+    FROM
+      favorites
+    WHERE
+      user_id = ${userId}
+  `;
+  return favoriteTherapistsIds.map((fav) => camelcaseKeys(fav));
 }
 
 // export async function getSpecializationById() {

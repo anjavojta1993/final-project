@@ -109,6 +109,10 @@ const resultsHeadingContainer = css`
     text-align: center;
     text-transform: uppercase;
   }
+
+  h2 {
+    font-size: ${largeText};
+  }
 `;
 
 const searchItemsContainer = css`
@@ -370,18 +374,6 @@ const errorStyles = css`
   text-align: center;
 `;
 
-// const coloredBorder = css
-//   background: linear-gradient(to left, #faffd1, #a1ffce);
-//   padding: 3px;
-//   width: 20%;
-//   height: 300px;
-//   padding: 1rem;
-//   border-radius: 50%;
-//   position: relative;
-//   z-index: 1;
-//   box-shadow: 0 7px 17px rgb(0 0 0 / 13%);
-// `;
-
 // define const for zipCodes
 
 const zipCodeOptions = [
@@ -529,8 +521,6 @@ export default function SearchForTherapist(props: Props) {
   const [error, setError] = useState('');
 
   // function to send information to API
-
-  // function to send information to API
   const formSubmit = async (event: any) => {
     event.preventDefault();
     const response = await fetch(`/api/search`, {
@@ -611,6 +601,40 @@ export default function SearchForTherapist(props: Props) {
   };
 
   console.log('filtered therapists', filteredTherapistsWithSpecializations);
+
+  // post request to add to favorites for user
+
+  const addToFavorite = async (therapistId: number, userId: number) => {
+    const response = await fetch(`/api/favorites`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: userId,
+        therapistId: therapistId,
+      }),
+    });
+
+    const json = await response.json();
+    if ('errors' in json) {
+      setError(json.errors[0].message);
+      return;
+    }
+  };
+
+  // useState to check status of favorites
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  // event handler add to favorites
+
+  function addToFavoritesHandler() {
+    addToFavorite(props.userId, finalTherapists.id);
+    setIsFavorite(true);
+  }
+
   return (
     <Layout email={props.email} userId={props.userId}>
       <Head>
@@ -750,7 +774,11 @@ export default function SearchForTherapist(props: Props) {
                         <div css={headingContainer}>
                           <div css={headlineContainer}>Specializations</div>
                           <div css={favoritesContainer}>
-                            <FaRegHeart />
+                            {!isFavorite ? (
+                              <FaRegHeart onClick={addToFavoritesHandler} />
+                            ) : (
+                              <FaHeart />
+                            )}
                           </div>
                         </div>
                         <div css={specializationsContainer}>
