@@ -97,6 +97,8 @@ const resultsHeadingContainer = css`
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
 
   //background-color: orange;
 
@@ -513,7 +515,8 @@ export default function SearchForTherapist(props: Props) {
   // define variable and functions for the smooth scrolling on submit of form
 
   const divRef = useRef<HTMLDivElement>(null);
-  const executeScroll = () => divRef.current?.scrollIntoView();
+  const executeScroll = () =>
+    divRef.current?.scrollIntoView({ behavior: 'smooth' });
 
   const [error, setError] = useState('');
 
@@ -588,8 +591,8 @@ export default function SearchForTherapist(props: Props) {
       filteredTherapistsWithSpecializations,
     );
 
-    executeScroll();
     setLoading(true);
+    executeScroll();
 
     if ('errors' in data) {
       setError(data.errors[0].message);
