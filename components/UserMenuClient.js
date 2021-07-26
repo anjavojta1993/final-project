@@ -20,7 +20,7 @@ const navBarContainer = css`
     padding-top: 10px;
     text-align: center;
     font-size: ${normalText};
-    width: 200px;
+    width: 180px;
   }
 
   a {

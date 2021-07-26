@@ -83,8 +83,8 @@ const searchHeadingContainer = css`
   margin-top: 20px;
   //background-color: orange;
 
-  h1 {
-    font-size: ${h1};
+  h2 {
+    font-size: ${h2};
     line-height: 1.5em;
     font-weight: 400;
     text-align: center;
@@ -130,7 +130,6 @@ const singleItemContainerSpecializations = css`
   margin-right: 20px;
   flex-direction: column;
   justify-content: center;
-  //background-color: red;
   width: 400px;
   height: 100px;
 `;
@@ -140,7 +139,6 @@ const singleItemContainer = css`
   justify-content: center;
   margin-right: 20px;
   flex-direction: column;
-  //background-color: red;
   width: 200px;
   height: 100px;
 `;
@@ -423,6 +421,7 @@ export default function SearchForTherapist(props: Props) {
   const [filteredTherapists, setFilteredTherapists] = useState<
     FilteredTherapists[]
   >([]);
+
   const [
     filteredTherapistsWithSpecializations,
     setFilteredTherapistsWithSpecializations,
@@ -433,6 +432,8 @@ export default function SearchForTherapist(props: Props) {
     useState<FilteredTherapistsWithScore[]>([]);
 
   const [loading, setLoading] = useState(false);
+
+  // const [alreadyCounted, setAlreadyCounted] = useState([]);
 
   // functions to return final therapist info for frontend
 
@@ -541,11 +542,12 @@ export default function SearchForTherapist(props: Props) {
     const dataFilteredTherapists = data.filteredTherapistsSpecializations;
     console.log('data', data);
     console.log('data filtered', data.filteredTherapistsSpecializations);
-    console.log('filtered therapists', filteredTherapists);
+    console.log('filtered therapists', dataFilteredTherapists);
 
     const filteredTherapistsWithScoreCopy = [...filteredTherapistsWithScore];
 
     for (const ther of dataFilteredTherapists) {
+      console.log('data in loop', dataFilteredTherapists);
       const alreadyCounted = filteredTherapistsWithScoreCopy.map(
         (therapist) => therapist.id,
       );
@@ -559,8 +561,11 @@ export default function SearchForTherapist(props: Props) {
           score: 1,
         });
       }
+      console.log('already counted', alreadyCounted);
       filteredTherapistsWithScoreCopy.sort((a, b) => b.score - a.score);
     }
+
+    // final therapist info WITHOUT specializations
 
     let filteredTherapistsWithSpecializationsCopy = [
       ...filteredTherapistsWithSpecializations,
@@ -600,7 +605,8 @@ export default function SearchForTherapist(props: Props) {
     }
   };
 
-  console.log('filtered therapists', filteredTherapistsWithSpecializations);
+  console.log('score', filteredTherapistsWithScore);
+  console.log('!!!!!', filteredTherapists);
 
   // post request to add to favorites for user
 
@@ -626,34 +632,24 @@ export default function SearchForTherapist(props: Props) {
 
   // useState to check status of favorites
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  // const [isFavorite, setIsFavorite] = useState(false);
 
   // event handler add to favorites
 
-  function addToFavoritesHandler() {
-    addToFavorite(props.userId, finalTherapists.id);
-    setIsFavorite(true);
-  }
+  // function addToFavoritesHandler() {
+  //   addToFavorite(props.userId, finalTherapists.id);
+  //   setIsFavorite(true);
+  // }
 
   return (
     <Layout email={props.email} userId={props.userId}>
       <Head>
         <title>Find a therapist</title>
       </Head>
-      <div
-        css={pageContainer}
-        style={{
-          background: 'linear-gradient(to left, #FAFFD1, #A1FFCE)',
-        }}
-      >
-        <section
-          css={searchContainer}
-          style={{
-            background: 'linear-gradient(to left, #FAFFD1, #A1FFCE)',
-          }}
-        >
+      <div css={pageContainer}>
+        <section css={searchContainer}>
           <div css={searchHeadingContainer}>
-            <h1>What are you looking for?</h1>
+            <h2>What are you looking for?</h2>
           </div>
           <form onSubmit={formSubmit}>
             <div css={searchItemsContainer}>
@@ -774,11 +770,7 @@ export default function SearchForTherapist(props: Props) {
                         <div css={headingContainer}>
                           <div css={headlineContainer}>Specializations</div>
                           <div css={favoritesContainer}>
-                            {!isFavorite ? (
-                              <FaRegHeart onClick={addToFavoritesHandler} />
-                            ) : (
-                              <FaHeart />
-                            )}
+                            <FaHeart />
                           </div>
                         </div>
                         <div css={specializationsContainer}>

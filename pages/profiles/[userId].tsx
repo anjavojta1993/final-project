@@ -5,10 +5,11 @@ import router from 'next/router';
 import { useState } from 'react';
 import Select, { ValueType } from 'react-select';
 import Layout from '../../components/Layout';
+import ReactSelect from '../../components/ReactSelect';
 import UserMenuClient from '../../components/UserMenuClient';
 import UserMenuTherapist from '../../components/UserMenuTherapist';
 import VideoUploader2 from '../../components/VideoUploader2';
-import { h1, h2, normalText } from '../../styles/sharedStyles';
+import { h2, normalText } from '../../styles/sharedStyles';
 import {
   ApplicationError,
   RegionType,
@@ -133,10 +134,10 @@ const singleItemContainer = css`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  //background-color: red;
-  margin-bottom: 10px;
   width: 200px;
-  height: 50px;
+  height: 80px;
+  margin-left: 8px;
+  margin-bottom: 10px;
 `;
 
 const itemDropdown = css`
@@ -198,6 +199,22 @@ const clientInfoStyles = css`
   display: flex;
   font-weight: bold;
   margin-bottom: 10px;
+`;
+
+const itemHeading = css`
+  height: 20px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  display: flex;
+  //background-color: purple;
+`;
+
+const singleItemContainerSpecializations = css`
+  display: flex;
+  flex-direction: column;
+  width: 100%
+  height: 100px;
+  margin-left: 8px;
 `;
 
 // define const for regions
@@ -466,25 +483,27 @@ export default function SingleClientProfile(props: Props) {
                     />
                   </div>
                   <div css={singleItemContainer}>
-                    <Select
-                      // styles={customStyles}
-                      options={zipCodeOptions}
-                      value={zipCode}
-                      onChange={(
-                        selectedOption: ValueType<ZipCodeType, false>,
-                      ) => {
-                        setZipCode(selectedOption as ZipCodeType);
-                      }}
-                    />
-                  </div>
-                  <div css={singleItemContainer}>
-                    <Select
+                    <div css={itemHeading}>Region:</div>
+                    <ReactSelect
                       options={regionOptions}
                       value={region}
                       onChange={(
                         selectedOption: ValueType<RegionType, false>,
                       ) => {
                         setRegion(selectedOption as RegionType);
+                      }}
+                    />
+                  </div>
+                  <div css={singleItemContainer}>
+                    <div css={itemHeading}>ZIP Code:</div>
+                    <ReactSelect
+                      aria-label="zip-code"
+                      options={zipCodeOptions}
+                      value={zipCode}
+                      onChange={(
+                        selectedOption: ValueType<ZipCodeType, false>,
+                      ) => {
+                        setZipCode(selectedOption as ZipCodeType);
                       }}
                     />
                   </div>
@@ -502,32 +521,34 @@ export default function SingleClientProfile(props: Props) {
                       }}
                     />
 
-                    <div>
+                    <div css={singleItemContainerSpecializations}>
                       <label htmlFor="specializations">
                         Please choose up to 4 specializations:
                       </label>
-                      <Select
-                        // styles={customStyles}
-                        onChange={(
-                          selectedOption: ValueType<SpecializationType, true>,
-                        ) =>
-                          handleTypeSelect(
-                            selectedOption as SpecializationType[],
-                          )
-                        }
-                        isMulti
-                        options={
-                          selectedSpecializations?.length === maxOptions
-                            ? []
-                            : props.specialization
-                        }
-                        noOptionsMessage={() => {
-                          return selectedSpecializations?.length === maxOptions
-                            ? 'You cannot choose more than 4 specializations'
-                            : 'No options available';
-                        }}
-                        value={selectedSpecializations}
-                      />
+                      <div>
+                        <Select
+                          onChange={(
+                            selectedOption: ValueType<SpecializationType, true>,
+                          ) =>
+                            handleTypeSelect(
+                              selectedOption as SpecializationType[],
+                            )
+                          }
+                          isMulti
+                          options={
+                            selectedSpecializations?.length === maxOptions
+                              ? []
+                              : props.specialization
+                          }
+                          noOptionsMessage={() => {
+                            return selectedSpecializations?.length ===
+                              maxOptions
+                              ? 'You cannot choose more than 4 specializations'
+                              : 'No options available';
+                          }}
+                          value={selectedSpecializations}
+                        />
+                      </div>
                     </div>
                     <div css={buttonWrapper}>
                       <button css={coloredButtonStyles}>Save</button>
