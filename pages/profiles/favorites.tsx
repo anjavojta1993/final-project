@@ -25,43 +25,6 @@ const pageContainer = css`
   }
 `;
 
-const allLogoContainer = css`
-  display: flex;
-  width: auto;
-  //background-color: green;
-
-  > a {
-    text-decoration: none;
-    color: black;
-
-    :hover {
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-    }
-  }
-`;
-
-const singleLogoContainer = css`
-  display: flex;
-  align-items: center;
-  width: auto;
-  margin-top: 50px;
-  margin-right: 20px;
-  //background-color: red;
-
-  > a {
-    text-decoration: none;
-    color: black;
-
-    :hover {
-      font-weight: bold;
-      color: black;
-      cursor: pointer;
-    }
-  }
-`;
-
 export default function Favorites(props: Props) {
   return (
     <Layout email={props.email} userId={props.userId}>

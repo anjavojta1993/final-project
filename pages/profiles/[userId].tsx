@@ -140,9 +140,9 @@ const singleItemContainer = css`
   margin-bottom: 10px;
 `;
 
-const itemDropdown = css`
-  align-content: center;
-`;
+// const itemDropdown = css`
+//   align-content: center;
+// `;
 
 const buttonWrapper = css`
   display: flex;

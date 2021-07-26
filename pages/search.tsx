@@ -59,7 +59,6 @@ const resultsContainer = css`
 const imageContainer = css`
   //position: absolute;
   //background-color: blue;
-  top: 30%;
   text-align: right;
   margin-left: auto;
   margin-right: 0;
@@ -69,7 +68,7 @@ const imageContainer = css`
   transform: translateX(-50%); */
 
   > img {
-    width: 70%;
+    width: 65%;
     height: auto;
     margin-right: 0;
     //background-color: orange;
@@ -610,25 +609,25 @@ export default function SearchForTherapist(props: Props) {
 
   // post request to add to favorites for user
 
-  const addToFavorite = async (therapistId: number, userId: number) => {
-    const response = await fetch(`/api/favorites`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: userId,
-        therapistId: therapistId,
-      }),
-    });
+  // const addToFavorite = async (therapistId: number, userId: number) => {
+  //   const response = await fetch(`/api/favorites`, {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       userId: userId,
+  //       therapistId: therapistId,
+  //     }),
+  //   });
 
-    const json = await response.json();
-    if ('errors' in json) {
-      setError(json.errors[0].message);
-      return;
-    }
-  };
+  //   const json = await response.json();
+  //   if ('errors' in json) {
+  //     setError(json.errors[0].message);
+  //     return;
+  //   }
+  // };
 
   // useState to check status of favorites
 
@@ -736,7 +735,7 @@ export default function SearchForTherapist(props: Props) {
               >
                 <h2>
                   Sorry, there are no therapists that match your search
-                  criteria. Please try another request! <FaHeart />
+                  criteria. Please try another request! <FaRegHeart />
                 </h2>
               </div>
               <div css={errorStyles}>{error}</div>

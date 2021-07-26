@@ -1,7 +1,5 @@
 import { css } from '@emotion/react';
-import Image from 'next/image';
 import Link from 'next/link';
-import Avatar from '../public/images/avatar.png';
 import { normalText } from '../styles/sharedStyles';
 
 const navBarContainer = css`
