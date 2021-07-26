@@ -735,7 +735,7 @@ export default function SearchForTherapist(props: Props) {
               >
                 <h2>
                   Sorry, there are no therapists that match your search
-                  criteria. Please try another request! <FaRegHeart />
+                  criteria. Please try another request! <FaHeart />
                 </h2>
               </div>
               <div css={errorStyles}>{error}</div>
@@ -769,7 +769,7 @@ export default function SearchForTherapist(props: Props) {
                         <div css={headingContainer}>
                           <div css={headlineContainer}>Specializations</div>
                           <div css={favoritesContainer}>
-                            <FaHeart />
+                            <FaRegHeart />
                           </div>
                         </div>
                         <div css={specializationsContainer}>
