@@ -21,7 +21,7 @@ const heroImageContainer = css`
   //background-color: orange;
   bottom: 0;
 
-  > Image {
+  > img {
     align-content: right;
   }
 `;
@@ -104,8 +104,8 @@ export default function Hero() {
       <Head>abc</Head>
       <div css={pageContainer}>
         <div css={heroImageContainer}>
-          <Image
-            src={meditatingWoman}
+          <img
+            src="/images/woman_meditating.png"
             alt="woman with dark skin and big afro sitting before forest meditating"
           />
         </div>
