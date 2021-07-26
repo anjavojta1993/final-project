@@ -66,8 +66,8 @@ export default function Favorites(props: Props) {
   return (
     <Layout email={props.email} userId={props.userId}>
       <UserMenuClient
-        firstName={props.user.firstName}
-        lastName={props.user.lastName}
+        firstName={props.user?.firstName}
+        lastName={props.user?.lastName}
         userId={props.userId}
       />
       <Head>
