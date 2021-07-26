@@ -91,7 +91,7 @@ export default function Header(props) {
           <a css={buttonStyles}>Profile</a>
         </Link>
       ) : (
-        <Link href="/register">
+        <Link href="/login">
           <a css={buttonStyles}>Login</a>
         </Link>
       )}
