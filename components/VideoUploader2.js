@@ -28,8 +28,20 @@ const coloredButtonStyles = css`
   }
 `;
 
+const buttonWrapper = css`
+  display: flex;
+  justify-content: center;
+`;
+
+const videoWrapper = css`
+  display: flex;
+  justify-content: center;
+`;
+
 export default function VideoUploader({ videoUrl, setVideoUrl }) {
   const [loading, setLoading] = useState(false);
+
+  let file;
 
   const handleVideoUpload = (event) => {
     setLoading(true);
@@ -40,7 +52,8 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
       'event currenttarget files 0',
       event.currentTarget['myFile'].files[0],
     );
-    const file = event.currentTarget['myFile'].files[0];
+
+    file = event.currentTarget['myFile'].files[0];
 
     const formData = new FormData();
     formData.append('myFile', file);
@@ -64,16 +77,15 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
   return (
     <div>
       <form onSubmit={handleVideoUpload}>
-        <label htmlFor="files" class="btn">
-          Select Video
-        </label>
-        <div>
+        <label htmlFor="files">
+          {/* <div>Choose video</div> */}
           <input id="myFile" type="file" accept="video/*" />
-        </div>
-        <div>
-          {!loading ? (
-            <div />
-          ) : videoUrl ? (
+        </label>
+
+        {!loading ? (
+          <div />
+        ) : videoUrl ? (
+          <div css={videoWrapper}>
             <video
               alt="preview of your uploaded video"
               src={videoUrl}
@@ -87,15 +99,18 @@ export default function VideoUploader({ videoUrl, setVideoUrl }) {
                 label="english_captions"
               />
             </video>
-          ) : (
+          </div>
+        ) : (
+          <div css={videoWrapper}>
             <Image src={spinner} alt="video loading" />
-          )}
-        </div>
+          </div>
+        )}
         <br />
-
-        <button css={coloredButtonStyles} type="submit">
-          Upload
-        </button>
+        <div css={buttonWrapper}>
+          <button css={coloredButtonStyles} type="submit">
+            Upload
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import Layout from '../components/Layout';
-import UserMenuClient from '../components/UserMenuClient';
-import { h2 } from '../styles/sharedStyles';
-import { User } from '../util/types';
+import Layout from '../../components/Layout';
+import UserMenuClient from '../../components/UserMenuClient';
+import { h2 } from '../../styles/sharedStyles';
+import { User } from '../../util/types';
 
 type Props = {
   email: string;
@@ -80,7 +80,7 @@ export default function Favorites(props: Props) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getUserById, getValidSessionByToken } = await import(
-    '../util/database'
+    '../../util/database'
   );
 
   const session = await getValidSessionByToken(

@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { AiOutlineEuro } from 'react-icons/ai';
@@ -9,7 +8,6 @@ import { FiExternalLink } from 'react-icons/fi';
 import { GoLocation } from 'react-icons/go';
 import Select, { ValueType } from 'react-select';
 import Layout from '../components/Layout';
-import womenChatting from '../public/images/women_chatting_2.png';
 import {
   h1,
   h2,
@@ -321,7 +319,6 @@ const websiteContainer = css`
     color: black;
 
     :hover {
-      font-weight: bold;
       color: black;
       cursor: pointer;
     }
@@ -716,8 +713,8 @@ export default function SearchForTherapist(props: Props) {
             </div>
 
             <div css={imageContainer}>
-              <Image
-                src={womenChatting}
+              <img
+                src="/images/women_chatting_2.png"
                 alt="two women sitting on floor and chatting in front of buildings and trees"
               />
             </div>

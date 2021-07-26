@@ -1,12 +1,10 @@
 import { css } from '@emotion/react';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Layout from '../components/Layout';
-import Logo from '../public/images/logo.png';
 import { normalText } from '../styles/sharedStyles';
 import { getValidSessionByToken } from '../util/database';
 import { LoginResponse } from './api/login';
@@ -41,8 +39,13 @@ const formContainer = css`
 `;
 
 const logoContainer = css`
+  display: flex;
+  justify-content: center;
   align-items: center;
-  width: 200px;
+  width: 250px;
+  > img {
+    width: 200px;
+  }
 `;
 
 const loginOrSignUpContainer = css`
@@ -56,7 +59,7 @@ const loginOrSignUpContainer = css`
 const inputsContainer = css`
   justify-content: center;
   align-items: center;
-  /* display: flex; */
+  display: flex;
   flex-direction: column;
   width: 250px;
   margin-right: 5px;
@@ -167,7 +170,10 @@ export default function Login(props: Props) {
             }}
           >
             <div css={logoContainer}>
-              <Image src={Logo} alt="lotus flower with ease brand name" />
+              <img
+                src="/images/logo.png"
+                alt="lotus flower with ease brand name"
+              />
             </div>
             <div css={loginOrSignUpContainer}>
               <Link href="/register">

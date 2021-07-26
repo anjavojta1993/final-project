@@ -53,6 +53,12 @@ function MyApp({ Component, pageProps }) {
             font-family: 'Epilogue', sans-serif;
             color: black;
           }
+
+          a {
+            :hover {
+              border-bottom: 1px solid black;
+            }
+          }
         `}
       />
       <Head />

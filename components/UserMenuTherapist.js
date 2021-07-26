@@ -7,18 +7,20 @@ import { normalText } from '../styles/sharedStyles';
 const navBarContainer = css`
   margin: 0;
   display: flex;
-  height: 180vh;
-  width: 200px;
+  height: 200vh;
+  width: 250px;
   align-self: flex-start;
   flex-direction: column;
   //background-color: orange;
   border-right: 1px solid black;
+  align-items: center;
 
   p {
     display: block;
     padding-top: 10px;
     text-align: center;
     font-size: ${normalText};
+    width: 200px;
   }
 
   a {
@@ -39,7 +41,6 @@ const profileImageContainer = css`
   margin-top: 20%;
   //background-color: blue;
   height: 150px;
-
   > img {
     width: auto;
     height: auto;
@@ -50,8 +51,8 @@ export default function UserMenuTherapist(props) {
   return (
     <div css={navBarContainer}>
       <div css={profileImageContainer}>
-        <Image
-          src={Avatar}
+        <img
+          src="/images/avatar.png"
           alt="woman with dark skin and afro and happy face avatar"
         />
       </div>

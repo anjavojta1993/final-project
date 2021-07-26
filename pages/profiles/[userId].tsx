@@ -8,7 +8,7 @@ import Layout from '../../components/Layout';
 import UserMenuClient from '../../components/UserMenuClient';
 import UserMenuTherapist from '../../components/UserMenuTherapist';
 import VideoUploader2 from '../../components/VideoUploader2';
-import { normalText } from '../../styles/sharedStyles';
+import { h1, h2, normalText } from '../../styles/sharedStyles';
 import {
   ApplicationError,
   RegionType,
@@ -32,10 +32,9 @@ type Props = {
 const pageContainer = css`
   display: flex;
   width: 100%;
+  padding-top: 20px;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
-  margin-top: 40px;
 `;
 
 const formContainer = css`
@@ -45,12 +44,28 @@ const formContainer = css`
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
-  width: 50vw;
+  width: 45vw;
   //background-color: orange;
   border-radius: 8px;
   border: 1px solid black;
   padding: 5px;
-  height: 95%;
+  height: auto;
+  margin-bottom: 20px;
+`;
+
+const videoContainer = css`
+  display: flex;
+  box-shadow: 0 7px 17px rgb(0 0 0 / 13%);
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  width: 45vw;
+  border-radius: 8px;
+  border: 1px solid black;
+  height: auto;
+  margin-bottom: 20px;
+  padding-top: 10px;
 `;
 
 const inputsContainer = css`
@@ -59,6 +74,7 @@ const inputsContainer = css`
   width: 600px;
   margin-right: 5px;
   margin-bottom: 10px;
+  padding-top: 10px;
   //background-color: green;
 
   label {
@@ -67,6 +83,11 @@ const inputsContainer = css`
     display: block;
     //background-color: purple;
     text-align: left;
+    line-height: 1.5;
+  }
+
+  li {
+    line-height: 1.5;
   }
 
   input {
@@ -78,9 +99,22 @@ const inputsContainer = css`
     border-radius: 5px;
     width: 300px;
   }
+`;
 
-  h1 {
-    padding: 10px;
+const headingContainer = css`
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-bottom: 10px;
+
+  > h2 {
+    font-size: ${h2};
+    text-align: center;
   }
 `;
 
@@ -89,10 +123,30 @@ const inputsContainer = css`
 //     ...provided,
 //     padding: 5,
 //     width: 300,
+//     placeholder: 'Region...'
 //   }),
-//   return { ...provided };
 
+//   return {...provided};
 // };
+
+const singleItemContainer = css`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  //background-color: red;
+  margin-bottom: 10px;
+  width: 200px;
+  height: 50px;
+`;
+
+const itemDropdown = css`
+  align-content: center;
+`;
+
+const buttonWrapper = css`
+  display: flex;
+  justify-content: center;
+`;
 
 const coloredButtonStyles = css`
   background: linear-gradient(to left, #faffd1, #a1ffce);
@@ -121,6 +175,29 @@ const errorStyles = css`
   color: red;
   height: 20px;
   text-align: center;
+`;
+
+const costWrapper = css`
+  display: flex;
+`;
+
+const euroSignStyles = css`
+  display: flex;
+  align-items: center;
+`;
+
+const clientInfoStylesWrapper = css`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 20px;
+`;
+
+const clientInfoStyles = css`
+  display: flex;
+  font-weight: bold;
+  margin-bottom: 10px;
 `;
 
 // define const for regions
@@ -266,21 +343,31 @@ export default function SingleClientProfile(props: Props) {
         />
         <Head>
           <title>
-            Client Profile page for {props.user.firstName} {props.user.lastName}
+            Profile page for {props.user.firstName} {props.user.lastName}
           </title>
         </Head>
 
-        <h1 data-cy="profile-page-h1">Client Profile Page</h1>
-
-        <div>
-          id: <span data-cy="profile-page-id">{props.user.id}</span>
+        <div css={pageContainer}>
+          <div css={formContainer}>
+            <div css={inputsContainer}>
+              <div css={headingContainer}>
+                <h1 data-cy="profile-page-h1">Your profile</h1>
+              </div>
+              <div css={clientInfoStylesWrapper}>
+                <div css={clientInfoStyles}>First name:</div>{' '}
+                {props.user.firstName}
+              </div>
+              <div css={clientInfoStylesWrapper}>
+                <div css={clientInfoStyles}>Last name:</div>
+                {props.user.lastName}
+              </div>
+              <div css={clientInfoStylesWrapper}>
+                <div css={clientInfoStyles}>Email:</div>
+                {props.user.email}
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div>
-          email: <span data-cy="profile-page-id">{props.user.email}</span>
-        </div>
-        <div>first_name: {props.user.firstName}</div>
-        <div>last_name: {props.user.lastName}</div>
       </Layout>
     );
   } else {
@@ -295,23 +382,23 @@ export default function SingleClientProfile(props: Props) {
           <title>Therapist Profile page</title>
         </Head>
         <div css={pageContainer}>
-          <div css={formContainer}>
+          <div css={videoContainer}>
             <div css={inputsContainer}>
-              <div>
+              <div css={headingContainer}>
                 <h1 data-cy="profile-page-h1">Your video</h1>
-                <label htmlFor="video-url">
-                  Please upload a video in horizontal view (max. 60 seconds)
-                  where you answer the following 3 questions:
-                  <ol>
-                    <li>Who are you and what are you specialized on?</li>
-                    <li>
-                      Describe a typical situation a client would come to you
-                      with.
-                    </li>
-                    <li>Why do you love what you do?</li>
-                  </ol>
-                </label>
               </div>
+              <label htmlFor="video-url">
+                Please upload a video in horizontal view (max. 60 seconds) where
+                you answer the following 3 questions:
+                <ol>
+                  <li>Who are you and what are you specialized on?</li>
+                  <li>
+                    Describe a typical situation a client would come to you
+                    with.
+                  </li>
+                  <li>Why do you love what you do?</li>
+                </ol>
+              </label>
               <VideoUploader2 videoUrl={videoUrl} setVideoUrl={setVideoUrl} />
             </div>
           </div>
@@ -319,7 +406,9 @@ export default function SingleClientProfile(props: Props) {
             <form onSubmit={formSubmitTherapist} id="form1">
               <div>
                 <div css={inputsContainer}>
-                  <h1 data-cy="profile-page-h1">Your information</h1>
+                  <div css={headingContainer}>
+                    <h1 data-cy="profile-page-h1">Your information</h1>
+                  </div>
                   <div>
                     <label htmlFor="company-name">
                       What is your company name?{' '}
@@ -339,15 +428,18 @@ export default function SingleClientProfile(props: Props) {
                     <label htmlFor="cost-per-hour">
                       Please enter your average cost/hour for a session:
                     </label>
-                    <input
-                      placeholder="100"
-                      aria-label="cost-per-hour"
-                      data-cy="cost-per-hour"
-                      value={costPerHour}
-                      onChange={(event) => {
-                        setCostPerHour(event.currentTarget.value);
-                      }}
-                    />
+                    <div css={costWrapper}>
+                      <input
+                        placeholder="100"
+                        aria-label="cost-per-hour"
+                        data-cy="cost-per-hour"
+                        value={costPerHour}
+                        onChange={(event) => {
+                          setCostPerHour(event.currentTarget.value);
+                        }}
+                      />
+                      <div css={euroSignStyles}>€</div>
+                    </div>
                   </div>
 
                   <div>
@@ -373,25 +465,29 @@ export default function SingleClientProfile(props: Props) {
                       }}
                     />
                   </div>
-                  <Select
-                    options={zipCodeOptions}
-                    value={zipCode}
-                    onChange={(
-                      selectedOption: ValueType<ZipCodeType, false>,
-                    ) => {
-                      setZipCode(selectedOption as ZipCodeType);
-                    }}
-                  />
-
-                  <Select
-                    options={regionOptions}
-                    value={region}
-                    onChange={(
-                      selectedOption: ValueType<RegionType, false>,
-                    ) => {
-                      setRegion(selectedOption as RegionType);
-                    }}
-                  />
+                  <div css={singleItemContainer}>
+                    <Select
+                      // styles={customStyles}
+                      options={zipCodeOptions}
+                      value={zipCode}
+                      onChange={(
+                        selectedOption: ValueType<ZipCodeType, false>,
+                      ) => {
+                        setZipCode(selectedOption as ZipCodeType);
+                      }}
+                    />
+                  </div>
+                  <div css={singleItemContainer}>
+                    <Select
+                      options={regionOptions}
+                      value={region}
+                      onChange={(
+                        selectedOption: ValueType<RegionType, false>,
+                      ) => {
+                        setRegion(selectedOption as RegionType);
+                      }}
+                    />
+                  </div>
                   <div>
                     <label htmlFor="website-url">
                       Please enter your website url:
@@ -433,7 +529,9 @@ export default function SingleClientProfile(props: Props) {
                         value={selectedSpecializations}
                       />
                     </div>
-                    <button css={coloredButtonStyles}>Save</button>
+                    <div css={buttonWrapper}>
+                      <button css={coloredButtonStyles}>Save</button>
+                    </div>
                     <div css={errorStyles}>{error}</div>
                   </div>
                 </div>

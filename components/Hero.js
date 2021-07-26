@@ -1,8 +1,6 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
-import meditatingWoman from '../public/images/woman_meditating.png';
 import { h1, h2, normalText } from '../styles/sharedStyles';
 
 const pageContainer = css`
