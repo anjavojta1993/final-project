@@ -54,6 +54,22 @@ const formContainer = css`
   margin-bottom: 20px;
 `;
 
+const formContainerClient = css`
+  display: flex;
+  box-shadow: 0 7px 17px rgb(0 0 0 / 13%);
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  width: 30vw;
+  //background-color: orange;
+  border-radius: 8px;
+  border: 1px solid black;
+  padding: 5px;
+  height: auto;
+  margin-bottom: 20px;
+`;
+
 const videoContainer = css`
   display: flex;
   box-shadow: 0 7px 17px rgb(0 0 0 / 13%);
@@ -73,6 +89,39 @@ const inputsContainer = css`
   display: flex;
   flex-direction: column;
   width: 600px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  //background-color: green;
+
+  label {
+    font-size: ${normalText};
+    margin: 10px;
+    display: block;
+    //background-color: purple;
+    text-align: left;
+    line-height: 1.5;
+  }
+
+  li {
+    line-height: 1.5;
+  }
+
+  input {
+    margin: 10px;
+    font-size: ${normalText};
+    padding: 5px;
+    display: block;
+    text-align: left;
+    border-radius: 5px;
+    width: 300px;
+  }
+`;
+
+const inputsContainerClient = css`
+  display: flex;
+  flex-direction: column;
+  width: 350px;
   margin-right: 5px;
   margin-bottom: 10px;
   padding-top: 10px;
@@ -212,7 +261,7 @@ const itemHeading = css`
 const singleItemContainerSpecializations = css`
   display: flex;
   flex-direction: column;
-  width: 100%
+  width: 100%;
   height: 100px;
   margin-left: 8px;
 `;
@@ -365,8 +414,8 @@ export default function SingleClientProfile(props: Props) {
         </Head>
 
         <div css={pageContainer}>
-          <div css={formContainer}>
-            <div css={inputsContainer}>
+          <div css={formContainerClient}>
+            <div css={inputsContainerClient}>
               <div css={headingContainer}>
                 <h1 data-cy="profile-page-h1">Your profile</h1>
               </div>
